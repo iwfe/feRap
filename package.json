@@ -69,6 +69,8 @@
     "koa-router": "^7.0.1",
     "koa-static": "^3.0.0",
     "koa-views": "^6.0.0",
+    "less": "^2.7.2",
+    "less-loader": "^4.0.3",
     "lolex": "^1.5.2",
     "mocha": "^3.2.0",
     "nightwatch": "^0.9.12",
