@@ -11,7 +11,8 @@ const routes = new Router()
 routes.get('/index', main.index)
 
 // 用户信息
-routes.get('/user/login', user.login)
-routes.get('/user/addUser', user.addUser)
+routes.get('/login', user.login)
+routes.post('/toLogin', user.toLogin)
+routes.get('/regist', user.regist)
 
 module.exports = routes

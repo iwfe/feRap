@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <fe-header></fe-header>
+    <fe-header v-if="isLogin !== true"></fe-header>
     <router-view></router-view>
   </div>
 </template>
@@ -9,19 +9,14 @@
 import FeHeader from '@/components/FeHeader'
 export default {
   name: 'app',
+  computed: {
+    isLogin () {
+      const path = this.$route.path
+      return (path.indexOf('regist') > 0 || path.indexOf('login') > 0)
+    }
+  },
   components: {
     FeHeader
   }
 }
 </script>
-
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #333;
-  font-size: 12px;
-}
-</style>

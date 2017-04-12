@@ -2,12 +2,12 @@
 
 export default {
   /**
-   * 登陆
+   * 首页
    * @return
    */
   index: async function (ctx, next) {
       await ctx.render('index', {
-        title: 'feRap1'
+        title: 'feRap'
       })
   }
 }

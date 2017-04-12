@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import Login from '@/login/router'
 import Index from '@/main/router'
 import Teams from '@/teams/router'
 import User from '@/user/router'
@@ -11,10 +12,7 @@ export default new Router({
   // base: '/',
   mode: 'history',
   routes: [
-    {
-      path: '/login',
-      component: require('@/login/Login')
-    },
+    ...Login,
     Index,
     Teams,
     User,
