@@ -12,7 +12,7 @@
       <div class="form-item">
         <label for="password" class="form-item-label form-item-required">密码 : </label>
         <div class="col-14">
-          <div class="form-item-control "><span class="input-wrapper"><input type="password" name="pwd" id="pwd" value="" placeholder="请输入密码" class="input input-lg"></span></div>
+          <div class="form-item-control "><span class="input-wrapper"><input type="password" name="password" id="password" value="" placeholder="请输入密码" class="input input-lg"></span></div>
         </div>
       </div>
 

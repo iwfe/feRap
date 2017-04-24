@@ -12,7 +12,7 @@ routes.get('/index', main.index)
 
 // 用户信息
 routes.get('/login', user.login)
-routes.post('/toLogin', user.toLogin)
+routes.post('/login', user.toLogin)
 routes.get('/regist', user.regist)
 
 module.exports = routes
