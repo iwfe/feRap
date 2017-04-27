@@ -3,9 +3,12 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router.js'
+import store from './store'
 
 require('@/styles/global.css')
 require('@/styles/site.css')
+
+import 'element-ui/lib/theme-default/index.css'
 
 Vue.config.productionTip = false
 
@@ -13,6 +16,7 @@ Vue.config.productionTip = false
 new Vue({
   el: '#app',
   router,
+  store,
   template: '<App/>',
   components: { App }
 })

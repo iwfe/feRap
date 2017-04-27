@@ -24,7 +24,7 @@ export default {
     return {
       menus: [
         {url: '/', text: '首页'},
-        {url: '/team', text: '团队'},
+        {url: '/teams', text: '团队'},
         {url: '/api/all', text: 'API'},
         {url: '/calendar', text: '日历'}
       ]
