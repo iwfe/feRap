@@ -1,4 +1,5 @@
 import message from './message';
+import _ from 'underscore';
 
 export default {
 
@@ -18,6 +19,23 @@ export default {
       message: message[code] || ''
     }
     return false;
+  },
+
+  //页面渲染
+  async render(ctx, data = {}) {
+    console.log('render.......');
+    let staticTag = 'index';
+    let pathArr = ctx.path.split('/');
+    if (pathArr[1]) {
+      staticTag = pathArr[1];
+    }
+    //为每个页面添加数据
+    ctx.locals = ctx.locals || {}
+    const user = Object.assign({}, ctx.locals._user);
+    delete user._id;
+    delete user.teams;
+    ctx.locals._user = user;
+    await ctx.render(data.tpl || 'index', ctx.locals, data);
   },
 
   async result(ctx, data) {

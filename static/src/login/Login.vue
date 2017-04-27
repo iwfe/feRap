@@ -2,7 +2,7 @@
   <section id="login-panel">
   <div class="mod-login" data-reactroot="" >
     <h1 class="title">{{title}}</h1>
-    <form class="form" method="post" action="/toLogin">
+    <form class="form" method="post" :action="formAction">
       <div class="form-item">
         <label for="username" class="form-item-label form-item-required">用户名 : </label>
         <div class="col-14">
@@ -45,6 +45,9 @@ export default {
     },
     title () {
       return this.isLogin ? '登 录' : '注 册'
+    },
+    formAction () {
+      return this.isLogin ? '/login' : '/regist'
     }
   }
 }

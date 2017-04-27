@@ -2,6 +2,8 @@
 
 import crypto from 'crypto'
 import db from '../common/db'
+import config from '../config'
+import sutil from '../common/sutil'
 
 const userDao = db.get('user')
 
@@ -14,10 +16,12 @@ export default {
    */
   toLogin: async function (username, pwd) {
     const result = await userDao.findOne({ username: username })
-    console.log('result---', result);
-    if (!!result && result.pwd === pwd) {
+
+    if (!!result && result.pwd === this.wrapUserPass(pwd)) {
+      await this.setLoginUser(this, username, pwd); // 将用户信息存储到cookie中
       return true
     }
+
     return false
   },
 
@@ -28,12 +32,13 @@ export default {
    * @return {Promise}          [description]
    */
   regist: async function (username, pwd) {
-    const result = await userDao.findOne({ username: username })
-    console.log('result---', result);
-    if (!!result && result.pwd === pwd) {
-      return true
-    }
-    return false
+    pwd = this.wrapUserPass(pwd)
+    const result = await userDao.insert({ username: username, pwd: pwd })
+  },
+
+  findByUserName: async function (username) {
+    const user = await userDao.findOne({ username: username })
+    return user
   },
 
   //登录用户cookie管理

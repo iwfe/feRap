@@ -14,5 +14,6 @@ routes.get('/index', main.index)
 routes.get('/login', user.login)
 routes.post('/login', user.toLogin)
 routes.get('/regist', user.regist)
+routes.post('/regist', user.toRegist)
 
 module.exports = routes

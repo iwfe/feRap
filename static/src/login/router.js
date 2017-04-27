@@ -1,4 +1,4 @@
-import Login from '@/login/Login'
+const Login = r => require.ensure([], () => r(require('@/login/Login')), 'login')
 
 export default [{
   path: '/login',

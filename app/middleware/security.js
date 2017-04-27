@@ -2,6 +2,9 @@ import userService from '../service/user'
 import sutil from '../common/sutil'
 import _ from 'underscore'
 
+const config = require('../config')
+
+
 const ACCEPT_URLS = [
   '/index'
 ]
@@ -18,23 +21,21 @@ const isVerifyUrl = (url) => {
 }
 
 module.exports = async function (ctx, next) {
-
+  console.log(`into security.......`);
   // 不需要验证，则跳过
   if (!isVerifyUrl(ctx.url)) {
-    return next()
+    await next()
+    return
   }
-
-  // 设置公共参数
-  ctx.locals = {}
 
   ctx.set({
     'Pragma': 'No-cache',
     'Cache-Control': 'no-cache'
   });
 
-  // 设置参数
-  ctx.locals.host = config.host;
-  ctx.locals._now = new Date().getTime();
+  // 设置公共参数
+  ctx.locals = {}
+  // 设置请求参数
   let p = ctx.query;
   try {
     p = _.extend(p, ctx.request.body, ctx.params);
@@ -72,6 +73,12 @@ module.exports = async function (ctx, next) {
       });
     }
   }
+  await next()
 
-  return next()
+  // return Promise.resolve()
+  //   .then(data=>{
+  //
+  //   })
+  //   .catch(() => {})
+  //   .then(() => next())
 }

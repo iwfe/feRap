@@ -12,6 +12,7 @@ const path = require('path')
 const config = require('./config')
 const router = require('./router')
 const security = require('./middleware/security')
+const hotMiddleware = require('../build/dev-server-koa')
 
 const app = new Koa()
 // mongodb
@@ -34,16 +35,19 @@ app.use(logger());
 app.use(bodyParser())
 
 // 安全认证
-app.use(security)
+app.use(security)  
 
 // router
 app.use(router.routes())
 
 // 404
-app.use(ctx => {
-  // ctx.body = 'This is 404 page! 2333'
-  ctx.redirect('/login')
-})
+// app.use(ctx => {
+//   // ctx.body = 'This is 404 page! 2333'
+//   console.log('is redirect to /login....');
+//   ctx.redirect('/login')
+// })
+//
+hotMiddleware(app)
 
 app.listen(3779);
 console.log('server is start: http://localhost:3779/');
