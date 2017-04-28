@@ -4,8 +4,7 @@
       <left></left>
     </div>
     <div class="main-content-panel">
-      <content></content>
-      {{teams}}
+      <teams-content></teams-content>
     </div>
   </div>
 </template>
@@ -13,7 +12,7 @@
 <script>
   import { mapGetters } from 'vuex'
   import Left from './components/Left'
-  import Content from './components/Content'
+  import TeamsContent from './components/Content'
 
   export default {
     data () {
@@ -23,15 +22,16 @@
     },
     computed: {
       ...mapGetters({
-        teams: 'allTeams'
+        teams: 'teams.allTeams',
+        curNode: 'teams.curNode'
       })
     },
     components: {
       Left,
-      Content
+      TeamsContent
     },
     mounted () {
-      this.$store.dispatch('getAllTeams')
+      this.$store.dispatch('teams.getAllTeams')
     }
   }
 </script>
@@ -46,6 +46,7 @@
     height: 100%;
   }
   .main-content-panel {
+    width: 100%;
     height: 100%;
   }
 }

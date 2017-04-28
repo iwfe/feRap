@@ -3,15 +3,19 @@
  */
 const _products = [{
   id: 1,
+  type: 1,
   label: '一级 1',
   children: [{
     id: 4,
+    type: 2,
     label: '二级 1-1',
     children: [{
       id: 9,
+      type: 3,
       label: '三级 1-1-1'
     }, {
       id: 10,
+      type: 3,
       label: '三级 1-1-2'
     }]
   }]

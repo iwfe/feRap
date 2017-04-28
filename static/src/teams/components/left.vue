@@ -1,5 +1,8 @@
 <template>
   <div class="left-panel">
+    <div class="left-header">
+      团队结构
+    </div>
     <el-tree :data="teams"
           :props="defaultProps"
           @node-click="handleNodeClick"
@@ -13,7 +16,7 @@
 </template>
 
 <script>
-  import { mapGetters } from 'vuex'
+  import { mapGetters, mapActions } from 'vuex'
   import { Tree } from 'element-ui'
 
   export default {
@@ -28,7 +31,7 @@
     },
     computed: {
       ...mapGetters({
-        teams: 'allTeams'
+        teams: 'teams.allTeams'
       })
     },
     components: {
@@ -37,6 +40,7 @@
     methods: {
       handleNodeClick (data) {
         console.log(data)
+        this.$store.dispatch('teams.setCurNode', data)
       }
     }
   }
@@ -46,9 +50,14 @@
 .left-panel {
   height: 100%;
   text-align: left;
+  .left-header {
+    border-right: 1px solid #eaeefb;
+    padding: 22px;
+  }
 }
 .el-tree {
-  height: 100%;
+  height: calc(~"100% - 64px");
   width: 200px;
+  border: 1px solid #eaeefb;
 }
 </style>

@@ -41,16 +41,15 @@ export default {
   box-shadow: 0 1px 6px rgba(99,99,99,.2);
 }
 .header-wrap {
-  width: 75pc;
+  width: 100%;
   margin: 0 auto;
+  padding: 0 5%;
 }
 .menu {
   display: flex;
   font-family: Lato,Helvetica Neue,Arial,Helvetica,sans-serif;
   background: #fff;
   font-weight: 400;
-  border-bottom: 1px solid rgba(34,36,38,.15);
-  box-shadow: 0 1px 2px 0 rgba(34,36,38,.15);
 }
 .item {
   border-bottom-color: transparent;
