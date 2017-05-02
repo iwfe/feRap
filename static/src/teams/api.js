@@ -42,6 +42,12 @@ const _products = [{
 }]
 
 export default {
+  getUrl (key) {
+    var rootPath = window.pageConfig.siteUrl + 'teams/'
+    return rootPath + {
+      getTeamsTree: 'getTeamsTree.json'
+    }[key]
+  },
   getTeams (cb) {
     setTimeout(() => cb(_products), 100)
   }

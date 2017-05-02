@@ -38,13 +38,18 @@ export default {
   },
 
   /**
-   * 注册用户
+   * 注册用户页面
    * @return
    */
   regist: async (ctx, next) => {
     await ctx.render('index')
   },
-
+  /**
+   * 注册用户
+   * @param  {[type]}   ctx  [description]
+   * @param  {Function} next [description]
+   * @return {Promise}       [description]
+   */
   toRegist: async (ctx, next) => {
     const { username, password } = ctx.request.body
 
