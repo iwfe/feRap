@@ -1,27 +1,36 @@
 <template>
   <div class="team-list-panel">
+    <p class="toolbar"><el-button type="primary" icon="plus" size="small">新增</el-button></p>
     <el-table
       :data="tableData"
       border
       style="width: 100%">
-      <el-table-column
-        prop="name"
-        label="姓名"
-        width="180">
+      <el-table-column type="expand">
+        <template scope="props">
+          <div class="team-user-panel">
+            <span class="team-user-label">团队成员：</span>
+            <span class="user-item" v-for="user in props.row.users">{{user}}</span>
+          </div>
+        </template>
       </el-table-column>
       <el-table-column
         prop="name"
+        label="名称"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="createUser"
         label="创建人"
         width="180">
       </el-table-column>
       <el-table-column
-        prop="date"
+        prop="createTime"
         label="创建时间"
         sortable
         width="180">
       </el-table-column>
       <el-table-column
-        prop="address"
+        prop="description"
         label="描述"
         :formatter="formatter">
       </el-table-column>
@@ -43,31 +52,12 @@
 <script>
   import { mapGetters } from 'vuex'
   import { Table, TableColumn, Tag, Button } from 'element-ui'
+  import api from './api.js'
 
   export default {
     data () {
       return {
-        tableData: [{
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄',
-          tag: '家'
-        }, {
-          date: '2016-05-04',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1517 弄',
-          tag: '公司'
-        }, {
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄',
-          tag: '家'
-        }, {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄',
-          tag: '公司'
-        }]
+        tableData: []
       }
     },
     components: {
@@ -81,9 +71,16 @@
         curNode: 'teams.curNode'
       })
     },
+    mounted () {
+      this.getListData()
+    },
     methods: {
       getListData () {
-        
+        const self = this
+        api.getTeamList((data) => {
+          console.log(data)
+          self.tableData = data
+        })
       },
       formatter (row, column) {
         return row.address
@@ -103,6 +100,32 @@
 
 <style lang="less" scoped>
 .team-list-panel {
+  .toolbar {
+    text-align: right;
+  }
+  .team-user-label {
+    position: absolute;
+    display: inline-block;
+    left: -40px;
+    top: 10px;
+  }
+  .team-user-panel {
+    text-align: left;
+    display: inline-block;
+    position: relative;
+    padding-left: 34px;
+    width: 100%;
+  }
+  .user-item {
+    display: inline-block;
+    background: #fff;
+    color: #8492A6;
+    border-radius: 5px;
+    border: 1px solid #D3DCE6;
+    padding: 6px 10px;
+    margin: 5px;
+    font-size: 12px;
+  }
 
 }
 </style>

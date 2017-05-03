@@ -11,11 +11,14 @@ export default {
    * @return
    */
   getTeamsTree: async function (ctx, next) {
-    console.log(`controller..... getTeamsTree...`);
     const user = await userService.getLoginUser(ctx)
-    console.log(JSON.stringify(user));
     const trees = await teamService.getTeamsTree(user)
-    console.log(`trees===${trees}`);
     sutil.success(ctx, trees)
+  },
+
+  getTeamList: async function (ctx, next) {
+    const user = await userService.getLoginUser(ctx)
+    const teams = await teamService.getTeamList(user)
+    sutil.success(ctx, teams)
   }
 }

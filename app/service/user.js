@@ -44,10 +44,8 @@ export default {
   getLoginUser: async (ctx) => {
     console.log(`userService => getLoginUser ctx:${ctx}`);
     let feteauth = ctx.cookies.get('feteauth');
-    console.log(`1111feteaut===${feteauth}`);
-    feteauth = '9c24c30988ff2c67dbcabe25090a646a6313f3c0d1e9adbc47581fcd98304e24166829f0f1cf39fa0e34ed19ceddd334aa87027e205a5e23'
-    console.log(`feteaut===${feteauth}`);
     if (!feteauth) return null;
+    
     let decrypted = '';
     let decipher = crypto.createDecipher('rc4', config.authKey);
     decrypted += decipher.update(feteauth, 'hex', 'utf8');

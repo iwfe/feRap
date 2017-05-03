@@ -60,5 +60,6 @@
   height: calc(~"100% - 37px");
   width: 200px;
   border: 1px solid #eaeefb;
+  overflow: auto;
 }
 </style>

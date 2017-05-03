@@ -2,7 +2,7 @@
   <div class="content-panel">
     <div class="content-header">
       <el-breadcrumb separator="/">
-        <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: '/teams' }">全部</el-breadcrumb-item>
         <el-breadcrumb-item v-if="curNode.type >= 0">团队</el-breadcrumb-item>
         <el-breadcrumb-item v-if="curNode.type >= 1">项目</el-breadcrumb-item>
         <el-breadcrumb-item v-if="curNode.type >= 2">prd</el-breadcrumb-item>
@@ -57,7 +57,7 @@
   .content-body {
     border-radius: 4px;
     transition: .2s;
-    padding: 24px;
+    padding: 10px 24px;
   }
 }
 </style>

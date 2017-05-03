@@ -18,8 +18,7 @@ routes.get('/regist', user.regist)
 routes.post('/regist', user.toRegist)
 
 // team
-console.log(team.getTeamsTree);
 routes.get('/team/getTeamsTree.json', team.getTeamsTree)
-
+routes.get('/team/getTeamList.json', team.getTeamList)
 
 module.exports = routes

@@ -2,7 +2,9 @@
 
 import db from '../common/db'
 import sutil from '../common/sutil'
+import utils from '../../global/utils'
 
+const userDao = db.get('user')
 const teamDao = db.get('team')
 const projectDao = db.get('project')
 const prdDao = db.get('prd')
@@ -61,13 +63,42 @@ export default {
     // console.log(JSON.stringify(trees));
     return trees
   },
-
-  createTreeNode (id, type, label, children) {
+  /**
+   * 创建树节点
+   */
+  createTreeNode: function (id, type, label, children) {
     return {
       id,
       type,
       label,
       children
     }
+  },
+
+  getTeamList: async function (user) {
+    const teams0 = user.teams
+    if(!teams0 || !teams0.length) return []
+
+    let qteam = []
+    for(let t in teams0) {
+      const team = teams0[t]
+      qteam.push(team.id)
+    }
+    const teams = await teamDao.find({id: {'$in': qteam}})
+
+    for (let t in teams) {
+      const team = teams[t]
+      // 格式化日期
+      team.createTime = utils.formateDate(team.createTime, '%F')
+      // 查找团队的用户
+      const users = await userDao.find({'teams.id': team.id})
+      let teamUsers = []
+      for (let u in users) {
+        teamUsers.push(users[u].username)
+      }
+      team.users = teamUsers
+      console.log(team);
+    }
+    return teams
   }
 }
