@@ -3,15 +3,17 @@
     <div class="content-header">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-        <el-breadcrumb-item>活动管理</el-breadcrumb-item>
-        <el-breadcrumb-item>活动列表</el-breadcrumb-item>
-        <el-breadcrumb-item>活动详情</el-breadcrumb-item>
+        <el-breadcrumb-item v-if="curNode.type >= 0">团队</el-breadcrumb-item>
+        <el-breadcrumb-item v-if="curNode.type >= 1">项目</el-breadcrumb-item>
+        <el-breadcrumb-item v-if="curNode.type >= 2">prd</el-breadcrumb-item>
+        <el-breadcrumb-item v-if="curNode.type >= 3">api</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
     <div class="content-body">
-      <team-list v-if="curNode.type === 1"></team-list>
-      <prj-list v-if="curNode.type === 2"></prj-list>
-      <prd-list v-if="curNode.type === 3"></prd-list>
+      <team-list v-if="curNode.type === 0"></team-list>
+      <prj-list v-if="curNode.type === 1"></prj-list>
+      <prd-list v-if="curNode.type === 2"></prd-list>
+      <api-list v-if="curNode.type === 3"></api-list>
     </div>
   </div>
 </template>
@@ -19,9 +21,10 @@
 <script>
   import { mapGetters } from 'vuex'
   import { Breadcrumb, BreadcrumbItem } from 'element-ui'
-  import TeamList from './TeamList'
-  import PrjList from './PrjList'
-  import PrdList from './PrdList'
+  import TeamList from '../team/TeamList'
+  import PrjList from '../project/PrjList'
+  import PrdList from '../prd/PrdList'
+  import ApiList from '../api/ApiList'
 
   export default {
     data () {
@@ -33,7 +36,8 @@
       ElBreadcrumbItem: BreadcrumbItem,
       TeamList,
       PrjList,
-      PrdList
+      PrdList,
+      ApiList
     },
     computed: {
       ...mapGetters({
@@ -48,7 +52,7 @@
   .content-header {
     border-bottom: 1px solid #eaeefb;
     transition: .2s;
-    padding: 24.5px;
+    padding: 12px;
   }
   .content-body {
     border-radius: 4px;

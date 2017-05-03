@@ -1,4 +1,4 @@
-import teams from '@/teams/api'
+import teamsApi from '@/teams/api'
 import * as types from '@/store/mutation-types'
 import util from '@/common/util'
 
@@ -17,7 +17,7 @@ const getters = {
 // actions
 const actions = {
   getAllTeams ({ commit }) {
-    teams.getTeams(teams => {
+    teamsApi.getTeamsTree(teams => {
       commit(types.GET_ALL_TEAMS, { teams })
     })
   },

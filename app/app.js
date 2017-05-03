@@ -14,6 +14,8 @@ const router = require('./router')
 const security = require('./middleware/security')
 const hotMiddleware = require('../build/dev-server-koa')
 
+const vueEasyRenderer = require('vue-easy-renderer').koaRenderer;
+
 const app = new Koa()
 // mongodb
 app.use(mongo(config.mongodb))
@@ -25,8 +27,22 @@ app.use(views(__dirname + '/view', { extension: 'ejs' }))
 // app.use(favicon('./view/favicon.ico', { maxAge: config.staticCacheMaxAge }))
 
 // static files
+app.use(serve(path.resolve(__dirname, '../static/src/dist')))
 // app.use(mount('/static', serve('./static/dist', { maxAge: config.staticCacheMaxAge })))
 // app.use(mount('/static', serve(path.resolve(config.uploadImagePath), { maxAge: config.staticCacheMaxAge })))
+
+// vue server render
+// const renderer = vueEasyRenderer(path.resolve(__dirname, '../static/src'), {
+//   head: {
+//     title: 'FeRap',
+//     meta: [
+//       {charset: 'utf-8'},
+//       {name: 'viewport', content: 'width=device-width, initial-scale=1'}
+//     ]
+//   }
+// })
+// app.use(renderer)
+// app.use(ctx => ctx.vueRender(path.resolve(__dirname, '../static/src/hello_world/hello_world.vue'), {world: 'world33333!'}));
 
 // logger
 app.use(logger());
@@ -35,7 +51,7 @@ app.use(logger());
 app.use(bodyParser())
 
 // 安全认证
-app.use(security)  
+app.use(security)
 
 // router
 app.use(router.routes())
@@ -47,7 +63,8 @@ app.use(router.routes())
 //   ctx.redirect('/login')
 // })
 //
-hotMiddleware(app)
+// hotMiddleware(app)
+
 
 app.listen(3779);
 console.log('server is start: http://localhost:3779/');

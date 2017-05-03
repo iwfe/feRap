@@ -19,7 +19,8 @@ export default {
     console.log(ctx.url);
     console.log(`ctx.request.query=${JSON.stringify(ctx.request)}`);
     const { username, password } = ctx.request.body
-    const user = await userService.toLogin(username, password)
+    const user = await userService.toLogin(ctx, username, password)
+    console.log(`isUser===${user}`);
 
     if (!user) {
       console.log('用户名或密码不正确');
@@ -55,7 +56,7 @@ export default {
 
     // 判断用户是否存在
     const user = await userService.findByUserName(username)
-    console.log(user);
+
     if (user) {
       console.log('用户名已经存在')
       await sutil.render('index', {

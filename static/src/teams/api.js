@@ -1,3 +1,5 @@
+import Vue from 'vue'
+import axios from 'axios'
 /**
  * Mocking client-server processing
  */
@@ -43,12 +45,30 @@ const _products = [{
 
 export default {
   getUrl (key) {
-    var rootPath = window.pageConfig.siteUrl + 'teams/'
+    var rootPath = 'http://localhost:8080/team/'
     return rootPath + {
-      getTeamsTree: 'getTeamsTree.json'
+      getTeamsTree: 'getTeamsTree.json',
+      getTeamList: 'getTeamList.json'
     }[key]
   },
-  getTeams (cb) {
-    setTimeout(() => cb(_products), 100)
+  getTeamsTree (cb) {
+    console.log(this.getUrl('getTeamsTree'))
+    console.log(`axios==${axios}`)
+    axios.get(this.getUrl('getTeamsTree'), {})
+    .then(function (response) {
+      cb(response.data.data)
+    })
+    .catch(function (response) {
+      console.log(`faild: ${response}`)
+    })
+  },
+  getTeamList () {
+    axios.get(this.getUrl('getTeamList'), {})
+    .then(function (response) {
+      return response.data.data
+    })
+    .catch(function (response) {
+      console.log(`faild: ${response}`)
+    })
   }
 }

@@ -6,7 +6,6 @@
     <el-tree :data="teams"
           :props="defaultProps"
           @node-click="handleNodeClick"
-          default-expand-all=""
           :expand-on-click-node=false
           node-key="id"
           ref="tree"
@@ -52,11 +51,13 @@
   text-align: left;
   .left-header {
     border-right: 1px solid #eaeefb;
-    padding: 22px;
+    padding: 8px;
+    font-size: 14px;
+    color: #ccc;
   }
 }
 .el-tree {
-  height: calc(~"100% - 64px");
+  height: calc(~"100% - 37px");
   width: 200px;
   border: 1px solid #eaeefb;
 }

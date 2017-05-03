@@ -14,9 +14,13 @@
     "server": "nodemon ./node_modules/.bin/babel-node ./app/app.js"
   },
   "dependencies": {
+    "axios": "^0.16.1",
     "element-ui": "^1.2.9",
+    "koa-cors": "^0.0.16",
     "vue": "^2.2.2",
+    "vue-easy-renderer": "^0.10.3",
     "vue-router": "^2.2.0",
+    "vue-server-renderer": "^2.3.0",
     "vuex": "^2.3.1"
   },
   "devDependencies": {

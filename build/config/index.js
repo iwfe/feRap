@@ -33,6 +33,7 @@ module.exports = {
         filter: function (pathname, req) {
           return pathname.match('^/api') || (pathname.match('^/login') && req.method === 'POST')
                   || (pathname.match('^/regist') && req.method === 'POST')
+                  || pathname.match('^/team/')
         }
       }
     },
