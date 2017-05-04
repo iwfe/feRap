@@ -1,8 +1,10 @@
 <template>
   <div class="container-panel">
+    <!-- 左侧菜单 -->
     <div class="main-left-panel">
       <left></left>
     </div>
+    <!-- 右侧内容 -->
     <div class="main-content-panel">
       <teams-content></teams-content>
     </div>

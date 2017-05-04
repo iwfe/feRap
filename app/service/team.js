@@ -10,7 +10,11 @@ const projectDao = db.get('project')
 const prdDao = db.get('prd')
 
 export default {
-
+  /**
+   * 查找团队树
+   * @param  {[type]}  user [description]
+   * @return {Promise}      [description]
+   */
   getTeamsTree: async function (user) {
     let qteam = [], qprj = [],
         trees = [], treesMap = {}
@@ -34,7 +38,6 @@ export default {
     for(let t in teams) {
       const team = teams[t]
       // 创建树节点
-      console.log(`team.name:${team.name}`);
       const node = this.createTreeNode(team.id, 1, team.name, [])
       treesMap[`team_${team.id}`] = node
       treesMap['team_0'].children.push(node)
@@ -74,7 +77,11 @@ export default {
       children
     }
   },
-
+  /**
+   * 团队列表
+   * @param  {[type]}  user [description]
+   * @return {Promise}      [description]
+   */
   getTeamList: async function (user) {
     const teams0 = user.teams
     if(!teams0 || !teams0.length) return []
@@ -97,8 +104,62 @@ export default {
         teamUsers.push(users[u].username)
       }
       team.users = teamUsers
-      console.log(team);
     }
     return teams
+  },
+  /**
+   * 添加团队
+   * @param  {[type]}  user [description]
+   * @param  {[type]}  team [description]
+   * @return {Promise}      [description]
+   */
+  addTeam: async function (user, team) {
+    let teams = user.teams || []
+    const id = await sutil.genId(teamDao)
+
+    team = await teamDao.insert(Object.assign(team, {
+      id: id,
+      createUser: user.username,
+      createTime: Date.now(),
+      updateTime: Date.now()
+    }))
+
+    teams.push({
+      id: team.id,
+      role: 'owner',
+      status: 'normal'
+    })
+
+    await userDao.update({
+      _id: user._id
+    }, {
+      $set: {
+        teams: teams
+      }
+    })
+
+    return true
+  },
+  /**
+   * 更新团队
+   * @param  {[type]}  user [description]
+   * @param  {[type]}  team [description]
+   * @return {Promise}      [description]
+   */
+  updateTeam: async function (team) {
+    team = await teamDao.update({
+      id: team.id
+    }, {
+      $set: Object.assign({
+          updateTime: Date.now()
+        },
+        team)
+    });
+    return true
+  },
+
+  findTeamById: async function (id) {
+    const team = await teamDao.findOne({id: id})
+    return team
   }
 }

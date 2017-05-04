@@ -1,6 +1,6 @@
 <template>
   <div class="team-list-panel">
-    <p class="toolbar"><el-button type="primary" icon="plus" size="small">新增</el-button></p>
+    <p class="toolbar"><el-button type="primary" @click="handleAdd" icon="plus" size="small">新增</el-button></p>
     <el-table
       :data="tableData"
       border
@@ -31,8 +31,7 @@
       </el-table-column>
       <el-table-column
         prop="description"
-        label="描述"
-        :formatter="formatter">
+        label="描述">
       </el-table-column>
       <el-table-column label="操作">
         <template scope="scope">
@@ -46,17 +45,28 @@
         </template>
       </el-table-column>
     </el-table>
+
+    <!-- 新增表单 -->
+    <team-form
+      :dialogFormVisible="dialogFormVisible"
+      :teamId="teamId"
+      @hideForm="hideForm"
+      @updateList="getListData">
+    </team-form>
   </div>
 </template>
 
 <script>
   import { mapGetters } from 'vuex'
   import { Table, TableColumn, Tag, Button } from 'element-ui'
+  import TeamForm from './TeamForm'
   import api from './api.js'
 
   export default {
     data () {
       return {
+        dialogFormVisible: false, // 是否显示新增窗口
+        teamId: null,
         tableData: []
       }
     },
@@ -64,7 +74,8 @@
       ElTable: Table,
       ElTableColumn: TableColumn,
       ElTag: Tag,
-      ElButton: Button
+      ElButton: Button,
+      TeamForm
     },
     computed: {
       ...mapGetters({
@@ -82,17 +93,27 @@
           self.tableData = data
         })
       },
-      formatter (row, column) {
-        return row.address
-      },
-      filterTag (value, row) {
-        return row.tag === value
+      handleAdd () {
+        this.teamId = null
+        this.showForm()
       },
       handleEdit (index, row) {
+        this.teamId = row.id
+        this.showForm()
         console.log(index, row)
       },
       handleDelete (index, row) {
         console.log(index, row)
+      },
+      hideForm () {
+        this.dialogFormVisible = false
+      },
+      showForm () {
+        const self = this
+        this.dialogFormVisible = false
+        setTimeout(() => {
+          self.dialogFormVisible = true
+        }, 100)
       }
     }
   }

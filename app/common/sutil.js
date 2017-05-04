@@ -1,5 +1,6 @@
 import message from './message';
 import _ from 'underscore';
+import utils from '../../global/utils'
 
 export default {
 
@@ -63,5 +64,15 @@ export default {
 
   isPost(method) {
     return method.toLowerCase() === 'post';
-  }
+  },
+
+  async genId(dao, len = 6) {
+    let id = utils.genId(len);
+    while (await dao.findOne({
+      id: id
+    })) {
+      id = utils.genId(len);
+    }
+    return id;
+  },
 }

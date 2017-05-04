@@ -19,6 +19,7 @@ const actions = {
   getAllTeams ({ commit }) {
     teamsApi.getTeamsTree(teams => {
       commit(types.GET_ALL_TEAMS, { teams })
+      commit(types.SET_CUR_NODE, { node: teams[0] })
     })
   },
   setCurNode ({ commit }, node) {

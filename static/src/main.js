@@ -12,10 +12,9 @@ import '@/styles/site.css'
 import 'element-ui/lib/theme-default/index.css'
 
 Vue.config.productionTip = false
-Vue.prototype.$http = axios  // 将axios对象clone到Vue的$http属性
 
 window.pageConfig = { // 用于测试
-  siteUrl: '/'
+  siteUrl: 'http://localhost:8080/'
 }
 
 /* eslint-disable no-new */

@@ -9,7 +9,8 @@
           :expand-on-click-node=false
           node-key="id"
           ref="tree"
-          highlight-current>
+          :highlight-current=true
+          :default-expanded-keys="defaultExpandedKeys">
     </el-tree>
   </div>
 </template>
@@ -25,7 +26,8 @@
         defaultProps: {
           children: 'children',
           label: 'label'
-        }
+        },
+        defaultExpandedKeys: [0]
       }
     },
     computed: {

@@ -22,11 +22,6 @@ const isVerifyUrl = (url) => {
 
 module.exports = async function (ctx, next) {
   console.log(`into security.......`);
-  // 不需要验证，则跳过
-  if (!isVerifyUrl(ctx.url)) {
-    await next()
-    return
-  }
 
   ctx.set({
     'Pragma': 'No-cache',
@@ -34,14 +29,21 @@ module.exports = async function (ctx, next) {
   });
 
   // 设置公共参数
-  ctx.locals = {}
+  ctx.locals = ctx.locals || {}
   // 设置请求参数
   let p = ctx.query;
   try {
     p = _.extend(p, ctx.request.body, ctx.params);
   } catch (e) {
   }
+  console.log(`p=======${ctx.request.body}`);
   ctx.parse = p;
+
+  // 不需要验证，则跳过
+  if (!isVerifyUrl(ctx.url)) {
+    await next()
+    return
+  }
 
   // 判断用户是否登录
   var user = _.extend({}, await userService.getLoginUser(ctx));

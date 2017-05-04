@@ -16,11 +16,8 @@ export default {
    * @return
    */
   toLogin: async (ctx, next) => {
-    console.log(ctx.url);
-    console.log(`ctx.request.query=${JSON.stringify(ctx.request)}`);
     const { username, password } = ctx.request.body
     const user = await userService.toLogin(ctx, username, password)
-    console.log(`isUser===${user}`);
 
     if (!user) {
       console.log('用户名或密码不正确');
@@ -33,7 +30,6 @@ export default {
       ctx.locals = ctx.locals || {}
       ctx.locals._user = user
       const refer = (ctx.parse ? ctx.parse.next : null) || '/index'
-      console.log(`refer======${refer}`);
       ctx.redirect(refer);
     }
   },

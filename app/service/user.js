@@ -15,12 +15,7 @@ export default {
    * @return {Promise}          [description]
    */
   toLogin: async function (ctx, username, pwd) {
-    const result = await userDao.findOne({ username: username, password: this.wrapUserPass(pwd) })
-    if (!!result) {
-      return await this.setLoginUser(ctx, username, pwd); // 将用户信息存储到cookie中
-    }
-
-    return false
+    return await this.setLoginUser(ctx, username, pwd); // 将用户信息存储到cookie中
   },
 
   /**
@@ -45,7 +40,7 @@ export default {
     console.log(`userService => getLoginUser ctx:${ctx}`);
     let feteauth = ctx.cookies.get('feteauth');
     if (!feteauth) return null;
-    
+
     let decrypted = '';
     let decipher = crypto.createDecipher('rc4', config.authKey);
     decrypted += decipher.update(feteauth, 'hex', 'utf8');
@@ -75,7 +70,7 @@ export default {
 
     console.log(`username: ${username}, pwd: ${pwd} user===${user}`);
     if (!user) {
-      return false;
+      return null;
     }
 
     const ip = ctx.ip;
@@ -89,7 +84,7 @@ export default {
     console.log(`set ctx.cookies: ${str}`);
 
     // loginUserStore.set(username, user);
-    return true
+    return user
   },
 
   wrapUserPass(password) {
