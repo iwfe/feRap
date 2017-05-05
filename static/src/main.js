@@ -4,7 +4,6 @@ import Vue from 'vue'
 import App from './App'
 import router from './router.js'
 import store from './store'
-import axios from 'axios'
 
 import '@/styles/global.css'
 import '@/styles/site.css'

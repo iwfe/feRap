@@ -1,10 +1,6 @@
-import Vue from 'vue'
-import axios from 'axios'
-
 export default {
   getUrl (key) {
     const rootPath = window.pageConfig.siteUrl + 'team/'
-    console.log(`rootPath: ${rootPath}`)
     return rootPath + {
       getTeamList: 'getTeamList.json',
       teamData: 'data'
@@ -37,7 +33,21 @@ export default {
       console.log(`faild: ${response}`)
     })
   },
-
+  /**
+   * 删除团队
+   */
+  delTeam (id, cb) {
+    axios.delete(this.getUrl('teamData') + `?teamId=${id}`)
+    .then(function (response) {
+      cb(response.data.data)
+    })
+    .catch(function (response) {
+      console.log(`faild: ${response}`)
+    })
+  },
+  /**
+   * 根据ID查找团队
+   */
   findTeamById (id, cb) {
     axios.get(this.getUrl('teamData') + `?teamId=${id}`)
     .then(function (response) {

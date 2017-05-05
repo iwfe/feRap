@@ -3,6 +3,7 @@
 import db from '../common/db'
 import sutil from '../common/sutil'
 import utils from '../../global/utils'
+import _ from 'underscore'
 
 const userDao = db.get('user')
 const teamDao = db.get('team')
@@ -153,11 +154,39 @@ export default {
       $set: Object.assign({
           updateTime: Date.now()
         },
-        team)
+      team)
     });
     return true
   },
 
+  /**
+   * 删除team
+   * @param  {[type]}  user   [description]
+   * @param  {[type]}  teamId [description]
+   * @return {Promise}        [description]
+   */
+  deleteTeam: async function (user, teamId) {
+    // 删除team
+    const team = await teamDao.remove({ id: teamId })
+
+    // 更新用户teams信息
+    let teams = user.teams
+    teams = _.filter(teams, item => item.id !== teamId)
+    await userDao.update({
+      _id: user._id
+    }, {
+      $set: {
+        teams: teams
+      }
+    })
+    return true
+  },
+
+  /**
+   * 根据ID查找team
+   * @param  {[type]}  id [description]
+   * @return {Promise}    [description]
+   */
   findTeamById: async function (id) {
     const team = await teamDao.findOne({id: id})
     return team

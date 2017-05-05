@@ -23,5 +23,6 @@ routes.get('/team/getTeamList.json', team.getTeamList)
 routes.post('/team/data', team.addTeam)
 routes.put('/team/data', team.updateTeam)
 routes.get('/team/data', team.findTeamById)
+routes.del('/team/data', team.deleteTeam)
 
 module.exports = routes

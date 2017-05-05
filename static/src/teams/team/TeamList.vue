@@ -58,7 +58,7 @@
 
 <script>
   import { mapGetters } from 'vuex'
-  import { Table, TableColumn, Tag, Button } from 'element-ui'
+  import { Table, TableColumn, Tag, Button, MessageBox, Message } from 'element-ui'
   import TeamForm from './TeamForm'
   import api from './api.js'
 
@@ -66,8 +66,8 @@
     data () {
       return {
         dialogFormVisible: false, // 是否显示新增窗口
-        teamId: null,
-        tableData: []
+        teamId: null,  // 用于编辑删除团队
+        tableData: [] // 列表数据
       }
     },
     components: {
@@ -75,6 +75,8 @@
       ElTableColumn: TableColumn,
       ElTag: Tag,
       ElButton: Button,
+      MessageBox,
+      Message,
       TeamForm
     },
     computed: {
@@ -86,25 +88,44 @@
       this.getListData()
     },
     methods: {
+      // 获取数据列表
       getListData () {
         const self = this
         api.getTeamList((data) => {
-          console.log(data)
           self.tableData = data
         })
       },
+      // 新增
       handleAdd () {
         this.teamId = null
         this.showForm()
       },
+      // 修改
       handleEdit (index, row) {
         this.teamId = row.id
         this.showForm()
-        console.log(index, row)
       },
+      // 删除team
       handleDelete (index, row) {
-        console.log(index, row)
+        const self = this
+        self.teamId = row.id
+        MessageBox.confirm(`确认删除团队"${row.name}"么?`, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          self.doDelete()
+        })
       },
+      doDelete () {
+        const self = this
+        api.delTeam(self.teamId, (res) => {
+          Message.success('删除成功')
+          self.getListData() // 更新数据列表
+          self.$store.dispatch('teams.getAllTeams') // 更新团队树
+        })
+      },
+      // 隐藏显示team
       hideForm () {
         this.dialogFormVisible = false
       },

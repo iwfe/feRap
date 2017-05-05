@@ -55,6 +55,17 @@ export default {
     sutil.success(ctx, result)
   },
   /**
+   * 删除团队
+   * @param  {[type]}   ctx  [description]
+   * @param  {Function} next [description]
+   * @return {Promise}       [description]
+   */
+  deleteTeam: async function (ctx, next) {
+    const user = await userService.getLoginUser(ctx)
+    const result = await teamService.deleteTeam(user, ctx.parse.teamId)
+    sutil.success(ctx, result)
+  },
+  /**
    * 根据Id查找team
    * @param  {[type]}   ctx  [description]
    * @param  {Function} next [description]
