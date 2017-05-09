@@ -11,7 +11,7 @@ export default {
    * @return
    */
   getTeamsTree: async function (ctx, next) {
-    const user = await userService.getLoginUser(ctx)
+    const user = ctx.locals._user
     const trees = await teamService.getTeamsTree(user)
     sutil.success(ctx, trees)
   },
@@ -22,7 +22,7 @@ export default {
    * @return {Promise}       [description]
    */
   getTeamList: async function (ctx, next) {
-    const user = await userService.getLoginUser(ctx)
+    const user = ctx.locals._user
     const teams = await teamService.getTeamList(user)
     sutil.success(ctx, teams)
   },
@@ -39,7 +39,7 @@ export default {
      name: name,
      description: description
     }
-    const user = await userService.getLoginUser(ctx)
+    const user = ctx.locals._user
     const result = await teamService.addTeam(user, team)
 
     sutil.success(ctx, result)
@@ -61,7 +61,7 @@ export default {
    * @return {Promise}       [description]
    */
   deleteTeam: async function (ctx, next) {
-    const user = await userService.getLoginUser(ctx)
+    const user = ctx.locals._user
     const result = await teamService.deleteTeam(user, ctx.parse.teamId)
     sutil.success(ctx, result)
   },
@@ -73,6 +73,38 @@ export default {
    */
   findTeamById: async function (ctx, next) {
     const result = await teamService.findTeamById(ctx.parse.teamId)
+    sutil.success(ctx, result)
+  },
+
+  /**
+   * 查找所有团队，包括已加入的和未加入的
+   * @param  {[type]}   ctx  [description]
+   * @param  {Function} next [description]
+   * @return {Promise}       [description]
+   */
+  getAllTeamList: async function (ctx, next) {
+    const user = ctx.locals._user
+    const result = await teamService.getAllTeamList(user)
+    sutil.success(ctx, result)
+  },
+  /**
+   * 加入团队
+   * @return {Promise} [description]
+   */
+  joinIntoTeam: async function (ctx, next) {
+    const user = ctx.locals._user
+    const { teamId } = ctx.parse
+    const result = await teamService.joinIntoTeam(user, teamId)
+    sutil.success(ctx, result)
+  },
+  /**
+   * 退出团队
+   * @return {Promise} [description]
+   */
+  quitFromTeam: async function (ctx, next) {
+    const user = ctx.locals._user
+    const { teamId } = ctx.parse
+    const result = await teamService.quitFromTeam(user, teamId)
     sutil.success(ctx, result)
   }
 

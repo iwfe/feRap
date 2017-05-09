@@ -31,8 +31,11 @@ export default {
   },
 
   findByUserName: async function (username) {
-    const user = await userDao.findOne({ username: username })
-    return user
+    return await userDao.findOne({ username: username })
+  },
+
+  findById: async function (id) {
+    return await userDao.findOne({ id: id })
   },
 
   //登录用户cookie管理

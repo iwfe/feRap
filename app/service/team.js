@@ -20,6 +20,7 @@ export default {
     let qteam = [], qprj = [],
         trees = [], treesMap = {}
 
+    user = await this.findUser(user)
     const teams0 = user.teams
     if(!teams0 || !teams0.length) return []
 
@@ -84,6 +85,8 @@ export default {
    * @return {Promise}      [description]
    */
   getTeamList: async function (user) {
+    user = await this.findUser(user)
+
     const teams0 = user.teams
     if(!teams0 || !teams0.length) return []
 
@@ -115,6 +118,8 @@ export default {
    * @return {Promise}      [description]
    */
   addTeam: async function (user, team) {
+    user = await this.findUser(user)
+
     let teams = user.teams || []
     const id = await sutil.genId(teamDao)
 
@@ -170,7 +175,8 @@ export default {
     const team = await teamDao.remove({ id: teamId })
 
     // 更新用户teams信息
-    let teams = user.teams
+    user = await this.findUser(user)
+    let teams = user.teams || []
     teams = _.filter(teams, item => item.id !== teamId)
     await userDao.update({
       _id: user._id
@@ -190,5 +196,99 @@ export default {
   findTeamById: async function (id) {
     const team = await teamDao.findOne({id: id})
     return team
-  }
+  },
+
+  /**
+   * 查找所有团队，包括已加入的和未加入的
+   * @param  {[type]}  user [description]
+   * @return {Promise}      [description]
+   */
+  getAllTeamList: async function (user) {
+    user = await this.findUser(user)
+
+    const teams = user.teams || []
+    let teamsMap = {}
+    _.map(teams, (team) => {
+      teamsMap[team.id] = team
+    })
+
+    // 查找所有团队
+    const allteams = await teamDao.find()
+    _.each(allteams, (team) => {
+      if (_.has(teamsMap, team.id)) {
+        team.joined = true  // 用户已加入团队
+      }
+      return team
+    })
+
+    // 排序
+    allteams.sort((t1, t2) => {
+      return t1.joined ? -1 : 1
+    })
+
+    return allteams
+  },
+
+  /**
+   * 加入团队
+   * @return {Promise} [description]
+   */
+  joinIntoTeam: async function (user, teamId) {
+    user = await this.findUser(user)
+
+    let teams = user.teams || []
+
+    const team = await this.findTeamById(teamId)
+
+    if (!team) return false
+
+    teams.push({
+      id: team.id,
+      role: 'member',
+      status: 'normal'
+    })
+
+    await userDao.update({
+      _id: user._id
+    }, {
+      $set: {
+        teams: teams
+      }
+    })
+
+    return true
+  },
+
+  /**
+   * 退出团队
+   * @return {Promise} [description]
+   */
+  quitFromTeam: async function (user, teamId) {
+    user = await this.findUser(user)
+
+    let teams = user.teams || []
+
+    const team = await this.findTeamById(teamId)
+
+    if (!team) return false
+
+    teams = _.filter(teams, item => item.id !== teamId)
+    await userDao.update({
+      _id: user._id
+    }, {
+      $set: {
+        teams: teams
+      }
+    })
+
+    return true
+  },
+  /**
+   * 查找用户信息
+   * @param  {[type]}  id [description]
+   * @return {Promise}    [description]
+   */
+  findUser: async function (user) {
+    return await userDao.findOne({username: user.username})
+  },
 }

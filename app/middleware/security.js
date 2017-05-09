@@ -6,7 +6,7 @@ const config = require('../config')
 
 
 const ACCEPT_URLS = [
-  '/index'
+  '/login'
 ]
 
 // 是否需要验证权限
@@ -30,6 +30,7 @@ module.exports = async function (ctx, next) {
 
   // 设置公共参数
   ctx.locals = ctx.locals || {}
+
   // 设置请求参数
   let p = ctx.query;
   try {
@@ -40,10 +41,10 @@ module.exports = async function (ctx, next) {
   ctx.parse = p;
 
   // 不需要验证，则跳过
-  if (!isVerifyUrl(ctx.url)) {
-    await next()
-    return
-  }
+  // if (!isVerifyUrl(ctx.url)) {
+  //   await next()
+  //   return
+  // }
 
   // 判断用户是否登录
   var user = _.extend({}, await userService.getLoginUser(ctx));
@@ -55,12 +56,19 @@ module.exports = async function (ctx, next) {
     });
   }
   delete user.password;
+  delete user.teams;
   ctx.locals._user = user;
+  console.log(`ctx.locals._user=======${JSON.stringify(ctx.locals._user)}`);
+
+  console.log(`ctx.status=======${ctx.status}`);
+  await next()
+  return
 
   // 页面404跳转
   try {
     var status = ctx.status || 404;
     if (status === 404) ctx.throw(404);
+    console.log(`ctx.status=======${ctx.status}`);
 
   } catch (error) {
     ctx.status = error.status || 500;
@@ -76,7 +84,6 @@ module.exports = async function (ctx, next) {
     }
   }
   await next()
-
   // return Promise.resolve()
   //   .then(data=>{
   //

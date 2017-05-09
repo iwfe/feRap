@@ -1,15 +1,14 @@
 
 export default {
   getUrl (key) {
-    const rootPath = window.pageConfig.siteUrl + 'team/'
-    return rootPath + {
+    return window.pageConfig.siteUrl + 'team/' + {
       getTeamsTree: 'getTeamsTree.json'
     }[key]
   },
   getTeamsTree (cb) {
     axios.get(this.getUrl('getTeamsTree'), {})
     .then(function (response) {
-      cb(response.data.data)
+      cb(response.data)
     })
     .catch(function (response) {
       console.log(`faild: ${response}`)

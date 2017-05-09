@@ -25,4 +25,8 @@ routes.put('/team/data', team.updateTeam)
 routes.get('/team/data', team.findTeamById)
 routes.del('/team/data', team.deleteTeam)
 
+routes.get('/team/getAllTeamList.json', team.getAllTeamList)
+routes.get('/team/joinIntoTeam.json', team.joinIntoTeam)
+routes.get('/team/quitFromTeam.json', team.quitFromTeam)
+
 module.exports = routes

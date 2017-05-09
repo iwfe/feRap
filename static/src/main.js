@@ -16,6 +16,8 @@ window.pageConfig = { // 用于测试
   siteUrl: 'http://localhost:8080/'
 }
 
+import '@/common/axios-init'
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

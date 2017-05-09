@@ -1,7 +1,6 @@
 export default {
   getUrl (key) {
-    const rootPath = window.pageConfig.siteUrl + 'team/'
-    return rootPath + {
+    return window.pageConfig.siteUrl + 'team/' + {
       getTeamList: 'getTeamList.json',
       teamData: 'data'
     }[key]
@@ -13,7 +12,7 @@ export default {
   getTeamList (cb) {
     axios.get(this.getUrl('getTeamList'), {})
     .then(function (response) {
-      cb(response.data.data)
+      cb(response.data)
     })
     .catch(function (response) {
       console.log(`faild: ${response}`)
@@ -27,7 +26,7 @@ export default {
     const method = data.id ? 'put' : 'post'
     axios[method](this.getUrl('teamData'), data)
     .then(function (response) {
-      cb(response.data.data)
+      cb(response.data)
     })
     .catch(function (response) {
       console.log(`faild: ${response}`)
@@ -39,7 +38,7 @@ export default {
   delTeam (id, cb) {
     axios.delete(this.getUrl('teamData') + `?teamId=${id}`)
     .then(function (response) {
-      cb(response.data.data)
+      cb(response.data)
     })
     .catch(function (response) {
       console.log(`faild: ${response}`)
@@ -51,7 +50,7 @@ export default {
   findTeamById (id, cb) {
     axios.get(this.getUrl('teamData') + `?teamId=${id}`)
     .then(function (response) {
-      cb(response.data.data)
+      cb(response.data)
     })
     .catch(function (response) {
       console.log(`faild: ${response}`)

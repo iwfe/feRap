@@ -23,7 +23,7 @@ export default {
   data () {
     return {
       menus: [
-        {url: '/', text: '首页'},
+        {url: '/index', text: '首页'},
         {url: '/teams', text: '团队'},
         {url: '/api/all', text: 'API'},
         {url: '/calendar', text: '日历'}
