@@ -7,6 +7,15 @@ import teamService from '../service/team'
 export default {
   root: 'team',
   /**
+   * 主页
+   * @param  {[type]}   ctx  [description]
+   * @param  {Function} next [description]
+   * @return {Promise}       [description]
+   */
+  index: async (ctx, next) => {
+    await ctx.render('index')
+  },
+  /**
    * 团队树
    * @return
    */

@@ -24,8 +24,8 @@ export default {
     return {
       menus: [
         {url: '/index', text: '首页'},
-        {url: '/teams', text: '团队'},
-        {url: '/api/all', text: 'API'},
+        {url: '/teams/index?prdId=m3tnaO', text: '团队'},
+        {url: '/api/index', text: 'API'},
         {url: '/calendar', text: '日历'}
       ]
     }

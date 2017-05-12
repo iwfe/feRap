@@ -283,6 +283,7 @@ export default {
 
     return true
   },
+
   /**
    * 查找用户信息
    * @param  {[type]}  id [description]
@@ -290,5 +291,5 @@ export default {
    */
   findUser: async function (user) {
     return await userDao.findOne({username: user.username})
-  },
+  }
 }

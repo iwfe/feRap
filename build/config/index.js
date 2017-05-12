@@ -31,9 +31,10 @@ module.exports = {
       devServer: {
         target: 'http://localhost:3779',
         filter: function (pathname, req) {
-          return pathname.match('^/api') || (pathname.match('^/login') && req.method === 'POST')
+          return (pathname.match('^/login') && req.method === 'POST')
                   || (pathname.match('^/regist') && req.method === 'POST')
                   || pathname.match('^/team/')
+                  || (pathname.match('^/api/') && !pathname.match('^/api/index'))
         }
       }
     },

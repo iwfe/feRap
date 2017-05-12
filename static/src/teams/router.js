@@ -1,7 +1,7 @@
 const Teams = r => require.ensure([], () => r(require('@/teams/Teams')), 'teams')
 
 export default {
-  path: '/teams',
+  path: '/teams/index',
   name: 'teams',
   component: Teams
 }

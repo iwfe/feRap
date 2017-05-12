@@ -37,7 +37,7 @@ module.exports = async function (ctx, next) {
     p = _.extend(p, ctx.request.body, ctx.params);
   } catch (e) {
   }
-  console.log(`p=======${ctx.request.body}`);
+  console.log(`p=======${p.prdId}`);
   ctx.parse = p;
 
   // 不需要验证，则跳过

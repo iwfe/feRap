@@ -1,7 +1,7 @@
-import List from '@/api/List'
+const ApiList = r => require.ensure([], () => r(require('@/api/List')), 'apis')
 
 export default {
-  path: '/api',
-  name: 'list',
-  component: List
+  path: '/api/index',
+  name: 'apiList',
+  component: ApiList
 }

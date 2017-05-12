@@ -1,14 +1,14 @@
 <template>
   <div class="container-panel">
     <div class="teams-panel">
-      <div class="team-item" :class="{joined: team.joined}" v-for="team in teams" @click="goDetail(team.joined)">
+      <div class="team-item" :class="{joined: team.joined}" v-for="team in teams" @click="goDetail()">
         <p class="team-label title">{{team.name}}</p>
         <p class="team-label">{{team.description}}</p>
 
-        <p class="team-add" v-if="!team.joined" @click="join(team.id)">加入</p>
+        <p class="team-add" v-if="!team.joined" @click.stop="join(team.id)">加入</p>
         <p class="team-add gray" v-if="!team.joined"></p>
 
-        <p class="team-quit" v-if="team.joined" @click="quit(team.id)">退出</p>
+        <p class="team-quit" v-if="team.joined" @click.stop="quit(team.id)">退出</p>
       </div>
     </div>
   </div>
@@ -33,8 +33,7 @@
           self.teams = res
         })
       },
-      goDetail (isJoin) {
-        if (!isJoin) return
+      goDetail () {
         window.location.href = window.pageConfig.siteUrl + 'teams/'
       },
       join (teamId) {

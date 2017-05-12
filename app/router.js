@@ -5,6 +5,7 @@ import Router from 'koa-router'
 import main from './controller/main'
 import user from './controller/user'
 import team from './controller/team'
+import api from './controller/api'
 
 const routes = new Router()
 
@@ -28,5 +29,10 @@ routes.del('/team/data', team.deleteTeam)
 routes.get('/team/getAllTeamList.json', team.getAllTeamList)
 routes.get('/team/joinIntoTeam.json', team.joinIntoTeam)
 routes.get('/team/quitFromTeam.json', team.quitFromTeam)
+
+// api
+routes.get('/api/index', api.index)
+routes.get('/api/getApiList.json', api.getApiList)
+
 
 module.exports = routes
