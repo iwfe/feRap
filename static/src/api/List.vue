@@ -3,6 +3,7 @@
     <p class="toolbar"><el-button type="primary" @click="handleAdd" icon="plus" size="small">新增</el-button></p>
     <el-table
       :data="tableData"
+      @row-click="showForm"
       border
       style="width: 100%">
       <el-table-column
@@ -26,26 +27,22 @@
         label="最后修改">
       </el-table-column>
       <el-table-column
-        label="操作"
-        width="140">
-        <template scope="scope">
-          <el-button
-            size="small"
-            @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-          <el-button
-            size="small"
-            type="danger"
-            @click="handleDelete(scope.$index, scope.row)">删除</el-button>
-        </template>
+        prop="id"
+        width="100"
+        label="预览">
       </el-table-column>
     </el-table>
-
+    <!-- 表单 -->
+    <transition name="slide-fade" >
+      <form-panel v-show="isShowForm" :apiId="apiId"></form-panel>
+    </transition>
   </div>
 </template>
 
 <script>
   import { mapGetters } from 'vuex'
   import { Table, TableColumn, Tag, Button, MessageBox, Message } from 'element-ui'
+  import FormPanel from './form/FormPanel'
   import api from './api.js'
 
   export default {
@@ -53,7 +50,8 @@
       return {
         prdId: this.$route.query.prdId,
         apiId: null,  // 用于编辑删除Api
-        tableData: [] // 列表数据
+        tableData: [], // 列表数据
+        isShowForm: false // 是否显示表单
       }
     },
     components: {
@@ -62,7 +60,8 @@
       ElTag: Tag,
       ElButton: Button,
       MessageBox,
-      Message
+      Message,
+      FormPanel
     },
     computed: {
 
@@ -80,6 +79,11 @@
       },
       handleAdd () {
 
+      },
+      showForm (row) {
+        // this.isShowForm = true
+        this.isShowForm = !this.isShowForm
+        this.apiId = row.id
       }
 
     }
@@ -115,8 +119,46 @@
     margin: 5px;
     font-size: 12px;
   }
+  .el-table {
+    font-size: 12px;
+  }
   .el-table .cell {
     text-align: left;
   }
+}
+
+/* 可以设置不同的进入和离开动画 */
+@keyframes slideIn {
+  from {
+    transform: translate3d(100%, 0, 0);
+    opacity: 0;
+  }
+  to {
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOut {
+  from {
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
+  }
+  to {
+    transform: translate3d(100%, 0, 0);
+    opacity: 0;
+  }
+}
+
+.slide-fade-enter-active {
+  animation: slideIn .3s ease-in;
+}
+
+.slide-fade-leave-active {
+  animation: slideOut .3s ease-out;
+}
+
+.slide-fade-enter, .slide-fade-leave-to {
+  z-index: 1;
 }
 </style>
