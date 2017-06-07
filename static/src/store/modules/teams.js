@@ -1,6 +1,5 @@
 import teamsApi from '@/teams/api'
 import * as types from '@/store/mutation-types'
-import util from '@/common/util'
 
 // initial state
 const state = {
@@ -23,7 +22,6 @@ const actions = {
     })
   },
   setCurNode ({ commit }, node) {
-    console.log(`node...${node}`)
     commit(types.SET_CUR_NODE, { node })
   }
 }
@@ -40,7 +38,7 @@ const mutations = {
 
 export default {
   state,
-  getters: util.initRoot('teams', getters),
-  actions: util.initRoot('teams', actions),
+  getters,
+  actions,
   mutations
 }

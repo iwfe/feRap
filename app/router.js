@@ -33,6 +33,7 @@ routes.get('/team/quitFromTeam.json', team.quitFromTeam)
 // api
 routes.get('/api/index', api.index)
 routes.get('/api/getApiList.json', api.getApiList)
+routes.get('/api/getApiDetail.json', api.getApiDetail)
 
 
 module.exports = routes

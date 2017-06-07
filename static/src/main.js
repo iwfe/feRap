@@ -18,6 +18,8 @@ window.pageConfig = { // 用于测试
 
 import '@/common/axios-init'
 
+console.log(store)
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

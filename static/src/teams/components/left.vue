@@ -32,7 +32,7 @@
     },
     computed: {
       ...mapGetters({
-        teams: 'teams.allTeams'
+        teams: 'teams/allTeams'
       })
     },
     components: {
@@ -41,7 +41,7 @@
     methods: {
       handleNodeClick (data) {
         console.log(data)
-        this.$store.dispatch('teams.setCurNode', data)
+        this.$store.dispatch('teams/setCurNode', data)
       }
     }
   }

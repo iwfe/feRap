@@ -84,7 +84,7 @@
             api.addOrUpdateTeam(self.form, (data) => {
               Message.success('保存成功')
               self.$emit('updateList') // 更新数据列表
-              self.$store.dispatch('teams.getAllTeams') // 更新团队树
+              self.$store.dispatch('teams/getAllTeams') // 更新团队树
             })
 
             // 隐藏

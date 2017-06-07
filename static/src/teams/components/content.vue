@@ -41,7 +41,7 @@
     },
     computed: {
       ...mapGetters({
-        curNode: 'teams.curNode'
+        curNode: 'teams/curNode'
       })
     }
   }

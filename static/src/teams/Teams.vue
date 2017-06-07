@@ -24,8 +24,8 @@
     },
     computed: {
       ...mapGetters({
-        teams: 'teams.allTeams',
-        curNode: 'teams.curNode'
+        teams: 'teams/allTeams',
+        curNode: 'teams/curNode'
       })
     },
     components: {
@@ -33,7 +33,7 @@
       TeamsContent
     },
     mounted () {
-      this.$store.dispatch('teams.getAllTeams')
+      this.$store.dispatch('teams/getAllTeams')
     }
   }
 </script>

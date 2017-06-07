@@ -81,7 +81,7 @@
     },
     computed: {
       ...mapGetters({
-        curNode: 'teams.curNode'
+        curNode: 'teams/curNode'
       })
     },
     mounted () {
@@ -122,7 +122,7 @@
         api.delTeam(self.teamId, (res) => {
           Message.success('删除成功')
           self.getListData() // 更新数据列表
-          self.$store.dispatch('teams.getAllTeams') // 更新团队树
+          self.$store.dispatch('teams/getAllTeams') // 更新团队树
         })
       },
       // 隐藏显示team

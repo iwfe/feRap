@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import * as actions from './actions'
 import * as getters from './getters'
 import teams from './modules/teams'
+import apis from './modules/apis'
 
 Vue.use(Vuex)
 
@@ -12,7 +13,15 @@ export default new Vuex.Store({
   actions,
   getters,
   modules: {
-    teams
+    teams: {
+      namespaced: true,
+      ...teams
+    },
+    apis: {
+      namespaced: true,
+      ...apis
+    }
+
   },
   strict: debug
   // plugins: debug ? [createLogger()] : []

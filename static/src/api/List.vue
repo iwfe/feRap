@@ -1,8 +1,10 @@
 <template>
   <div class="api-list-panel">
-    <p class="toolbar"><el-button type="primary" @click="handleAdd" icon="plus" size="small">新增</el-button></p>
+    <p class="toolbar">
+      <el-button type="primary" @click="handleAdd" icon="plus" size="small">新增</el-button>
+    </p>
     <el-table
-      :data="tableData"
+      :data="apiList"
       @row-click="showForm"
       border
       style="width: 100%">
@@ -33,9 +35,9 @@
       </el-table-column>
     </el-table>
     <!-- 表单 -->
-    <transition name="slide-fade" >
-      <form-panel v-show="isShowForm" :apiId="apiId"></form-panel>
-    </transition>
+    <!-- <transition name="slide-fade" > -->
+      <form-panel v-show="isShowForm" ></form-panel>
+    <!-- </transition> -->
   </div>
 </template>
 
@@ -49,8 +51,8 @@
     data () {
       return {
         prdId: this.$route.query.prdId,
-        apiId: null,  // 用于编辑删除Api
-        tableData: [], // 列表数据
+        // apiId: null,  // 用于编辑删除Api
+        // apiList: [], // 列表数据
         isShowForm: false // 是否显示表单
       }
     },
@@ -64,26 +66,30 @@
       FormPanel
     },
     computed: {
-
+      ...mapGetters({
+        apiList: 'apis/allApis',
+        apiId: 'apis/curId'
+      })
     },
     mounted () {
       this.getListData()
+      document.addEventListener('click', () => {
+        // this.isShowForm = false
+      })
     },
     methods: {
       // 获取数据列表
       getListData () {
-        const self = this
-        api.getApiList(self.prdId, (data) => {
-          self.tableData = data
-        })
+        this.$store.dispatch('apis/getAllApis', this.prdId)
       },
       handleAdd () {
 
       },
-      showForm (row) {
-        // this.isShowForm = true
-        this.isShowForm = !this.isShowForm
-        this.apiId = row.id
+      showForm (row, event) {
+        this.isShowForm = true
+        console.log(row.id)
+        this.$store.dispatch('apis/setCurId', row.id)
+        event.stopPropagation()
       }
 
     }

@@ -37,14 +37,14 @@ module.exports = async function (ctx, next) {
     p = _.extend(p, ctx.request.body, ctx.params);
   } catch (e) {
   }
-  console.log(`p=======${p.prdId}`);
-  ctx.parse = p;
+  console.log(`p=======${p.apiId}`);
+  ctx.locals.parse = p;
 
   // 不需要验证，则跳过
-  // if (!isVerifyUrl(ctx.url)) {
-  //   await next()
-  //   return
-  // }
+  if (!isVerifyUrl(ctx.url)) {
+    await next()
+    return
+  }
 
   // 判断用户是否登录
   var user = _.extend({}, await userService.getLoginUser(ctx));

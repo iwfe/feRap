@@ -19,7 +19,9 @@ module.exports = {
     "$": true,
     "_": true,
     "Vue": true,
-    "axios": true
+    "axios": true,
+    "CodeMirror": true,
+    "toastr": true
   },
   // add your custom rules here
   'rules': {

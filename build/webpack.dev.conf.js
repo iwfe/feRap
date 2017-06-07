@@ -21,8 +21,11 @@ module.exports = merge(baseWebpackConfig, {
     new webpack.ProvidePlugin({
       Vue: 'vue',
       axios: 'axios',
-      _: 'underscore'
-
+      _: 'underscore',
+      $: 'jquery',
+      jQuery: 'jquery',
+      CodeMirror: 'codemirror',
+      toastr: 'toastr'
     }),
     new webpack.DefinePlugin({
       'process.env': config.dev.env
