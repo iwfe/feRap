@@ -9,6 +9,7 @@ export default {
    * @return
    */
   login: async (ctx, next) => {
+    console.log(`login......`);
       await ctx.render('index')
   },
   /**
@@ -18,14 +19,13 @@ export default {
   toLogin: async (ctx, next) => {
     const { username, password } = ctx.request.body
     const user = await userService.toLogin(ctx, username, password)
-
+    console.log(user);
     if (!user) {
       console.log('用户名或密码不正确');
-      await ctx.redirect('/login')
-      // await sutil.render(ctx, {
-      //   username: username,
-      //   error: '用户名或密码不正确'
-      // });
+      await ctx.render('index', {
+        username: username,
+        error: '用户名或密码不正确'
+      });
     } else {
       ctx.locals = ctx.locals || {}
       ctx.locals._user = user
@@ -82,5 +82,5 @@ export default {
     } else {
       return false
     }
-  } 
+  }
 }

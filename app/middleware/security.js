@@ -47,6 +47,7 @@ module.exports = async function (ctx, next) {
   }
 
   // 判断用户是否登录
+  console.log(`wwwwwwwww`)
   var user = _.extend({}, await userService.getLoginUser(ctx));
   console.log(`username=${user.username}`);
   if (!user.username) {

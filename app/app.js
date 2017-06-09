@@ -27,7 +27,7 @@ app.use(views(__dirname + '/view', { extension: 'ejs' }))
 // app.use(favicon('./view/favicon.ico', { maxAge: config.staticCacheMaxAge }))
 
 // static files
-app.use(serve(path.resolve(__dirname, '../static/src/dist')))
+app.use(serve(path.resolve(__dirname, '../static/dist')))
 // app.use(mount('/static', serve('./static/dist', { maxAge: config.staticCacheMaxAge })))
 // app.use(mount('/static', serve(path.resolve(config.uploadImagePath), { maxAge: config.staticCacheMaxAge })))
 

@@ -27,6 +27,15 @@ var webpackConfig = merge(baseWebpackConfig, {
     chunkFilename: utils.assetsPath('js/[id].[chunkhash].js')
   },
   plugins: [
+    new webpack.ProvidePlugin({
+      Vue: 'vue',
+      axios: 'axios',
+      _: 'underscore',
+      $: 'jquery',
+      jQuery: 'jquery',
+      CodeMirror: 'codemirror',
+      toastr: 'toastr'
+    }),
     // http://vuejs.github.io/vue-loader/en/workflow/production.html
     new webpack.DefinePlugin({
       'process.env': env

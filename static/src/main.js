@@ -12,9 +12,9 @@ import 'element-ui/lib/theme-default/index.css'
 
 Vue.config.productionTip = false
 
-window.pageConfig = { // 用于测试
-  siteUrl: 'http://localhost:8080/'
-}
+// window.pageConfig = { // 用于测试
+//   siteUrl: 'http://localhost:8080/'
+// }
 
 import '@/common/axios-init'
 

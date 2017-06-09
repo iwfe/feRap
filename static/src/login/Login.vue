@@ -17,6 +17,7 @@
       </div>
 
       <div class="register clearfix">
+        <span class="error-info" v-if="error">{{error}}</span>
         <a v-if="isLogin" class="pull-right" href="/regist">没有帐号?</a>
         <a v-else class="pull-right" href="/login">已有帐号?</a>
       </div>
@@ -37,7 +38,10 @@ export default {
   name: 'login',
   data () {
     return {
+      error: window.pageConfig.error
     }
+  },
+  mounted () {
   },
   computed: {
     isLogin () {

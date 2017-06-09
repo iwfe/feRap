@@ -185,6 +185,7 @@ export default {
       return self.setError(2)
     },
     isAdd (v) {
+      console.log(`isAdd.....`)
       const self = this
       if (v) {
         self.inputJson = {
@@ -201,10 +202,12 @@ export default {
       self.$emit('init-code-mirror-all')
     }
   },
-  created () {
+  mounted () {
     this.$on('init-code-mirror-all', this.initCodeMirrorAll)
     this.$on('remove-code-mirror-all', this.removeCodeMirrorAll)
     this.$on('revertMock', this.revertMock)
+
+    this.initCodeMirrorAll()
   },
   // 清除事件监听
   beforeDestroy: function () {
@@ -214,6 +217,7 @@ export default {
   },
   methods: {
     initEditor (dom, readOnly) {
+      console.log(`initEditor...dom=${dom}`)
       const editor = CodeMirror.fromTextArea(dom, {
         lineNumbers: true,
         mode: 'application/json',
@@ -265,6 +269,7 @@ export default {
      * @returns {{key: *, comment: string, dataType: string, mock: string, children: Array}}
        */
     revertFormat (model, parents, type) {
+      console.log(`revertFormat......`)
       const self = this
       const output = []
       let children = ''
@@ -442,6 +447,7 @@ export default {
     },
 
     initCodeMirrorAll () {
+      console.log(`initCodeMirrorAll....`)
       const self = this
       if (self.editorReady) {
         self.setEditorData('input', self.inputJson)
@@ -449,9 +455,14 @@ export default {
         self.$emit('revertMock')
         return
       }
+      console.log(`self.$refs=${JSON.stringify(self.$refs)}`)
+
       const inputEditorDom = self.$refs.inputeditor
       const outputEditorDom = self.$refs.outputeditor
       const mockEditorDom = self.$refs.mockeditor
+      console.log(`inputEditorDom=${inputEditorDom}`)
+      console.log(`outputEditorDom=${outputEditorDom}`)
+
       self.inputEditor = self.initEditor(inputEditorDom)
       self.inputEditor.on('change', (cm, obj) => {
         self.inputData = $.trim(self.getEditorData('input'))

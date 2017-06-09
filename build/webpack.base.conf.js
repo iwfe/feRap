@@ -1,6 +1,7 @@
 var path = require('path')
 var utils = require('./utils')
 var config = require('./config')
+var argv = require('yargs').argv
 var vueLoaderConfig = require('./vue-loader.conf')
 
 function resolve (dir) {
@@ -25,6 +26,7 @@ module.exports = {
       '@': resolve('static/src')
     }
   },
+  watch: argv.watch ? true : false,
   module: {
     rules: [
       {
