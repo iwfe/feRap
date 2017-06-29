@@ -37,11 +37,11 @@ module.exports = async function (ctx, next) {
     p = _.extend(p, ctx.request.body, ctx.params);
   } catch (e) {
   }
-  console.log(`p=======${p.apiId}`);
+  console.log(`p=======${p.teamId}`);
   ctx.locals.parse = p;
 
   // 不需要验证，则跳过
-  if (!isVerifyUrl(ctx.url)) {
+  if (isVerifyUrl(ctx.url)) {
     await next()
     return
   }

@@ -43,7 +43,7 @@ export default {
    * @return {Promise}       [description]
    */
   addTeam: async function (ctx, next) {
-    const {name, description} = ctx.parse
+    const {name, description} = ctx.locals.parse
     const team = {
      name: name,
      description: description
@@ -60,7 +60,7 @@ export default {
    * @return {Promise}       [description]
    */
   updateTeam: async function (ctx, next) {
-    const result = await teamService.updateTeam(ctx.parse)
+    const result = await teamService.updateTeam(ctx.locals.parse)
     sutil.success(ctx, result)
   },
   /**
@@ -71,7 +71,7 @@ export default {
    */
   deleteTeam: async function (ctx, next) {
     const user = ctx.locals._user
-    const result = await teamService.deleteTeam(user, ctx.parse.teamId)
+    const result = await teamService.deleteTeam(user, ctx.locals.parse.teamId)
     sutil.success(ctx, result)
   },
   /**
@@ -81,7 +81,7 @@ export default {
    * @return {Promise}       [description]
    */
   findTeamById: async function (ctx, next) {
-    const result = await teamService.findTeamById(ctx.parse.teamId)
+    const result = await teamService.findTeamById(ctx.locals.parse.teamId)
     sutil.success(ctx, result)
   },
 
@@ -102,7 +102,8 @@ export default {
    */
   joinIntoTeam: async function (ctx, next) {
     const user = ctx.locals._user
-    const { teamId } = ctx.parse
+    console.log(`teamId==` + ctx.locals.parse.teamId)
+    const { teamId } = ctx.locals.parse
     const result = await teamService.joinIntoTeam(user, teamId)
     sutil.success(ctx, result)
   },
@@ -112,7 +113,7 @@ export default {
    */
   quitFromTeam: async function (ctx, next) {
     const user = ctx.locals._user
-    const { teamId } = ctx.parse
+    const { teamId } = ctx.locals.parse
     const result = await teamService.quitFromTeam(user, teamId)
     sutil.success(ctx, result)
   }

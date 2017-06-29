@@ -19,7 +19,7 @@ export default {
   toLogin: async (ctx, next) => {
     const { username, password } = ctx.request.body
     const user = await userService.toLogin(ctx, username, password)
-    console.log(user);
+    console.log(`ssss` + user);
     if (!user) {
       console.log('用户名或密码不正确');
       await ctx.render('index', {

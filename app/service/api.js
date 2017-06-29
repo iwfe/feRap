@@ -16,7 +16,7 @@ export default {
    * @return {Promise}      [description]
    */
   getApiList: async function (prdId) {
-  return apiDao.find({prdId: prdId})
+    return apiDao.find({prdId: prdId})
   },
   /**
    * [getApiDetail description]
