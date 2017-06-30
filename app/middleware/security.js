@@ -6,7 +6,8 @@ const config = require('../config')
 
 
 const ACCEPT_URLS = [
-  '/login'
+  '/login',
+  '/regist'
 ]
 
 // 是否需要验证权限
