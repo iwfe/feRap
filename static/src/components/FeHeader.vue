@@ -40,12 +40,10 @@ export default {
       const pathArr = ['/index', '/teams', '/api', '/calendar']
       for (let i = 0; i < pathArr.length; i++) {
         const exp = new RegExp('^' + pathArr[i] + '\\b')
-        // console.log(pathname, exp)
         if (exp.test(pathname)) {
           this.active = i
         }
       }
-      console.log(this.active)
     }
   }
 }

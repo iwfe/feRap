@@ -1,53 +1,66 @@
 <template>
   <div class="team-list-panel">
+    <add-prd></add-prd>
     <el-table
       :data="tableData"
       border
       style="width: 100%">
       <el-table-column
-        prop="name"
-        label="姓名"
-        width="180">
+        prop="projectName"
+        label="所属项目">
       </el-table-column>
       <el-table-column
         prop="name"
-        label="创建人"
-        width="180">
+        label="版本号">
       </el-table-column>
       <el-table-column
-        prop="date"
-        label="创建时间"
-        sortable
-        width="180">
-      </el-table-column>
-      <el-table-column
-        prop="address"
-        label="描述"
-        :formatter="formatter">
-      </el-table-column>
-      <el-table-column
-        prop="tag"
-        label="标签"
-        width="100"
-        :filters="[{ text: '家', value: '家' }, { text: '公司', value: '公司' }]"
-        :filter-method="filterTag">
+        prop="jira"
+        label="JIRA地址">
         <template scope="scope">
-          <el-tag
-            :type="scope.row.tag === '家' ? 'primary' : 'success'"
-            close-transition>{{scope.row.tag}}</el-tag>
+          <a
+            :href="scope.row.jira"
+            target="_blank"
+          >jira</a>
         </template>
       </el-table-column>
-      <el-table-column label="操作">
-      <template scope="scope">
-        <el-button
-          size="small"
-          @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-        <el-button
-          size="small"
-          type="danger"
-          @click="handleDelete(scope.$index, scope.row)">删除</el-button>
-      </template>
-    </el-table-column>
+      <el-table-column
+        prop="testTime"
+        label="提测时间"
+        min-width="140"
+        sortable>
+      </el-table-column>
+      <el-table-column
+        prop="onlineTime"
+        label="上线时间"
+        min-width="140"
+        sortable>
+      </el-table-column>
+      <el-table-column
+        prop="mergeMaster"
+        label="是否合master"
+        min-width="140">
+        <template scope="scope">
+          <span>{{scope.row.mergeMaster || '否'}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="comment"
+        label="备注">
+      </el-table-column>
+      <el-table-column
+        label="操作"
+        min-width="140"
+      >
+        <template scope="scope">
+          <el-button
+            size="small"
+            @click="handleUpdate(scope.$index, scope.row)">编辑</el-button>
+          <el-button
+            size="small"
+            type="danger"
+            @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+        </template>
+      </el-table-column>
     </el-table>
   </div>
 </template>
@@ -55,8 +68,17 @@
 <script>
   import { mapGetters } from 'vuex'
   import { Table, TableColumn, Tag, Button } from 'element-ui'
+  import AddPrd from './AddPrd'
+  import Api from './api.js'
 
   export default {
+    components: {
+      ElTable: Table,
+      ElTableColumn: TableColumn,
+      ElTag: Tag,
+      ElButton: Button,
+      AddPrd
+    },
     data () {
       return {
         tableData: [{
@@ -82,15 +104,17 @@
         }]
       }
     },
-    components: {
-      ElTable: Table,
-      ElTableColumn: TableColumn,
-      ElTag: Tag,
-      ElButton: Button
-    },
     computed: {
       ...mapGetters({
         curNode: 'teams.curNode'
+      })
+    },
+    mounted () {
+      Api.getPrdList().then(res => {
+        const { code, data } = res
+        if (code === 200) {
+          this.tableData = res.data
+        }
       })
     },
     methods: {

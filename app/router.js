@@ -6,6 +6,7 @@ import main from './controller/main'
 import user from './controller/user'
 import team from './controller/team'
 import api from './controller/api'
+import prd from './controller/prd'
 
 const routes = new Router()
 
@@ -35,5 +36,7 @@ routes.get('/api/index', api.index)
 routes.get('/api/getApiList.json', api.getApiList)
 routes.get('/api/getApiDetail.json', api.getApiDetail)
 
+// prd
+routes.get('/prd/getPrdList.json', prd.getPrdList)
 
 module.exports = routes
