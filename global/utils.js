@@ -141,6 +141,22 @@ var util = {
 
     var ret = format.replace(/%(\w)/g, repl)
     return ret;
+  },
+  /**
+   *
+   * @desc 根据 keys数组中的值，返回obj中有的key，返回最后的obj
+   * @param {Aarray} keys
+   * @param {Object} obj
+   * @returns Object
+   */
+  getObjByKeys (keys = [], obj = {}) {
+    let o = {}
+    for (let i = 0; i < keys.length; i++) {
+      if (Object.prototype.hasOwnProperty.call(obj, keys[i])) {
+        o[keys[i]] = obj[keys[i]]
+      }
+    }
+    return o
   }
 }
 export default util;

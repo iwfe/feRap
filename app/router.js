@@ -38,5 +38,8 @@ routes.get('/api/getApiDetail.json', api.getApiDetail)
 
 // prd
 routes.get('/prd/getPrdList.json', prd.getPrdList)
+routes.post('/prd/data', prd.addPrd)
+routes.put('/prd/data', prd.updatePrd)
+routes.delete('/prd/data', prd.deletePrd)
 
 module.exports = routes

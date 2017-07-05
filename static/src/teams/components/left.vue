@@ -40,7 +40,6 @@
     },
     methods: {
       handleNodeClick (data) {
-        console.log(data)
         this.$store.dispatch('teams/setCurNode', data)
       }
     }

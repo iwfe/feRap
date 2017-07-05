@@ -16,27 +16,35 @@
           <el-input type="textarea" v-model="addPrdForm.description"></el-input>
         </el-form-item>
         <el-form-item label="JIRA地址" prop="jiraAddr">
-          <el-input type="text" v-model="addPrdForm.jiraAddr"></el-input>
+          <el-input type="text" v-model="addPrdForm.jira"></el-input>
         </el-form-item>
         <el-form-item label="提测时间" prop="testTime">
-          <el-input type="text" v-model="addPrdForm.testTime"></el-input>
+          <el-date-picker
+            v-model="addPrdForm.testTime"
+            type="datetime"
+            placeholder="选择日期时间">
+          </el-date-picker>
         </el-form-item>
-        <el-form-item label="上线时间" prop="onLineTime">
-          <el-input type="text" v-model="addPrdForm.onLineTime"></el-input>
+        <el-form-item label="上线时间" prop="onlineTime">
+          <el-date-picker
+            v-model="addPrdForm.onlineTime"
+            type="datetime"
+            placeholder="选择日期时间">
+          </el-date-picker>
         </el-form-item>
-        <el-form-item label="是否合master" prop="mergedMaster">
+        <el-form-item label="是否合master" prop="mergeMaster">
           <el-switch
-            v-model="addPrdForm.mergedMaster"
+            v-model="addPrdForm.mergeMaster"
             on-text="是"
             off-text="否"
             on-color="#13ce66"
             off-color="#ff4949"
-            on-value="0"
-            off-value="1">
+            on-value="否"
+            off-value="是">
           </el-switch>
         </el-form-item>
         <el-form-item label="备注" prop="memo">
-          <el-input type="textarea" v-model="addPrdForm.memo"></el-input>
+          <el-input type="textarea" v-model="addPrdForm.comment"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -48,13 +56,16 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import {
   Button,
   Dialog,
   Form,
   FormItem,
   Input,
-  Switch
+  Switch,
+  DatePicker,
+  Message
 } from 'element-ui'
 import Api from './api'
 
@@ -66,19 +77,25 @@ export default {
     ElForm: Form,
     ElFormItem: FormItem,
     ElInput: Input,
-    ElSwitch: Switch
+    ElSwitch: Switch,
+    ElDatePicker: DatePicker
   },
+  computed: mapState({
+    projectId: function (state) {
+      return state.teams.curNode.id
+    }
+  }),
   data () {
     return {
       dialogVisible: false,
       addPrdForm: {
         name: '',
         description: '',
-        jiraAddr: '',
+        jira: '',
         testTime: '',
-        onLineTime: '',
-        mergedMaster: 0,
-        memo: ''
+        onlineTime: '',
+        mergeMaster: 0,
+        comment: ''
       },
       rules: {
         name: [
@@ -91,30 +108,49 @@ export default {
   methods: {
     handleAdd () {
       this.dialogVisible = true
-      Api.getPrdList().then(res => {
-        console.log(res)
-      })
     },
     handleClose (done) {
       this.dialogVisible = false
     },
     submitForm (formName) {
+      const form = this[formName]
       this.$refs[formName].validate((valid) => {
         if (valid) {
-            // const params = {
-            //     username: this[formName].username,
-            //     password: this[formName].password
-            // }
-            // this.$http.post("/api/user/login", params)
-            // .then(res => {
-            //     if(res.body && res.body.code == 1){
-            //         this.loginSuccess()
-            //     }else{
-            //         this.loginFail()
-            //     }
-            // }, err => {
-            //     this.loginFail()
-            // })
+          const params = {
+            'projectId': this.projectId,             // 项目id
+            'name': form.name,                       // prd名称
+            'description': form.description,         // 主要功能
+            'jira': form.jira,                   // JIRA地址
+            'testTime': form.testTime,               // 提测时间
+            'onlineTime': form.onlineTime,           // 上线时间
+            'mergeMaster': form.mergeMaster || '否', // 是否合master
+            'comment': form.comment                      // 备注
+          }
+          Api.addPrd(params)
+          .then(res => {
+            const { code, data } = res
+            if (code === 200) {
+              this.$emit('callback')
+              this.dialogVisible = false
+              Message({
+                type: 'success',
+                message: '新增成功!'
+              })
+            } else {
+              Message({
+                type: 'error',
+                message: '新增失败!'
+              })
+            }
+          })
+          .catch(err => {
+            if (err) {
+              Message({
+                type: 'error',
+                message: '新增失败!'
+              })
+            }
+          })
         } else {
           return false
         }
