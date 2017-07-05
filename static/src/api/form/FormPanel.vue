@@ -109,6 +109,7 @@
       })
     },
     mounted () {
+      console.log(11111)
       this.getData()
     },
     methods: {
