@@ -1,5 +1,5 @@
 <template>
-  <div class="api-list-panel">
+  <div class="api-list-panel" @click="isShowForm = false">
     <p class="toolbar">
       <el-button type="primary" @click="handleAdd" icon="plus" size="small">新增</el-button>
     </p>

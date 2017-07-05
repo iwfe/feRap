@@ -1,5 +1,5 @@
 <template>
-  <div id="apiform" class="api-form-panel" >
+  <div id="apiform" class="api-form-panel" @click.stop>
     <div class="api-header">
       <i class="iconfont el-icon-share"></i>
       {{form.title}}
