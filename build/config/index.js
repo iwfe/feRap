@@ -34,6 +34,7 @@ module.exports = {
           return (pathname.match('^/login') && req.method === 'POST')
                   || (pathname.match('^/regist') && req.method === 'POST')
                   || pathname.match('^/team/')
+                  || pathname.match('^/prd/')
                   || pathname.match('^/project/')
                   || (pathname.match('^/api/') && !pathname.match('^/api/index'))
         }

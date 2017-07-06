@@ -2,7 +2,7 @@
   <header id="header">
   <div class="header-wrap clearfix">
     <div class="menu">
-      <router-link v-for="item in menus" class="item" :to="item.url">{{item.text}}</router-link>
+      <router-link v-for="item in menus" v-bind:key="index" class="item" :to="item.url">{{item.text}}</router-link>
 
       <div class="right">
         <div class="item" tabindex="0" v-if="username">
@@ -21,7 +21,6 @@
         </div>
       </div>
     </div>
-  </div>
 </header>
 </template>
 
@@ -41,7 +40,23 @@ export default {
         {url: '/teams/index?prdId=m3tnaO', text: '团队'},
         {url: '/api/index', text: 'API'},
         {url: '/calendar', text: '日历'}
-      ]
+      ],
+      active: 0
+    }
+  },
+  beforeMount () {
+    this.urlAnalyze()
+  },
+  methods: {
+    urlAnalyze () {
+      const pathname = location.pathname
+      const pathArr = ['/index', '/teams', '/api', '/calendar']
+      for (let i = 0; i < pathArr.length; i++) {
+        const exp = new RegExp('^' + pathArr[i] + '\\b')
+        if (exp.test(pathname)) {
+          this.active = i
+        }
+      }
     }
   },
   computed: {
@@ -72,11 +87,13 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style scoped lang="less">
 #header {
   background-color: #fff;
+  height: 64px;
   border-bottom: 1px solid #e9e9e9;
   box-shadow: 0 1px 6px rgba(99,99,99,.2);
+  font-size: 14px;
 }
 .header-wrap {
   width: 100%;
@@ -90,16 +107,30 @@ export default {
   font-weight: 400;
 }
 .item {
+  box-sizing: border-box;
+  min-width: 72px;
   border-bottom-color: transparent;
   border-bottom-style: solid;
   border-radius: 0;
-  item-align: end;
-  padding: 10px 20px;
+  height: 64px;
+  line-height: 64px;
+  align-items: end;
+  padding-left: 20px;
+  padding-right: 20px;
   align-self: flex-end;
   margin: 0 0 -2px;
   border-bottom-width: 2px;
-  -webkit-transition: color .1s ease;
-  transition: color .1s ease;
+  -webkit-transition: color,border-bottom-color .2s ease;
+  transition: color,border-bottom-color .2s ease;
+  &:hover{
+    border-bottom-color: #20a0ff;
+    color: #20a0ff;
+  }
+  &.active{
+    border-bottom-color: #20a0ff;
+    color: #20a0ff;
+    font-weight: 700;
+  }
 }
 .right {
   display: flex;
