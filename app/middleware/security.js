@@ -34,11 +34,12 @@ module.exports = async function (ctx, next) {
 
   // 设置请求参数
   let p = ctx.query;
+
   try {
     p = _.extend(p, ctx.request.body, ctx.params);
   } catch (e) {
+
   }
-  console.log(`p=======${p.teamId}`);
   ctx.locals.parse = p;
 
   // 不需要验证，则跳过
@@ -48,33 +49,42 @@ module.exports = async function (ctx, next) {
   }
 
   // 判断用户是否登录
-  console.log(`wwwwwwwww`)
   var user = _.extend({}, await userService.getLoginUser(ctx));
-  console.log(`username=${user.username}`);
+
   if (!user.username) {
+    // ctx.status = 301
+    // ctx.redirect('/login')
+    ctx.type = ''
     return await sutil.result(ctx, {
       code: 10001,
       redirect: '/login?next=' + ctx.url
     });
   }
+
   delete user.password;
   delete user.teams;
-  ctx.locals._user = user;
-  console.log(`ctx.locals._user=======${JSON.stringify(ctx.locals._user)}`);
 
-  console.log(`ctx.status=======${ctx.status}`);
+  ctx.locals._user = user;
+
+  // console.log(`ctx.locals._user=======${JSON.stringify(ctx.locals._user)}`);
+
+  // console.log(`ctx.status=======${ctx.status}`);
+
   await next()
+
   return
 
   // 页面404跳转
   try {
     var status = ctx.status || 404;
     if (status === 404) ctx.throw(404);
-    console.log(`ctx.status=======${ctx.status}`);
+
+    // console.log(`ctx.status=======${ctx.status}`);
 
   } catch (error) {
     ctx.status = error.status || 500;
     console.log(error.stack);
+
     if (ctx.status === 404) {
       await ctx.render('error', {
         error
@@ -84,12 +94,7 @@ module.exports = async function (ctx, next) {
         error
       });
     }
+
   }
   await next()
-  // return Promise.resolve()
-  //   .then(data=>{
-  //
-  //   })
-  //   .catch(() => {})
-  //   .then(() => next())
 }

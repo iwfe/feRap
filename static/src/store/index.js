@@ -4,6 +4,7 @@ import * as actions from './actions'
 import * as getters from './getters'
 import teams from './modules/teams'
 import apis from './modules/apis'
+import logins from './modules/logins'
 
 Vue.use(Vuex)
 
@@ -20,9 +21,11 @@ export default new Vuex.Store({
     apis: {
       namespaced: true,
       ...apis
+    },
+    login: {
+      namespaced: true,
+      ...logins
     }
-
   },
   strict: debug
-  // plugins: debug ? [createLogger()] : []
 })

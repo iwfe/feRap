@@ -1,16 +1,23 @@
 <template>
   <header id="header">
-    <div class="header-wrap clearfix">
-      <div class="menu">
-        <a v-for="(item, index) in menus" class="item" :class="{active: active == index}" v-bind:key="index" :href="item.url"> {{item.text}} </a>
-        <div class="right">
-          <a class="item msg-span" href="/message">消息 (<span class="msg-count">3</span>)</a>
-          <div class="item" tabindex="0">
-            <span>lancui <i class="dropdown icon"></i></span>
-            <div tabindex="-1" class="drop-items">
-              <a class="item" href="/user/profile">个人设置</a>
-              <a class="item" href="/logout">退出</a> </div>
-          </div>
+  <div class="header-wrap clearfix">
+    <div class="menu">
+      <router-link v-for="item in menus" v-bind:key="index" class="item" :to="item.url">{{item.text}}</router-link>
+
+      <div class="right">
+        <div class="item" tabindex="0" v-if="username">
+          <el-dropdown trigger="click" @command="handleCommand">
+            <span class="el-dropdown-link">
+              {{username}}<i class="el-icon-caret-bottom el-icon--right"></i>
+            </span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item command="profile">个人设置</el-dropdown-item>
+              <el-dropdown-item command="logout">退出</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+        </div>
+        <div class="item" v-else="username">
+          <router-link :to="{path:'/login', query: {redirect: currentPath}}">登录</router-link>
         </div>
       </div>
     </div>
@@ -18,8 +25,14 @@
 </template>
 
 <script>
+import {Dropdown, DropdownMenu, DropdownItem} from 'element-ui'
 export default {
   name: 'header',
+  components: {
+    ElDropdown: Dropdown,
+    ElDropdownMenu: DropdownMenu,
+    ElDropdownItem: DropdownItem
+  },
   data () {
     return {
       menus: [
@@ -43,6 +56,30 @@ export default {
         if (exp.test(pathname)) {
           this.active = i
         }
+      }
+    }
+  },
+  computed: {
+    username () {
+      return this.$store.getters['login/getLoginUserName']
+    },
+    currentPath () {
+      return this.$route.fullPath
+    }
+  },
+  methods: {
+    handleCommand (command) {
+      switch (command) {
+        case 'logout':
+          this.$store.dispatch('login/setLoginStatus', false)
+          this.$store.dispatch('login/setLoginUserName', '')
+          this.$router.push('/login')
+          break
+        case 'profile':
+          console.log('profile')
+          break
+        default:
+          console.log('default')
       }
     }
   }

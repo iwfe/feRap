@@ -109,11 +109,11 @@
       })
     },
     mounted () {
-      console.log(11111)
       this.getData()
     },
     methods: {
       getData () {
+        console.log(`form getData....`)
         if (!this.apiId) return
         api.getApiDetail(this.apiId, (data) => {
           this.form = data
@@ -132,6 +132,7 @@
   width: 80%;
   height: 100%;
   box-shadow: 0 0 2px 6px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
   z-index: 999;
   .api-header {
     height: 40px;
@@ -154,10 +155,12 @@
 #apiform .el-form-item__content {
   line-height: 26px;
 }
-.el-form-item__label {
+#apiform .el-form-item__label {
+  font-size: 12px;
   padding: 6px 12px 6px 0;
 }
 #apiform .el-input__inner {
   height: 26px;
+  font-size: 12px;
 }
 </style>
