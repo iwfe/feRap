@@ -2,7 +2,7 @@
  * @Author: zoucong 
  * @Date: 2017-07-06 10:51:05 
  * @Last Modified by: zoucong
- * @Last Modified time: 2017-07-06 16:16:08
+ * @Last Modified time: 2017-07-06 16:20:05
  */
 
 <template>
@@ -88,7 +88,7 @@
     }
     // 选中状态
     &.active{
-      background-color: rgba(88,183,255,.6);
+      background-color: #E5E9F2;
     }
     .leaf-label-icon{
       width: 18px;
