@@ -58,7 +58,7 @@ export default {
      * @return {Promise}       [description]
      */
     findPrjById: async function (ctx, next) {
-        const result = await prjService.findPrjById(ctx.locals.parse.id)
+        const result = await prjService.findPrjById(ctx.locals.parse.prjId)
         sutil.success(ctx, result)
     },             
 }
