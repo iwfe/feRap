@@ -1,36 +1,36 @@
 <template>
   <section id="login-panel">
-  <div class="mod-login" data-reactroot="" >
-    <h1 class="title">{{title}}</h1>
-    <form class="form" method="post" :action="formAction">
-      <div class="form-item">
-        <label for="username" class="form-item-label form-item-required">用户名 : </label>
-        <div class="col-14">
-          <div class="form-item-control has-success"><span class="input-wrapper"><input type="text" name="username" id="username" value="" placeholder="请输入用户名" class="input input-lg"></span></div>
+    <div class="mod-login" data-reactroot="" >
+      <h1 class="title">{{title}}</h1>
+      <div class="form">
+        <div class="form-item">
+          <label for="username" class="form-item-label form-item-required">用户名 : </label>
+          <div class="col-14">
+            <div class="form-item-control has-success"><span class="input-wrapper"><input v-model="username" type="text" name="username" id="username" value="" placeholder="请输入用户名" class="input input-lg"></span></div>
+          </div>
         </div>
-      </div>
-      <div class="form-item">
-        <label for="password" class="form-item-label form-item-required">密码 : </label>
-        <div class="col-14">
-          <div class="form-item-control "><span class="input-wrapper"><input type="password" name="password" id="password" value="" placeholder="请输入密码" class="input input-lg"></span></div>
+        <div class="form-item">
+          <label for="password" class="form-item-label form-item-required">密码 : </label>
+          <div class="col-14">
+            <div class="form-item-control "><span class="input-wrapper"><input v-model="password" type="password" name="password" id="password" value="" placeholder="请输入密码" class="input input-lg"></span></div>
+          </div>
         </div>
-      </div>
 
-      <div class="register clearfix">
-        <span class="error-info" v-if="error">{{error}}</span>
-        <a v-if="isLogin" class="pull-right" href="/regist">没有帐号?</a>
-        <a v-else class="pull-right" href="/login">已有帐号?</a>
-      </div>
-      <div class="form-item" style="margin-top:24px;">
-        <div class="col-16 col-offset-6">
-          <div class="form-item-control ">
-            <button type="submit" class="btn btn-primary btn-lg"><span>{{title}}</span></button>
+        <div class="register clearfix">
+          <span class="error-info" v-if="error">{{error}}</span>
+          <a v-if="isLogin" class="pull-right" href="/regist">没有帐号?</a>
+          <a v-else class="pull-right" href="/login">已有帐号?</a>
+        </div>
+        <div class="form-item" style="margin-top:24px;">
+          <div class="col-16 col-offset-6">
+            <div class="form-item-control ">
+              <button @click="submit" type="submit" class="btn btn-primary btn-lg"><span>{{title}}</span></button>
+            </div>
           </div>
         </div>
       </div>
-    </form>
-  </div>
-</section>
+    </div>
+  </section>
 </template>
 
 <script>
@@ -38,7 +38,9 @@ export default {
   name: 'login',
   data () {
     return {
-      error: window.pageConfig.error
+      error: window.pageConfig.error,
+      username: '',
+      password: ''
     }
   },
   mounted () {
@@ -52,6 +54,37 @@ export default {
     },
     formAction () {
       return this.isLogin ? '/login' : '/regist'
+    }
+  },
+  methods: {
+    submit () {
+      let self = this
+
+      axios({
+        method: 'POST',
+        url: this.formAction,
+        data: {
+          username: this.username,
+          password: this.password
+        }
+      }).then(function (result) {
+        if (result && result.data && result.data.isLogin) {
+          self.$store.dispatch('login/setLoginStatus', result.data.isLogin)
+          self.$store.dispatch('login/setLoginUserName', result.data.userName)
+
+          let redirect = self.$route.query.redirect
+
+          if (redirect) {
+            self.$router.replace({
+              path: self.$route.query.redirect
+            })
+          } else {
+            self.$router.replace({
+              path: '/'
+            })
+          }
+        }
+      })
     }
   }
 }

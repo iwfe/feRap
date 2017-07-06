@@ -65,13 +65,16 @@ export default {
 
   //设置登录用户
   async setLoginUser(ctx, username, pwd) {
+
     pwd = this.wrapUserPass(pwd);
+
     const user = await userDao.findOne({
       username: username,
       password: pwd
     });
 
-    console.log(`username: ${username}, pwd: ${pwd} user===${user}`);
+    // console.log(`username: ${username}, pwd: ${pwd} user===${user}`);
+
     if (!user) {
       return null;
     }
@@ -80,13 +83,14 @@ export default {
     const str = username + '|' + pwd + '|' + ip;
     let encrypted = '';
     const cip = crypto.createCipher('rc4', config.authKey);
+
     encrypted += cip.update(str, 'utf8', 'hex');
     encrypted += cip.final('hex');
+
     ctx.cookies.set('feteauth', encrypted);
 
     console.log(`set ctx.cookies: ${str}`);
 
-    // loginUserStore.set(username, user);
     return user
   },
 
