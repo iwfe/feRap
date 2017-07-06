@@ -25,6 +25,7 @@
     },
     mounted () {
       this.getAllTeams()
+      console.log(this.$store.getters['login/getLoginStatus'])
     },
     methods: {
       getAllTeams () {

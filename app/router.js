@@ -10,10 +10,10 @@ import api from './controller/api'
 const routes = new Router()
 
 // main
-routes.get('/index', main.index)
+routes.get('/', main.index)
 
 // 用户信息
-routes.get('/login', user.login)
+// routes.get('/login', user.login)
 routes.post('/login', user.toLogin)
 routes.get('/regist', user.regist)
 routes.post('/regist', user.toRegist)
@@ -31,7 +31,7 @@ routes.get('/team/joinIntoTeam.json', team.joinIntoTeam)
 routes.get('/team/quitFromTeam.json', team.quitFromTeam)
 
 // api
-routes.get('/api/index', api.index)
+// routes.get('/api/index', api.index)
 routes.get('/api/getApiList.json', api.getApiList)
 routes.get('/api/getApiDetail.json', api.getApiDetail)
 

@@ -18,7 +18,21 @@ window.pageConfig = { // 用于测试
 
 import '@/common/axios-init'
 
-console.log(store)
+// 路由拦截
+router.beforeEach((to, from, next) => {
+  if (to.meta && to.meta.requireLogin) { // 该路由是否需要登录权限
+    if (!store.getters['login/getLoginStatus']) {
+      next({
+        path: '/login',
+        query: {redirect: to.fullPath}
+      })
+    } else {
+      next()
+    }
+  } else {
+    next()
+  }
+})
 
 /* eslint-disable no-new */
 new Vue({

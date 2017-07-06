@@ -8,7 +8,7 @@ module.exports = {
   staticCacheMaxAge: 1000 * 60 * 60 * 24 * 365,
   mongodb: {
     // host: 'localhost',
-    host: '10.7.251.88',
+    host: '127.0.0.1',
     port: 27017,
     db: 'fete'
   },
