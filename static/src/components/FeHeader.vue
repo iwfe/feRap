@@ -49,18 +49,15 @@ export default {
       return this.$store.getters['login/getLoginUserName']
     },
     currentPath () {
-      console.log(this.$route)
       return this.$route.fullPath
     }
   },
   methods: {
-    logout () {
-      console.log('logout')
-    },
     handleCommand (command) {
       switch (command) {
         case 'logout':
           this.$store.dispatch('login/setLoginStatus', false)
+          this.$store.dispatch('login/setLoginUserName', '')
           this.$router.push('/login')
           break
         case 'profile':

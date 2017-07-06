@@ -52,6 +52,9 @@ module.exports = async function (ctx, next) {
   var user = _.extend({}, await userService.getLoginUser(ctx));
 
   if (!user.username) {
+    // ctx.status = 301
+    // ctx.redirect('/login')
+    ctx.type = ''
     return await sutil.result(ctx, {
       code: 10001,
       redirect: '/login?next=' + ctx.url

@@ -5,6 +5,6 @@ export default {
   name: 'main',
   component: Main,
   meta: {
-    requireLogin: false
+    requireLogin: true
   }
 }

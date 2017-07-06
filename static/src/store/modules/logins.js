@@ -9,8 +9,8 @@ import * as types from '@/store/mutation-types.js'
 
 export default {
   state: {
-    isLogin: false,
-    userName: ''
+    isLogin: sessionStorage.getItem('isLogin') || false,
+    userName: sessionStorage.getItem('userName') || ''
   },
   getters: {
     getLoginStatus: (state) => {
@@ -22,9 +22,19 @@ export default {
   },
   mutations: {
     [types.IS_LOGIN] (state, {isLogin}) {
+      if (isLogin) {
+        sessionStorage.setItem('isLogin', isLogin)
+      } else {
+        sessionStorage.removeItem('isLogin')
+      }
       state.isLogin = isLogin
     },
     [types.USER_NAME] (state, {userName}) {
+      if (userName) {
+        sessionStorage.setItem('userName', userName)
+      } else {
+        sessionStorage.removeItem('userName')
+      }
       state.userName = userName
     }
   },

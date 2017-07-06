@@ -19,7 +19,6 @@ export default {
   toLogin: async (ctx, next) => {
     const { username, password } = ctx.request.body
 
-    console.log(username, password)
     //判断是否登录成功 null: 失败，user 对象 ：成功
     const user = await userService.toLogin(ctx, username, password)
 
