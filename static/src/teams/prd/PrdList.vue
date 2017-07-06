@@ -1,97 +1,112 @@
 <template>
   <div class="team-list-panel">
+    <add-prd v-on:callback="callback"></add-prd>
     <el-table
       :data="tableData"
       border
       style="width: 100%">
       <el-table-column
-        prop="name"
-        label="姓名"
-        width="180">
+        prop="projectName"
+        label="所属项目">
       </el-table-column>
       <el-table-column
         prop="name"
-        label="创建人"
-        width="180">
+        label="版本号">
       </el-table-column>
       <el-table-column
-        prop="date"
-        label="创建时间"
-        sortable
-        width="180">
-      </el-table-column>
-      <el-table-column
-        prop="address"
-        label="描述"
-        :formatter="formatter">
-      </el-table-column>
-      <el-table-column
-        prop="tag"
-        label="标签"
-        width="100"
-        :filters="[{ text: '家', value: '家' }, { text: '公司', value: '公司' }]"
-        :filter-method="filterTag">
+        prop="jira"
+        label="JIRA地址">
         <template scope="scope">
-          <el-tag
-            :type="scope.row.tag === '家' ? 'primary' : 'success'"
-            close-transition>{{scope.row.tag}}</el-tag>
+          <a
+            :href="scope.row.jira"
+            target="_blank"
+          >jira</a>
         </template>
       </el-table-column>
-      <el-table-column label="操作">
-      <template scope="scope">
-        <el-button
-          size="small"
-          @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-        <el-button
-          size="small"
-          type="danger"
-          @click="handleDelete(scope.$index, scope.row)">删除</el-button>
-      </template>
-    </el-table-column>
+      <el-table-column
+        prop="testTime"
+        label="提测时间"
+        min-width="140"
+        sortable>
+        <template scope="scope">
+          <span>{{formatDate(scope.row.testTime)}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="onlineTime"
+        label="上线时间"
+        min-width="140"
+        sortable>
+        <template scope="scope">
+          <span>{{formatDate(scope.row.onlineTime)}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="mergeMaster"
+        label="是否合master"
+        min-width="140">
+        <template scope="scope">
+          <span>{{scope.row.mergeMaster || '否'}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="description"
+        label="主要功能">
+      </el-table-column>
+      <el-table-column
+        prop="comment"
+        label="备注">
+      </el-table-column>
+      <el-table-column
+        label="操作"
+        min-width="140"
+      >
+        <template scope="scope">
+          <update-prd :row="scope.row" @callback="callback"></update-prd>
+          <delete-prd :row="scope.row" @callback="callback"></delete-prd>
+        </template>
+      </el-table-column>
     </el-table>
   </div>
 </template>
 
 <script>
-  import { mapGetters } from 'vuex'
+  import { mapGetters, mapState } from 'vuex'
   import { Table, TableColumn, Tag, Button } from 'element-ui'
+  import AddPrd from './AddPrd'
+  import UpdatePrd from './UpdatePrd'
+  import DeletePrd from './DeletePrd'
+  import Api from './api.js'
+  import moment from 'moment'
 
   export default {
-    data () {
-      return {
-        tableData: [{
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄',
-          tag: '家'
-        }, {
-          date: '2016-05-04',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1517 弄',
-          tag: '公司'
-        }, {
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄',
-          tag: '家'
-        }, {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄',
-          tag: '公司'
-        }]
-      }
-    },
     components: {
       ElTable: Table,
       ElTableColumn: TableColumn,
       ElTag: Tag,
-      ElButton: Button
+      ElButton: Button,
+      AddPrd,
+      UpdatePrd,
+      DeletePrd
     },
-    computed: {
-      ...mapGetters({
-        curNode: 'teams.curNode'
-      })
+    data () {
+      return {
+        tableData: []
+      }
+    },
+    computed: mapState({
+      projectId: function (state) {
+        return state.teams.curNode.id
+      }
+    }),
+
+    mounted () {
+      this.queryData(this.projectId)
+    },
+    watch: {
+      projectId (curVal) {
+        this.queryData(curVal)
+      }
     },
     methods: {
       formatter (row, column) {
@@ -100,18 +115,26 @@
       filterTag (value, row) {
         return row.tag === value
       },
-      handleEdit (index, row) {
-        console.log(index, row)
+      formatDate (time) {
+        time = moment(time).format('YYYY-MM-D HH:mm:ss')
+        return time
       },
-      handleDelete (index, row) {
-        console.log(index, row)
+      queryData (id) {
+        Api.getPrdList({
+          projectId: id
+        }).then(res => {
+          const { code, data } = res
+          if (code === 200) {
+            this.tableData = res.data
+          }
+        })
+      },
+      callback () {
+        this.queryData(this.projectId)
       }
     }
   }
 </script>
 
 <style lang="less" scoped>
-.team-list-panel {
-
-}
 </style>

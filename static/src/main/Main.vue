@@ -1,23 +1,68 @@
 <template>
   <div class="container-panel">
-    <div class="teams-panel">
-      <div class="team-item" :class="{joined: team.joined}" v-for="team in teams" @click="goDetail()">
-        <p class="team-label title">{{team.name}}</p>
-        <p class="team-label">{{team.description}}</p>
-
-        <p class="team-add" v-if="!team.joined" @click.stop="join(team.id)">加入</p>
-        <p class="team-add gray" v-if="!team.joined"></p>
-
-        <p class="team-quit" v-if="team.joined" @click.stop="quit(team.id)">退出</p>
-      </div>
-    </div>
+    <el-row
+      class="team-card-row"
+      :gutter="32"
+      justify="space-between"
+    >
+      <el-col
+        class="team-card-col"
+        :span="4"
+        v-for="(team, index) in teams"
+        :key="index"
+      >
+        <el-card
+          :body-style="{ padding: '0px' }"
+        >
+          <div class="team-card-header">
+            <p
+              class="team-card-title"
+              v-show="!team.__showIpt"
+            >{{team.name}}</p>
+            <p
+              class="team-card-des"
+            >{{team.description}}</p>
+          </div>
+          <div class="team-card-bottom">
+            <el-button
+              type="primary"
+              size="small"
+              v-if="!team.joined"
+              :loading="team.loading"
+              @click="joinTeam(index)"
+            >加入</el-button>
+            <el-button
+              type="warning"
+              size="small"
+              v-if="team.joined"
+              :loading="team.loading"
+              @click="exitTeam(index)"
+            >退出</el-button>
+          </div>
+        </el-card>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
 <script>
   import api from './api.js'
+  import {
+    Row,
+    Col,
+    Card,
+    Button,
+    Input
+  } from 'element-ui'
   export default {
     name: 'Main',
+    components: {
+      ElRow: Row,
+      ElCol: Col,
+      ElCard: Card,
+      ElButton: Button,
+      ElInput: Input
+    },
     data () {
       return {
         teams: []
@@ -31,11 +76,8 @@
       getAllTeams () {
         const self = this
         api.getAllTeamList(function (res) {
-          self.teams = res
+          self.addAttrForTeams(res)
         })
-      },
-      goDetail () {
-        window.location.href = window.pageConfig.siteUrl + 'teams/'
       },
       join (teamId) {
         const self = this
@@ -48,95 +90,80 @@
         api.quitFromTeam(teamId, function (res) {
           self.getAllTeams()
         })
+      },
+      addAttrForTeams (res) {
+        if (res && res.length) {
+          this.teams = res.map((item, index) => {
+            item.__loading = false
+            if (!item.joined) item.joined = false
+            return item
+          })
+        }
+      },
+      joinTeam (index) {
+        const team = this.teams[index]
+        team.__loading = true
+        api.joinIntoTeam(team.id, res => {
+          team.__loading = false
+          team.joined = true
+        })
+      },
+      exitTeam (index) {
+        const team = this.teams[index]
+        team.__loading = true
+        api.quitFromTeam(team.id, res => {
+          team.__loading = false
+          team.joined = false
+        })
       }
     }
   }
 </script>
 
 <style lang="less" scoped >
+.team-card-row{
+  padding-top: 20px;
+}
+.team-card-col{
+  margin-bottom: 32px;
+}
+.team-card-header{
+  padding: 8px;
+  border-bottom: 1px solid #d1dbe5;
+}
+.team-card-title{
+  .icon{
+    display: none;
+    cursor: pointer;
+  }
+  &:hover .icon{
+    display: inline-block;
+  }
+}
+.team-card-bottom{
+  padding: 8px;
+  text-align: right;
+}
+.team-card-des{
+  height: 48px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #aaa;
+}
+.team-card-title{
+  line-height: 32px;
+  font-size: 16px;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.team-card-ipt{
+  height: 32px;
+}
 .container-panel {
   box-sizing: border-box;
   padding: 0 5%;
   color: #475669;
-  .teams-panel {
-    display: flex;
-    flex-wrap: wrap;
-    width: 100%;
-  }
-  .team-item {
-    position: relative;
-    width: 150px;
-    height: 150px;
-    border: 1px solid #eee;
-    padding: 5px;
-    margin: 10px;
-    border-radius: 10px;
-    text-align: left;
-    cursor: pointer;
-    box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.06);
-    &.joined {
-      box-shadow: 0 2px 10px 0 rgba(179, 229, 252, 0.5);
-    }
-  }
-  .team-item:hover {
-    box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.2);
-    &.joined {
-      box-shadow: 0 2px 10px 0 rgba(179, 229, 252, 0.9);
-      .team-quit {
-        display: inline-block;
-      }
-    }
-    .team-add {
-      display: inline;
-    }
-    .gray {
-      display: none;
-    }
-  }
-
-  .team-label {
-    margin: 0;
-    color: #999;
-    padding: 5px;
-    &.title {
-      font-size: 14px;
-    }
-  }
-  .team-add {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    text-align: center;
-    margin: 0;
-    line-height: 150px;
-    font-size: 14px;
-    color: #fff;
-    border-radius: 6px;
-    background-color: rgba(251, 140, 0, .5);
-    box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.1);
-    display: none;
-
-    &.gray {
-      background-color: rgba(224, 224, 224, .5);
-      display: block;
-    }
-  }
-  .team-quit {
-    position: absolute;
-    margin: 5px;
-    bottom: 0;
-    right: 0;
-    border-radius: 50%;
-    width: 30px;
-    height: 30px;
-    line-height: 30px;
-    background: #E0F7FA;
-    text-align: center;
-    color: #00BCD4;
-    cursor: pointer;
-    display: none;
-  }
 }
 </style>

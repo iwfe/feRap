@@ -7,6 +7,7 @@ import user from './controller/user'
 import team from './controller/team'
 import prj from './controller/prj'
 import api from './controller/api'
+import prd from './controller/prd'
 
 const routes = new Router()
 
@@ -43,5 +44,10 @@ routes.del('/project/data', prj.deletePrj)
 routes.get('/api/getApiList.json', api.getApiList)
 routes.get('/api/getApiDetail.json', api.getApiDetail)
 
+// prd
+routes.get('/prd/getPrdList.json', prd.getPrdList)
+routes.post('/prd/data', prd.addPrd)
+routes.put('/prd/data', prd.updatePrd)
+routes.delete('/prd/data', prd.deletePrd)
 
 module.exports = routes
