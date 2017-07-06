@@ -1,18 +1,19 @@
 <template>
-  <div class="container-panel">
+  <el-row class="container-panel">
     <!-- 左侧菜单 -->
-    <div class="main-left-panel">
+    <el-col :md="5" class="main-left-panel">
       <left></left>
-    </div>
+    </el-col>
     <!-- 右侧内容 -->
-    <div class="main-content-panel">
+    <el-col :md="19" class="main-content-panel">
       <teams-content></teams-content>
-    </div>
-  </div>
+    </el-col>
+  </el-row>
 </template>
 
 <script>
   import { mapGetters } from 'vuex'
+  import { Row, Col } from 'element-ui'
   import Left from './components/Left'
   import TeamsContent from './components/Content'
 
@@ -29,6 +30,8 @@
       })
     },
     components: {
+      ElRow: Row,
+      ElCol: Col,
       Left,
       TeamsContent
     },
@@ -41,14 +44,11 @@
 <style lang="less">
 .container-panel {
   position: relative;
-  width: 100%;
   height: calc(~"100% - 36px");
-  display: flex;
   .main-left-panel {
     height: 100%;
   }
   .main-content-panel {
-    width: 100%;
     height: 100%;
   }
 }

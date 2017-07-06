@@ -5,6 +5,7 @@
   ],
   "plugins": [
     "transform-runtime",
+    "transform-vue-jsx",
     ["component", [
       {
         "libraryName": "element-ui",
@@ -16,7 +17,7 @@
   "env": {
     "test": {
       "presets": ["env", "stage-2"],
-      "plugins": [ "istanbul" ]
+      "plugins": ["istanbul"]
     }
   }
 }
