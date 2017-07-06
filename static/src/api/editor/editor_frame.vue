@@ -1,7 +1,7 @@
 <template>
     <div class='editor-wrap'>
       <div class="field">
-          <label><i class="red">*</i>输入数据格式</label>
+          <label><i class="red">*</i>输入数据格式</label>{{inputModel}}
           <textarea ref="inputeditor" ></textarea>
           <div class='' v-if='inputModel.length'>
             <div class='table-tr table-head'>
@@ -12,7 +12,7 @@
                 <li class='td-mock'>是否必须</li>
               </ul>
             </div>
-            <table-item :model='model' :is-child=false :loop=1 v-for='(model, key) in inputModel' track-by="key" type="input"></table-item>
+            <table-item :model='model' :is-child=false :loop=1 v-for='(model, key) in inputModel' v-bind:key="key" type="input"></table-item>
           </div>
       </div>
       <div class="field output-field clearfix-sp">
@@ -43,7 +43,7 @@
               <li class="td-select">状态选择</li>
             </ul>
           </div>
-          <table-item :model='output' :is-child=false :loop=1 v-for="(output, key) in outputModel"  track-by="key" type="output"></table-item>
+          <table-item :model='output' :is-child=false :loop=1 v-for="(output, key) in outputModel"  v-bind:key="key" type="output"></table-item>
         </div>
     </div>
 </template>
@@ -156,12 +156,22 @@ export default {
     }
   },
   watch: {
+    inputJson (val) {
+      console.log(`inputJson` + JSON.stringify(val))
+    },
+    inputModel (val) {
+      console.log(`inputModel` + JSON.stringify(val))
+    },
     outputData (val) {
+      console.log(`outputData update....`)
       const self = this
       if (val && self.isJson(val)) {
         console.log('yes, is json')
-        self.outputJson = JSON.parse(val.replace(/[\s\r\n]/, ''))
-        self.outputModel = self.revertFormat(self.outputJson, [], 'output')
+        // self.outputJson = JSON.parse(val.replace(/[\s\r\n]/, ''))
+        // self.outputModel = self.revertFormat(self.outputJson, [], 'output')
+        self.$emit('update:outputJson', JSON.parse(val.replace(/[\s\r\n]/, '')))
+        self.$emit('update:outputModel', self.revertFormat(self.outputJson, [], 'output'))
+
         if (!self.isJson(self.inputData)) {
           return self.setError(2)
         }
@@ -174,8 +184,12 @@ export default {
       const self = this
       if (val && self.isJson(val)) {
         console.log('yes, is json')
-        self.inputJson = JSON.parse(val.replace(/[\s\r\n]/, ''))
-        self.inputModel = self.revertFormat(self.inputJson, [], 'input')
+        // self.inputJson = JSON.parse(val.replace(/[\s\r\n]/, ''))
+        // self.inputModel = self.revertFormat(self.inputJson, [], 'input')
+        const inputJsonVal = JSON.parse(val.replace(/[\s\r\n]/, ''))
+        const inputModelVal = self.revertFormat(inputJsonVal, [], 'input')
+        self.$emit('update:inputJson', inputJsonVal)
+        self.$emit('update:inputModel', inputModelVal)
         if (!self.isJson(self.outputData)) {
           return self.setError(3)
         }
@@ -188,16 +202,25 @@ export default {
       console.log(`isAdd.....`)
       const self = this
       if (v) {
-        self.inputJson = {
-          id: 123
-        }
-        self.outputJson = {
+        // self.inputJson = {
+        //   id: 123
+        // }
+        // self.outputJson = {
+        //   status: 1,
+        //   data: {
+        //     test: 'test'
+        //   }
+        // }
+        // self.outputModel = []
+
+        self.$emit('update:inputJson', { id: 123 })
+        self.$emit('update:outputJson', {
           status: 1,
           data: {
             test: 'test'
           }
-        }
-        self.outputModel = []
+        })
+        self.$emit('update:outputModel', [])
       }
       self.$emit('init-code-mirror-all')
     }
@@ -476,16 +499,24 @@ export default {
       self.mockEditor = self.initEditor(mockEditorDom, true)
       self.editorReady = true
       if (!self.list_active.id) {
-        self.inputJson = {
-          id: 123
-        }
-        self.outputJson = {
+        // self.inputJson = {
+        //   id: 123
+        // }
+        // self.outputJson = {
+        //   status: 1,
+        //   data: {
+        //     test: 'test'
+        //   }
+        // }
+        // self.outputModel = []
+        self.$emit('update:inputJson', { id: 123 })
+        self.$emit('update:outputJson', {
           status: 1,
           data: {
             test: 'test'
           }
-        }
-        self.outputModel = []
+        })
+        self.$emit('update:outputModel', [])
       }
       self.setEditorData('input', self.inputJson)
       self.setEditorData('output', self.outputJson)
