@@ -55,7 +55,7 @@ axios.interceptors.response.use(
         store.dispatch('login/setLoginUserName', '')
 
         router.replace({
-          path: 'login',
+          path: '/login',
           query: {redirect: router.currentRoute.fullPath}
         })
     }
