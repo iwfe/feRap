@@ -25,6 +25,7 @@ module.exports = merge(baseWebpackConfig, {
       $: 'jquery',
       jQuery: 'jquery',
       CodeMirror: 'codemirror',
+      jsonlint: 'jsonlint',
       toastr: 'toastr'
     }),
     new webpack.DefinePlugin({
