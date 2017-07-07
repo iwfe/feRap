@@ -53,11 +53,11 @@ export default {
     const user = await userService.findByUserName(username)
 
     if (user) {
-      console.log('用户名已经存在')
-      await sutil.render('index', {
-        error: '用户名已经存在'
-      });
-      return false;
+      console.log('用户已存在')
+
+      sutil.failed(ctx,10002)
+
+      return
     }
 
     // 保存用户

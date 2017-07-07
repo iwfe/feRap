@@ -48,12 +48,11 @@ module.exports = async function (ctx, next) {
     return
   }
 
+
   // 判断用户是否登录
   var user = _.extend({}, await userService.getLoginUser(ctx));
 
   if (!user.username) {
-    // ctx.status = 301
-    // ctx.redirect('/login')
     ctx.type = ''
     return await sutil.result(ctx, {
       code: 10001,
@@ -66,10 +65,6 @@ module.exports = async function (ctx, next) {
 
   ctx.locals._user = user;
 
-  // console.log(`ctx.locals._user=======${JSON.stringify(ctx.locals._user)}`);
-
-  // console.log(`ctx.status=======${ctx.status}`);
-
   await next()
 
   return
@@ -78,12 +73,8 @@ module.exports = async function (ctx, next) {
   try {
     var status = ctx.status || 404;
     if (status === 404) ctx.throw(404);
-
-    // console.log(`ctx.status=======${ctx.status}`);
-
   } catch (error) {
     ctx.status = error.status || 500;
-    console.log(error.stack);
 
     if (ctx.status === 404) {
       await ctx.render('error', {

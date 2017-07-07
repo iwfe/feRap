@@ -17,9 +17,8 @@
         </div>
 
         <div class="register clearfix">
-          <span class="error-info" v-if="error">{{error}}</span>
-          <a v-if="isLogin" class="pull-right" href="/regist">没有帐号?</a>
-          <a v-else class="pull-right" href="/login">已有帐号?</a>
+          <router-link v-if="isLogin" to="/regist" class="pull-right">没有账号？</router-link>
+          <router-link v-else to="/login" class="pull-right">已有账号？</router-link>
         </div>
         <div class="form-item" style="margin-top:24px;">
           <div class="col-16 col-offset-6">
@@ -41,7 +40,6 @@ export default {
   name: 'login',
   data () {
     return {
-      error: window.pageConfig.error,
       username: '',
       password: ''
     }
@@ -62,7 +60,6 @@ export default {
   methods: {
     submit () {
       let self = this
-
       if (self.isSubmiting) {
         return
       }
@@ -78,15 +75,24 @@ export default {
       }).then(function (result) {
         self.isSubmiting = false
 
+        // 用户名或密码错误
         if (result && result.code === 10006) {
           Message.error({
             message: result.message
           })
           return
         }
+        // 用户名已存在
+        if (result && result.code === 10002) {
+          Message.error({
+            message: result.message
+          })
+          self.$router.replace('/login')
+          return
+        }
+
         if (result && result.data && result.data.isLogin) {
           self.$store.dispatch('login/setLoginStatus', result.data.token)
-//          self.$store.dispatch('login/setLoginStatus', result.data.isLogin)
           self.$store.dispatch('login/setLoginUserName', result.data.userName)
 
           let redirect = self.$route.query.redirect
@@ -100,11 +106,6 @@ export default {
               path: '/'
             })
           }
-        } else {
-          this.$message({
-            message: 'Congrats, this is a success message.',
-            type: 'success'
-          })
         }
       })
     }
