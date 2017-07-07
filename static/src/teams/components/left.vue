@@ -1,43 +1,39 @@
 <template>
   <div class="left-panel">
-    <div class="left-header">
-      团队结构
+    <!-- search -->
+    <div class="left-search">
+      <el-input v-model="searchItemKw" placeholder="搜索团队/项目" />
     </div>
-    <!-- teams list -->
-    <div>
-      <!-- 星标项 -->
-      <h5 class="left-group-title">我的星标</h5>
-      <team-tree 
-        :data="starTrees"
-        :current-node="curNode"
-        :expendeds="expendedCollections"
-        @nodeClick="(data) => handleNodeClick('expendedCollections',data)"
-      />
-      <div class="left-split" />
 
-      <!-- 搜索/全部 -->
-      <h5 class="left-group-title">我的团队</h5>
-      <div class="left-search">
-        <el-input v-model="searchItemKw" placeholder="搜索团队/项目" />
-      </div>
-      <team-tree 
-        v-if="displayTeams"
-        :data="displayTeams"
-        :current-node="curNode"
-        :expendeds="expendedNodes"
-        @nodeClick="(data) => handleNodeClick('expendedNodes',data)"
-      />
-    </div>
+    <!-- 星标项 -->
+    <h5 class="left-group-title">我的星标</h5>
+    <team-tree 
+      :data="starTrees"
+      :current-node="curNode"
+      :expendeds="expendedCollections"
+      :left-item="LeftItem"
+      @nodeClick="(data) => handleNodeClick('expendedCollections',data)"
+    />
+    <div class="left-split" />
+
+    <!-- 搜索/全部 -->
+    <h5 class="left-group-title">我的团队</h5>
+    <team-tree 
+      v-if="displayTeams"
+      :data="displayTeams"
+      :current-node="curNode"
+      :expendeds="expendedNodes"
+      :left-item="LeftItem"
+      @nodeClick="(data) => handleNodeClick('expendedNodes',data)"
+    />
   </div>
 </template>
 
 <script>
   import { mapGetters, mapActions } from 'vuex'
-  import tree from './tree'
+  import Tree from './tree'
   import LeftItem from './left-item.vue'
   import { Input } from 'element-ui'
-
-  const TeamTree = tree(LeftItem)
 
   function filterNodeToArrayProvide (filter) {
     return function findFunc (node) {
@@ -55,6 +51,7 @@
           children: 'children',
           label: 'label'
         },
+        LeftItem,
         searchItemKw: ''
       }
     },
@@ -83,7 +80,7 @@
       }
     },
     components: {
-      TeamTree,
+      TeamTree: Tree,
       ElInput: Input
     },
     methods: {
