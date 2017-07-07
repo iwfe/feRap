@@ -2,7 +2,7 @@
   <header id="header">
   <div class="header-wrap clearfix">
     <div class="menu">
-      <router-link v-for="item in menus" v-bind:key="index" class="item" :to="item.url">{{item.text}}</router-link>
+      <router-link v-for="(item, index) in menus" v-bind:key="index" class="item" :to="item.url">{{item.text}}</router-link>
 
       <div class="right">
         <div class="item" tabindex="0" v-if="username">
@@ -21,6 +21,7 @@
         </div>
       </div>
     </div>
+  </div>
 </header>
 </template>
 
@@ -37,7 +38,8 @@ export default {
     return {
       menus: [
         {url: '/index', text: '首页'},
-        {url: '/teams/index?prdId=m3tnaO', text: '团队'},
+//        {url: '/teams/index?prdId=m3tnaO', text: '团队'},
+        {url: '/teams/index', text: '团队'},
         {url: '/api/index', text: 'API'},
         {url: '/calendar', text: '日历'}
       ],
@@ -46,6 +48,14 @@ export default {
   },
   beforeMount () {
     this.urlAnalyze()
+  },
+  computed: {
+    username () {
+      return this.$store.getters['login/getLoginUserName']
+    },
+    currentPath () {
+      return this.$route.fullPath
+    }
   },
   methods: {
     urlAnalyze () {
@@ -57,17 +67,7 @@ export default {
           this.active = i
         }
       }
-    }
-  },
-  computed: {
-    username () {
-      return this.$store.getters['login/getLoginUserName']
     },
-    currentPath () {
-      return this.$route.fullPath
-    }
-  },
-  methods: {
     handleCommand (command) {
       switch (command) {
         case 'logout':
