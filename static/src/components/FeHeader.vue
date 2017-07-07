@@ -38,7 +38,8 @@ export default {
     return {
       menus: [
         {url: '/index', text: '首页'},
-        {url: '/teams/index?prdId=m3tnaO', text: '团队'},
+//        {url: '/teams/index?prdId=m3tnaO', text: '团队'},
+        {url: '/teams/index', text: '团队'},
         {url: '/api/index', text: 'API'},
         {url: '/calendar', text: '日历'}
       ],

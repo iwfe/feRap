@@ -34,6 +34,9 @@
 </template>
 
 <script>
+
+import { Message } from 'element-ui'
+
 export default {
   name: 'login',
   data () {
@@ -60,6 +63,11 @@ export default {
     submit () {
       let self = this
 
+      if (self.isSubmiting) {
+        return
+      }
+      self.isSubmiting = true
+
       axios({
         method: 'POST',
         url: this.formAction,
@@ -68,8 +76,17 @@ export default {
           password: this.password
         }
       }).then(function (result) {
+        self.isSubmiting = false
+
+        if (result && result.code === 10006) {
+          Message.error({
+            message: result.message
+          })
+          return
+        }
         if (result && result.data && result.data.isLogin) {
-          self.$store.dispatch('login/setLoginStatus', result.data.isLogin)
+          self.$store.dispatch('login/setLoginStatus', result.data.token)
+//          self.$store.dispatch('login/setLoginStatus', result.data.isLogin)
           self.$store.dispatch('login/setLoginUserName', result.data.userName)
 
           let redirect = self.$route.query.redirect
@@ -83,6 +100,11 @@ export default {
               path: '/'
             })
           }
+        } else {
+          this.$message({
+            message: 'Congrats, this is a success message.',
+            type: 'success'
+          })
         }
       })
     }
