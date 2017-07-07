@@ -11,7 +11,7 @@
       :data="starTrees"
       :current-node="curNode"
       :expendeds="expendedCollections"
-      :left-item="LeftItem"
+      :left-item="showParentsLeftItem"
       @nodeClick="(data) => handleNodeClick('expendedCollections',data)"
     />
     <div class="left-split" />
@@ -23,17 +23,26 @@
       :data="displayTeams"
       :current-node="curNode"
       :expendeds="expendedNodes"
-      :left-item="LeftItem"
+      :left-item="searchItemKw ? showParentsLeftItem : LeftItem"
       @nodeClick="(data) => handleNodeClick('expendedNodes',data)"
     />
   </div>
 </template>
 
 <script>
+  import Vue from 'vue'
   import { mapGetters, mapActions } from 'vuex'
   import Tree from './tree'
   import LeftItem from './left-item.vue'
   import { Input } from 'element-ui'
+
+  // 显示父级的项目
+  const showParentsLeftItem = Vue.extend({
+    props: ['data'],
+    render () {
+      return <LeftItem showParents={true} data={this.data} />
+    }
+  })
 
   function filterNodeToArrayProvide (filter) {
     return function findFunc (node) {
@@ -52,6 +61,7 @@
           label: 'label'
         },
         LeftItem,
+        showParentsLeftItem,
         searchItemKw: ''
       }
     },

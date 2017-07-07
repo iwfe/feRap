@@ -2,6 +2,12 @@ import teamsApi from '@/teams/api'
 import * as types from '@/store/mutation-types'
 import { store } from '../../common/util'
 
+function addParent (node) {
+  if (!node.children || node.children.length === 0) return node
+  node.children.map(d => (d.parent = node) && addParent(d))
+  return node
+}
+
 const starItemsKey = 'teamStarItems'
 // initial state
 const state = {
@@ -24,7 +30,8 @@ const getters = {
 // actions
 const actions = {
   getAllTeams ({ commit }) {
-    teamsApi.getTeamsTree(teams => {
+    teamsApi.getTeamsTree(res => {
+      const teams = res.map(addParent)
       commit(types.GET_ALL_TEAMS, { teams })
       commit(types.SET_CUR_NODE, { node: teams[0] })
     })
