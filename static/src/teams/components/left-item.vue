@@ -2,14 +2,14 @@
  * @Author: zoucong 
  * @Date: 2017-07-06 10:52:29 
  * @Last Modified by: zoucong
- * @Last Modified time: 2017-07-07 19:07:43
+ * @Last Modified time: 2017-07-10 10:22:41
  */
  
 <template>
   <div class="team-tree-item">
     <span class="tree-label">
       {{data.label}}
-      <span v-if="showParents" class="sub-label-text">{{getParentsStr()}}</span>
+      <span v-if="parentsStr" class="sub-label-text">{{parentsStr}}</span>
     </span>
     <span class="tree-star">
       <i class="tree-star-icon"
@@ -28,13 +28,19 @@
   }
 
   export default {
-    props: ['data', 'showParents'],
+    props: ['data', 'level'],
     computed: {
       ...mapGetters({
         starItems: 'teams/starItems'
       }),
       isStared () {
         return this.starItems.indexOf(this.data.id) !== -1
+      },
+      parentsStr () {
+        if (this.level !== 1) return 
+        const pList = getParents(this.data)
+        pList.pop() // 去掉“全部”
+        if (pList.length) return `( ${pList.join(' → ')} )`
       }
     },
     methods: {
@@ -42,11 +48,6 @@
         this.$store.dispatch(this.isStared 
           ? 'teams/unStarItem' : 'teams/starItem', this.data.id)
         event.stopPropagation()
-      },
-      getParentsStr () {
-        const pList = getParents(this.data)
-        pList.pop() // 删掉全部
-        return `(${pList.join(' → ')})`
       }
     }
   }
