@@ -141,6 +141,144 @@ var util = {
 
     var ret = format.replace(/%(\w)/g, repl)
     return ret;
+  },
+  /**
+   *
+   * @desc 根据 keys数组中的值，返回obj中有的key，返回最后的obj
+   * @param {Aarray} keys
+   * @param {Object} obj
+   * @returns Object
+   */
+  getObjByKeys (keys = [], obj = {}) {
+    let o = {}
+    for (let i = 0; i < keys.length; i++) {
+      if (Object.prototype.hasOwnProperty.call(obj, keys[i])) {
+        o[keys[i]] = obj[keys[i]]
+      }
+    }
+    return o
+  },
+  Json2MockTree (data, key, result) {
+    if (!result) {
+      result = []
+    }
+
+    if (Array.isArray(data)) {
+      // data is array
+      let tmpForPush = {
+        key: key,
+        type: 'Array',
+        mock: '',
+        comment: ''
+      }
+      let children = []
+      if (typeof data[0] === 'object') {
+        util.Json2MockTree(data[0], null, children)
+        tmpForPush.children = children
+      }
+      result.push(tmpForPush)
+      return result
+    } else if (typeof data === 'object') {
+      // data is object
+      let children = []
+      for (let k in data) {
+        if (key) {
+          util.Json2MockTree(data[k], k, children)
+        } else {
+          util.Json2MockTree(data[k], k, result)
+        }
+      }
+      if (key) {
+        result.push({
+          key: key,
+          type: typeof data,
+          mock: '',
+          comment: '',
+          children: children
+        })
+      }
+      return result
+    } else {
+      // not object or array
+      if (!key) {
+        console.log('error: data is not in a json format!')
+      } else {
+        result.push({
+          key: key,
+          type: typeof data,
+          mock: '',
+          comment: ''
+        })
+      }
+      return result
+    }
+  },
+
+  mockTree2MockTemplate (data, result) {
+    if (!result) {
+      result = {}
+    }
+
+    if (Array.isArray(data)) {
+      // data is array
+      for (let i = data.length - 1; i >= 0; i--) {
+        util.mockTree2MockTemplate(data[i], result)
+      }
+      return result
+    } else if (typeof data === 'object' && data.key && data.dataType && data.mock) {
+      let mockArr = data.mock.split(':')
+
+      // if has children
+      if (data.children) {
+        let tmpChildren = null
+        if (data.dataType.toLowerCase() === 'object') {
+          // object
+          tmpChildren = {}
+          for (let i = data.children.length - 1; i >= 0; i--) {
+            util.mockTree2MockTemplate(data.children[i], tmpChildren)
+          }
+        } else {
+          // array
+          tmpChildren = [{}]
+          for (let i = data.children.length - 1; i >= 0; i--) {
+            util.mockTree2MockTemplate(data.children[i], tmpChildren[0])
+          }
+        }
+        result[`${data.key}${mockArr[0]}`] = tmpChildren
+      } else {
+        // has no children
+        let value = mockArr[1]
+        if (data.dataType.toLowerCase() === 'boolean') {
+          value = (mockArr[1] === 'true')
+        } else if (data.dataType.toLowerCase() === 'number') {
+          // if is array
+          if (value[0] === '[') {
+            value = eval(mockArr[1])
+          } else {
+            value = parseFloat(mockArr[1])
+          }
+        } else if (!mockArr[0] && value[0] === '/') {
+          // regexp
+          let regArr = mockArr[1].split('/')
+          value = new RegExp(regArr[1], regArr[2])
+        } else {
+          // string
+          // if is array
+          if (value[0] === '[') {
+            value = eval(mockArr[1])
+          }
+        }
+        result[`${data.key}${mockArr[0]}`] = value
+      }
+
+      return result
+    } else {
+      console.log('mock tree data format error !')
+    }
+  },
+
+  getDataType (obj) {
+    return Object.prototype.toString.call(obj).substring(8).replace(/\]/g, '')
   }
 }
 export default util;

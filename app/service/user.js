@@ -40,38 +40,49 @@ export default {
 
   //登录用户cookie管理
   getLoginUser: async (ctx) => {
-    console.log(`userService => getLoginUser ctx:${ctx}`);
-    let feteauth = ctx.cookies.get('feteauth');
+    // console.log(`userService => getLoginUser ctx:`,ctx);
+    // let feteauth = ctx.cookies.get('feteauth');
+    let feteauth = ctx.header.token;
+
+    console.log('user token:', feteauth)
+
     if (!feteauth) return null;
 
     let decrypted = '';
     let decipher = crypto.createDecipher('rc4', config.authKey);
-    decrypted += decipher.update(feteauth, 'hex', 'utf8');
-    decrypted += decipher.final('utf8');
+    try{
+      decrypted += decipher.update(feteauth, 'hex', 'utf8');
+      decrypted += decipher.final('utf8');
+    } catch (e) {
+      return null
+    }
+
     let auth = decrypted.split('|');
 
     let username = auth[0];
     let password = auth[1];
     let ip = ctx.ip;
-    console.log(`${username} ${password} ${ip} ${auth[2]}`);
+    // console.log(`${username} ${password} ${ip} ${auth[2]}`);
     // if (!auth[2] || auth[2] != ip) return null; // 暂时注释
 
     let user = await userDao.findOne({
       username: username,
       password: password
     });
+
     return user;
   },
 
   //设置登录用户
   async setLoginUser(ctx, username, pwd) {
+
     pwd = this.wrapUserPass(pwd);
+
     const user = await userDao.findOne({
       username: username,
       password: pwd
     });
 
-    console.log(`username: ${username}, pwd: ${pwd} user===${user}`);
     if (!user) {
       return null;
     }
@@ -80,14 +91,14 @@ export default {
     const str = username + '|' + pwd + '|' + ip;
     let encrypted = '';
     const cip = crypto.createCipher('rc4', config.authKey);
+
     encrypted += cip.update(str, 'utf8', 'hex');
     encrypted += cip.final('hex');
+
     ctx.cookies.set('feteauth', encrypted);
 
-    console.log(`set ctx.cookies: ${str}`);
-
-    // loginUserStore.set(username, user);
-    return user
+    // return user
+    return encrypted
   },
 
   wrapUserPass(password) {

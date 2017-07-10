@@ -23,7 +23,7 @@ module.exports = {
   },
   dev: {
     env: require('./dev.env'),
-    port: 8080,
+    port: 8081,
     autoOpenBrowser: true,
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
@@ -34,8 +34,10 @@ module.exports = {
           return (pathname.match('^/login') && req.method === 'POST')
                   || (pathname.match('^/regist') && req.method === 'POST')
                   || pathname.match('^/team/')
-                  || (pathname.match('^/api/') && !pathname.match('^/api/index')
-                  || pathname.match('^/calendar/'))
+                  || pathname.match('^/calendar/')
+                  || pathname.match('^/prd/')
+                  || pathname.match('^/project/')
+                  || (pathname.match('^/api/') && !pathname.match('^/api/index'))
         }
       }
     },

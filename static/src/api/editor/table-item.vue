@@ -35,7 +35,7 @@
         </li>
       </ul>
       <div v-if="model.children && showChild" class="children">
-        <table-item :model="model" :is-child=true :loop='loop+1' v-for="(model, key) in model.children" track-by="key" :type="type" ></table-item>
+        <table-item :model="model" :is-child=true :loop='loop+1' v-for="(model, key) in model.children" v-bind:key="key" :type="type" ></table-item>
       </div>
     </div>
   </div>

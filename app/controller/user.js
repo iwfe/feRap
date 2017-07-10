@@ -18,19 +18,18 @@ export default {
    */
   toLogin: async (ctx, next) => {
     const { username, password } = ctx.request.body
+
+    //判断是否登录成功 null: 失败，user 对象 ：成功
     const user = await userService.toLogin(ctx, username, password)
-    console.log(`ssss` + user);
+
     if (!user) {
-      console.log('用户名或密码不正确');
-      await ctx.render('index', {
-        username: username,
-        error: '用户名或密码不正确'
-      });
+      sutil.failed(ctx,10006)
     } else {
-      ctx.locals = ctx.locals || {}
-      ctx.locals._user = user
-      const refer = (ctx.parse ? ctx.parse.next : null) || '/index'
-      ctx.redirect(refer);
+      sutil.success(ctx,{
+        isLogin: true,
+        userName: username,
+        token: user
+      })
     }
   },
 
@@ -54,11 +53,11 @@ export default {
     const user = await userService.findByUserName(username)
 
     if (user) {
-      console.log('用户名已经存在')
-      await sutil.render('index', {
-        error: '用户名已经存在'
-      });
-      return false;
+      console.log('用户已存在')
+
+      sutil.failed(ctx,10002)
+
+      return
     }
 
     // 保存用户
