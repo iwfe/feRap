@@ -5,6 +5,7 @@ import Index from '@/main/router'
 import Teams from '@/teams/router'
 // import User from '@/user/router'
 import Api from '@/api/router'
+import calendar from '@/calendar/router'
 
 Vue.use(Router)
 
@@ -16,6 +17,7 @@ export default new Router({
     Index,
     Teams,
     // User,
-    Api
+    Api,
+    calendar
   ]
 })
