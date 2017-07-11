@@ -106,6 +106,14 @@ export default {
               path: '/'
             })
           }
+          return
+        }
+
+        if (result && result.code === 200) {
+          Message.success({
+            message: '注册成功'
+          })
+          self.$router.replace('/login')
         }
       })
     }
