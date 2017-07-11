@@ -5,19 +5,24 @@ import sutil from '../common/sutil'
 import utils from '../../global/utils'
 import _ from 'underscore'
 
-const userDao = db.get('user')
 const prdDao = db.get('prd')
-const apiDao = db.get('api')
-
-// console.log('======================userDao====================', userDao)
+const projectDao = db.get('project')
 
 export default {
     /**
-   * 查找团队树
-   * @param  {[type]}  user [description]
-   * @return {Promise}      [description]
-   */
-    getUserTeam: async function () {
-        return userDao.find({username: 'lancui'})
+     * 查找prd
+     * @param  {[type]}  user [description]
+     * @return {Promise}      [description]
+     */
+    getPrd: async function (teamIds) {
+        return prdDao.find({teamId: {'$in': teamIds}})
     },
+    /**
+    * 查找项目
+    * @param  {[type]}  user [description]
+    * @return {Promise}      [description]
+    */
+    getprjs: async function (teamIds) {
+        return projectDao.find({teamId: {'$in': teamIds}})
+    }
 }

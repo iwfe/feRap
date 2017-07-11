@@ -46,7 +46,8 @@ routes.get('/api/getApiList.json', api.getApiList)
 routes.get('/api/getApiDetail.json', api.getApiDetail)
 
 // calendar
-routes.get('/calendar/getCalendar.json', calendar.getCalendarList)
+routes.get('/calendar/getcalendarList.json', calendar.getcalendarList)
+
 // prd
 routes.get('/prd/getPrdList.json', prd.getPrdList)
 routes.post('/prd/data', prd.addPrd)

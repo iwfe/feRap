@@ -6,27 +6,41 @@
 require('fullcalendar/dist/fullcalendar.css')
 require('fullcalendar/dist/fullcalendar.js')
 require('jquery')
+require('../plugins/jquery.qtip.min.css')
+require('../plugins/jquery.qtip.min.js')
 
 import api from './api.js'
-
+import { mapGetters } from 'vuex'
 export default{
   data () {
     return {
-      events: [{
-        id: '123',
-        title: '123',
-        start: '2017-07-07 20:00:00'
-      }]
+      events: []
     }
   },
   mounted () {
-    this.fullCalendar()
-    api.getCalendarList((data) => {
-      console.log(data)
+    this.getcalendarList()
+  },
+  computed: {
+    ...mapGetters({
+      expendedNodes: 'teams/expendedNodes'
     })
   },
   methods: {
-    fullCalendar () {
+    async getcalendarList () {
+      await api.getcalendarList((res) => {
+        if (res) {
+          res.map((item) => {
+            const title = `${item.projectName}${item.name}`
+            this.manage(`${title}_上线阶段`, item.onlineTime, item)
+            this.manage(`${title}_提测阶段`, item.testTime, item)
+          })
+        }
+        this.fullCalendar(this.events)
+      })
+    },
+    fullCalendar (events) {
+      let self = this
+      const initialLocaleCode = 'zh-cn'
       $('#calendar').fullCalendar({
         header: {
           left: 'prev,next today',
@@ -36,17 +50,50 @@ export default{
         firstDay: 1,
         aspectRatio: 1.5,
         timeFormat: 'H:mm',
-        axisFormat: 'H:mm',
-        events: this.events,
-        eventClick: function (calEvent, jsEvent, view) {
-          // 点击日程时间动作
+        locale: initialLocaleCode,
+        events: events,
+        editable: true,
+        eventLimit: true,
+        eventRender: function (event, element) {
+          element.qtip({
+            content: event.description,
+            show: 'mouseover',
+            hide: {
+              event: 'click mouseleave',
+              delay: 0
+            }
+          })
         },
         eventMouseover: function (calEvent, jsEvent, view) {
           $(this).addClass('mouseover')
         },
         eventMouseout: function (calEvent, jsEvent, view) {
           $(this).removeClass('mouseover')
+        },
+        eventClick: function (calEvent, jsEvent, view) {
+          const setName = 'expendedNodes'
+          console.log(calEvent.id, calEvent.teamId)
+          self.$store.dispatch('teams/toggleExpends', {setName, nodeId: calEvent.id})
+          // self.$store.dispatch('teams/setCurNode', data)
+          self.$router.push('/teams/index')
         }
+      })
+    },
+    manage (title, time, item) {
+      const data = new Date(time)
+      const year = data.getFullYear()
+      const month = data.getMonth() + 1 < 10 ? '0' + (data.getMonth() + 1) : data.getMonth() + 1
+      const day = data.getDate() < 10 ? '0' + data.getDate() : data.getDate()
+      const hour = data.getHours() < 10 ? '0' + data.getHours() : data.getHours()
+      const minute = data.getMinutes() < 10 ? '0' + data.getMinutes() : data.getMinutes()
+      const seconds = data.getSeconds() < 10 ? '0' + data.getSeconds() : data.getSeconds()
+      const eventTime = year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + seconds
+      this.events.push({
+        id: item.projectId,
+        teamId: item.teamId,
+        title: title,
+        start: eventTime,
+        description: `${title} 时间：${eventTime}`
       })
     }
   }

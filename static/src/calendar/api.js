@@ -1,11 +1,11 @@
 export default {
   getUrl (key) {
     return window.pageConfig.siteUrl + 'calendar/' + {
-      getCalendar: 'getCalendar.json'
+      getcalendarList: 'getcalendarList.json'
     }[key]
   },
-  getCalendarList (cb) {
-    axios.get(this.getUrl('getCalendar'), {})
+  getcalendarList (cb) {
+    axios.get(this.getUrl('getcalendarList'), {})
     .then(function (response) {
       cb(response.data)
     })
