@@ -91,13 +91,6 @@ export default {
           return
         }
 
-        if (result && result.code === 200) {
-          Message.success({
-            message: '注册成功'
-          })
-          self.$router.replace('/login')
-        }
-
         if (result && result.data && result.data.isLogin) {
           self.$store.dispatch('login/setLoginStatus', result.data.token)
           self.$store.dispatch('login/setLoginUserName', result.data.userName)
@@ -113,6 +106,14 @@ export default {
               path: '/'
             })
           }
+          return
+        }
+
+        if (result && result.code === 200) {
+          Message.success({
+            message: '注册成功'
+          })
+          self.$router.replace('/login')
         }
       })
     }
