@@ -47,9 +47,11 @@
   height: calc(~"100% - 36px");
   .main-left-panel {
     height: 100%;
+    overflow-y: scroll;
   }
   .main-content-panel {
     height: 100%;
+    overflow-y: scroll;
   }
 }
 </style>

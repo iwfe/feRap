@@ -22,8 +22,8 @@ export default {
    * @return {Promise}       [description]
    */
   getApiList: async function (ctx, next) {
-    // const { prdId } = ctx.locals.parse
-    const prdId = 'm3tnaO'
+    const { prdId } = ctx.locals.parse
+    // const prdId = 'm3tnaO'
     const apis = await apiService.getApiList(prdId)
     sutil.success(ctx, apis)
   },

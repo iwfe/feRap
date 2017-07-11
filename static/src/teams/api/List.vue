@@ -50,7 +50,6 @@
   export default {
     data () {
       return {
-        prdId: this.$route.query.prdId,
         // apiId: null,  // 用于编辑删除Api
         // apiList: [], // 列表数据
         isShowForm: false // 是否显示表单
@@ -68,14 +67,23 @@
     computed: {
       ...mapGetters({
         apiList: 'apis/allApis',
-        apiId: 'apis/curId'
-      })
+        apiId: 'apis/curId',
+        curNode: 'teams/curNode'
+      }),
+      prdId () {
+        return this.curNode.id
+      }
     },
     mounted () {
       this.getListData()
       document.addEventListener('click', () => {
         // this.isShowForm = false
       })
+    },
+    watch: {
+      prdId () {
+        this.getListData()
+      }
     },
     methods: {
       // 获取数据列表
@@ -98,7 +106,8 @@
 
 <style lang="less" scoped>
 .api-list-panel {
-  margin: 10px 30px;
+  margin: 10px;
+  height: 95%;
   .toolbar {
     text-align: right;
   }

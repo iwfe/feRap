@@ -1,4 +1,4 @@
-const ApiList = r => require.ensure([], () => r(require('@/api/List')), 'apis')
+const ApiList = r => require.ensure([], () => r(require('@/teams/api/List')), 'apis')
 
 export default {
   path: '/api/index',

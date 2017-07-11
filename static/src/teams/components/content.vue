@@ -24,7 +24,7 @@
   import TeamList from '../team/TeamList'
   import PrjList from '../project/PrjList'
   import PrdList from '../prd/PrdList'
-  import ApiList from '../api/ApiList'
+  import ApiList from '../api/List'
 
   export default {
     data () {

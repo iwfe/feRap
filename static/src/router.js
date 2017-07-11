@@ -5,7 +5,7 @@ import Main from '@/main/router.js'
 import Login from '@/login/router.js'
 import Teams from '@/teams/router.js'
 // import User from '@/user/router'
-import Api from '@/api/router.js'
+import Api from '@/teams/api/router.js'
 
 Vue.use(Router)
 

@@ -43,7 +43,7 @@
       </el-col>
       <el-col :span="24">
         <editor-frame
-            :listActive="form"
+            :list-active="{}"
             :output-model.sync="form.output"
             :output-json.sync="form.outputJson"
             :input-json.sync="form.input"
@@ -58,15 +58,30 @@
       </el-col>
 
       <el-col :span="24">
-        <div>
+        <div class="log-container" >
           <p>接口修改日志</p>
-          <div v-for="item in form.updateDescList">
-            <p>{{item.userName}}</p>
-            <p>{{item.updateTime}}: {{item.updateDesc}}</p>
+          <div class="log-panel" :class="{'show-more': !showLogMore}">
+            <div class="log-item" v-for="item in form.updateDescList">
+              <i class="iconfont el-icon-document"></i>
+              <p>{{item.userName}}</p>
+              <p>{{item.updateTime}}: {{item.updateDesc}}</p>
+            </div>
           </div>
+          <p class="more" v-if="form.updateDescList && form.updateDescList.length > 2">
+            <span class="down" v-show="showLogMore" @click="showLogMore = false">更多</span>
+            <span class="up" v-show="!showLogMore" @click="showLogMore = true">收起</span>
+          </p>
         </div>
       </el-col>
     </el-form>
+    <div class="detail-bottom">
+      <help></help>
+      <button class="primary mini ui button" @click="pageList">上一条</button>
+      <button class="positive mini ui button" :class="[sendLoad ? 'loading' : '']" @click="sendData">确定</button>
+      <button class="negative mini ui button" :class="[delLoad ? 'loading' : '']" @click="delList">删除</button>
+      <button class="mini ui button" @click="closeSlide">取消</button>
+      <button class="primary mini ui button" @click="pageList('')">下一条</button>
+    </div>
   </div>
 </template>
 
@@ -80,8 +95,9 @@
     name: 'apiForm',
     data () {
       return {
-        isAdd: true,
+        isAdd: false,
         editorError: {},
+        showLogMore: true, // 日志更多
         form: {
           method: 'GET',
           useOutputJson: true
@@ -113,9 +129,9 @@
     },
     methods: {
       getData () {
-        console.log(`form getData....`)
         if (!this.apiId) return
         api.getApiDetail(this.apiId, (data) => {
+          this.isAdd = true
           this.form = data
         })
       }
@@ -129,8 +145,8 @@
   right: 0;
   top: 0;
   background: #fff;
-  width: 80%;
-  height: 100%;
+  width: 65%;
+  height: 95%;
   box-shadow: 0 0 2px 6px rgba(0, 0, 0, 0.1);
   overflow-y: auto;
   z-index: 999;
@@ -146,6 +162,45 @@
   .api-form {
     width: 100%;
     padding: 10px;
+  }
+  .log-container {
+    .log-panel {
+      height: 104px;
+      overflow: hidden;
+      p {
+        margin-left: 20px;
+        line-height: 25px;
+      }
+    }
+    .more {
+      .up, .down {
+        cursor: pointer;
+      }
+    }
+    .show-more {
+      height: auto;
+    }
+    .log-item {
+      position: relative;
+    }
+    .iconfont {
+      position: absolute;
+      top: 8px;
+      font-size: 16px;
+    }
+  }
+  .detail-bottom {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      height: 50px;
+      padding: 10px;
+      text-align: center;
+      border-top: 1px solid #eee;
+    .button {
+      margin-right: 10px;
+    }
   }
 }
 
