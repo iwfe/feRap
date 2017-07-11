@@ -38,18 +38,18 @@ export default {
     return await userDao.findOne({ id: id })
   },
 
-  //登录用户cookie管理
   getLoginUser: async (ctx) => {
-    // console.log(`userService => getLoginUser ctx:`,ctx);
-    // let feteauth = ctx.cookies.get('feteauth');
     let feteauth = ctx.header.token;
 
     console.log('user token:', feteauth)
 
-    if (!feteauth) return null;
+    if (!feteauth){
+      return null;
+    }
 
     let decrypted = '';
     let decipher = crypto.createDecipher('rc4', config.authKey);
+
     try{
       decrypted += decipher.update(feteauth, 'hex', 'utf8');
       decrypted += decipher.final('utf8');
@@ -62,8 +62,6 @@ export default {
     let username = auth[0];
     let password = auth[1];
     let ip = ctx.ip;
-    // console.log(`${username} ${password} ${ip} ${auth[2]}`);
-    // if (!auth[2] || auth[2] != ip) return null; // 暂时注释
 
     let user = await userDao.findOne({
       username: username,
@@ -88,6 +86,7 @@ export default {
     }
 
     const ip = ctx.ip;
+    console.log('ip', ip)
     const str = username + '|' + pwd + '|' + ip;
     let encrypted = '';
     const cip = crypto.createCipher('rc4', config.authKey);
