@@ -2,7 +2,7 @@
  * @Author: zoucong 
  * @Date: 2017-07-06 10:50:52 
  * @Last Modified by: zoucong
- * @Last Modified time: 2017-07-07 15:43:16
+ * @Last Modified time: 2017-07-10 10:14:47
  */
 
 import Vue from 'vue'
@@ -26,38 +26,43 @@ export default Vue.extend({
       return Boolean(data && data.children && data.children.length)
     },
 
-    renderTree (h, data) {
+    renderTree (h, data, level) {
       return (
         <ul class="tree-component-ul">
-          { data.children.map(d => this.renderNode(h, d)) }
+          { 
+            data.children.map(d => (
+              <li>
+                {this.renderNode(h, d, level)}
+              </li>
+            ))
+          }
         </ul>
       )
     },
 
-    renderNode (h, data) {
+    renderNode (h, data, level) {
       const { nodeClick, currentNode, expendeds, LeftItem } = this
       const hasChildren = this.hasChildren(data)
       const expanded = expendeds.indexOf(data.id) !== -1
       const isActive = currentNode === data
       
       return (
-        <li>
-          <Leaf data={data} 
-            onNodeClick={nodeClick} 
-            expandable={hasChildren}
-            expanded={expanded}
-            active={isActive}
-          >
-            <LeftItem data={data} slot="label"/>
-            { hasChildren ? this.renderTree(h, data) : null }
-          </Leaf>
-        </li>
+        <Leaf data={data} 
+          level={level}
+          onNodeClick={nodeClick} 
+          expandable={hasChildren}
+          expanded={expanded}
+          active={isActive}
+        >
+          <LeftItem data={data} level={level} slot="label"/>
+          { hasChildren ? this.renderTree(h, data, level + 1) : null }
+        </Leaf>
       )
     }
   },
   
   render (h) {
-    const level = 0
-    return this.renderTree(h, this.data)
+    const level = 1
+    return this.renderTree(h, this.data, level)
   }
 })

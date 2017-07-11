@@ -30,6 +30,7 @@
 </template>
 
 <script>
+  import Vue from 'vue'
   import { mapGetters, mapActions } from 'vuex'
   import Tree from './tree'
   import LeftItem from './left-item.vue'
