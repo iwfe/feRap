@@ -12,9 +12,9 @@ export const store = {
     const value = JSON.stringify(v)
     return localStorage.setItem(key, value)
   },
-  deleteItem (k) {
+  removeItem (k) {
     const key = store.getKey(k)
-    return localStorage.deleteItem(key)
+    return localStorage.removeItem(key)
   }
 }
 /**

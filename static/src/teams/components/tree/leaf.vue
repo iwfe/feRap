@@ -2,12 +2,13 @@
  * @Author: zoucong 
  * @Date: 2017-07-06 10:51:05 
  * @Last Modified by: zoucong
- * @Last Modified time: 2017-07-06 16:20:05
+ * @Last Modified time: 2017-07-10 10:17:53
  */
 
 <template>
   <div class="tree-leaf-wrp" >
     <a class="leaf-label"
+      :style="{paddingLeft: level * 20 + 'px'}"
       :class="{'leaf-label-expanded': expanded, active}" 
       @click="nodeClick(data);"
     >
@@ -15,7 +16,7 @@
         <i v-if="expandable" class="el-icon-caret-right label-icon"/>
       </span>
       <span class="leaf-label-content">
-        <slot></slot>
+        <slot name="label"></slot>
       </span>
     </a>
 
@@ -29,7 +30,7 @@
       @after-leave  = "treeAfterTrans"
     >
       <div v-show="expanded">
-        <slot name="subTree"></slot>
+        <slot></slot>
       </div>
     </transition>
   </div>
@@ -38,7 +39,7 @@
 <script>
   const treeTransClassName = 'expand-tree-transition'
   export default {
-    props: ['data', 'expandable', 'expanded', 'active'],
+    props: ['data', 'level', 'expandable', 'expanded', 'active'],
 
     methods: {
       nodeClick (data) {
