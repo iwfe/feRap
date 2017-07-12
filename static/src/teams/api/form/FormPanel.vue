@@ -5,42 +5,45 @@
       {{form.title}}
     </div>
     <el-form class="api-form" ref="form" :model="form" label-width="80px">
-      <el-col :span="6">
-        <el-form-item label="标题">
-          <el-input v-model="form.title"></el-input>
-        </el-form-item>
-      </el-col>
-      <el-col :span="6">
-        <el-form-item label="URL">
-          <el-input v-model="form.url"></el-input>
-        </el-form-item>
-      </el-col>
-      <el-col :span="4">
-        <el-form-item label="Method">
-          <el-select v-model="form.method" placeholder="method">
-            <el-option label="GET" value="GET"></el-option>
-            <el-option label="POST" value="POST"></el-option>
-            <el-option label="PUT" value="PUT"></el-option>
-            <el-option label="DELETE" value="DELETE"></el-option>
-          </el-select>
-        </el-form-item>
-      </el-col>
-      <el-col :span="4">
-        <el-form-item label="返回output数据" label-width="120px">
-            <el-switch
-              v-model="form.useOutputJson"
-              on-text=""
-              off-text=""
-              on-value="true"
-              off-value="false">
-            </el-switch>
+      <div class="form-line">
+        <el-col :span="6">
+          <el-form-item label="标题">
+            <el-input v-model="form.title"></el-input>
           </el-form-item>
-      </el-col>
-      <el-col :span="6">
-        <el-form-item label="接口分类">
-          <el-input v-model="form.category"></el-input>
-        </el-form-item>
-      </el-col>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label="URL">
+            <el-input v-model="form.url"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="4">
+          <el-form-item label="Method">
+            <el-select v-model="form.method" placeholder="method">
+              <el-option label="GET" value="GET"></el-option>
+              <el-option label="POST" value="POST"></el-option>
+              <el-option label="PUT" value="PUT"></el-option>
+              <el-option label="DELETE" value="DELETE"></el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="4">
+          <el-form-item label="返回output数据" label-width="120px">
+              <el-switch
+                v-model="form.useOutputJson"
+                on-text=""
+                off-text=""
+                on-value="true"
+                off-value="false">
+              </el-switch>
+            </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label="接口分类">
+            <el-input v-model="form.category"></el-input>
+          </el-form-item>
+        </el-col>
+      </div>
+
       <el-col :span="24">
         <editor-frame
             :list-active="{}"
@@ -68,20 +71,19 @@
             </div>
           </div>
           <p class="more" v-if="form.updateDescList && form.updateDescList.length > 2">
-            <span class="down" v-show="showLogMore" @click="showLogMore = false">更多</span>
-            <span class="up" v-show="!showLogMore" @click="showLogMore = true">收起</span>
+            <span class="down" @click="showLogMore = !showLogMore">{{showLogMore ? '更多' : '收起'}}</span>
           </p>
         </div>
       </el-col>
     </el-form>
-    <div class="detail-bottom">
+    <!-- <div class="detail-bottom">
       <help></help>
       <button class="primary mini ui button" @click="pageList">上一条</button>
       <button class="positive mini ui button" :class="[sendLoad ? 'loading' : '']" @click="sendData">确定</button>
       <button class="negative mini ui button" :class="[delLoad ? 'loading' : '']" @click="delList">删除</button>
       <button class="mini ui button" @click="closeSlide">取消</button>
       <button class="primary mini ui button" @click="pageList('')">下一条</button>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -131,7 +133,7 @@
       getData () {
         if (!this.apiId) return
         api.getApiDetail(this.apiId, (data) => {
-          this.isAdd = true
+          this.isAdd = !this.isAdd
           this.form = data
         })
       }
@@ -159,17 +161,21 @@
       font-size: 16px;
     }
   }
+  .form-line {
+    display: flex;
+  }
   .api-form {
     width: 100%;
     padding: 10px;
   }
   .log-container {
     .log-panel {
-      height: 104px;
+      height: 80px;
       overflow: hidden;
+      padding: 5px 0;
       p {
         margin-left: 20px;
-        line-height: 25px;
+        line-height: 20px;
       }
     }
     .more {
@@ -185,12 +191,12 @@
     }
     .iconfont {
       position: absolute;
-      top: 8px;
+      top: 4px;
       font-size: 16px;
     }
   }
   .detail-bottom {
-      position: absolute;
+      position: fixed;
       left: 0;
       bottom: 0;
       width: 100%;
@@ -212,7 +218,8 @@
 }
 #apiform .el-form-item__label {
   font-size: 12px;
-  padding: 6px 12px 6px 0;
+  padding: 6px 12px 6px 6px;
+  text-align: left;
 }
 #apiform .el-input__inner {
   height: 26px;

@@ -26,6 +26,7 @@
       </el-table-column>
       <el-table-column
         prop="updateDescList"
+        :render-header="getLastDesc"
         label="最后修改">
       </el-table-column>
       <el-table-column
@@ -98,6 +99,14 @@
         console.log(row.id)
         this.$store.dispatch('apis/setCurId', row.id)
         event.stopPropagation()
+      },
+      getLastDesc (list, { column, $index }) {
+        console.log(11111)
+        console.log($index)
+        return ''
+        // if (!list || list.length < 1) return ''
+        // const desc = list[0]
+        // return `${desc.userName}:${desc.updateDesc}`
       }
 
     }

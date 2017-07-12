@@ -152,13 +152,6 @@ export default {
     }
   },
   watch: {
-    inputJson (val) {
-      this.setEditorData('input', val)
-    },
-    outputJson (val) {
-      this.setEditorData('output', val)
-      this.$emit('revertMock')
-    },
     outputData (val) {
       const self = this
       if (val && self.isJson(val)) {
@@ -250,6 +243,7 @@ export default {
       return self[`${editor}Editor`].getValue()
     },
     setEditorData (editor, value) {
+      console.log(1111)
       const self = this
       if (self.isJson(value)) {
         value = JSON.parse(value)
