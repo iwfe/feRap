@@ -60,6 +60,7 @@
       flex: 1;
     }
     .tree-star{
+      padding-right: 16px;
       color: #e84a01;
     }
     .sub-label-text{
