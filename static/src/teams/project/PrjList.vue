@@ -74,7 +74,7 @@
     computed: mapState({
       teamId: state => state.teams.curNode.id
     }),
-    mounted(){
+    mounted () {
       this.getListData(this.teamId)
     },
     watch: {

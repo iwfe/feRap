@@ -6,7 +6,6 @@ const ApiList = r => require.ensure([], () => r(require('@/teams/api/List')), 'a
 
 export default {
   path: '/teams',
-  name: 'teams',
   component: Teams,
   meta: {
     requireLogin: true // 表示该路由需要登录
@@ -14,19 +13,22 @@ export default {
   children: [
     {
       path: '',
+      name: 'teams',
       component: TeamList
     },
     {
       path: ':teamId',
+      name: 'teamsPrjList',
       component: PrjList
     },
     {
       path: ':teamId/:projectId',
+      name: 'teamsPrdList',
       component: PrdList
     },
     {
       path: ':teamId/:projectId/:prdId',
-      name: 'ApiList',
+      name: 'teamsApiList',
       component: ApiList
     }
   ]

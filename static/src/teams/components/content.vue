@@ -2,7 +2,8 @@
   <div class="content-panel">
     <div class="content-header">
       <el-breadcrumb separator="/">
-        <el-breadcrumb-item v-for="(item, index) in breadcrumbs" :to="{ path: item.path }" replace :key="index">
+        <el-breadcrumb-item v-for="(item, index) in breadcrumbs" 
+          :key="item.type" :to="{ path: item.path }" replace>
           {{item.name}}
         </el-breadcrumb-item>
       </el-breadcrumb>
@@ -32,7 +33,9 @@
         path: `/teams/${idList.slice(0, i).join('/')}`
       }))
     // add name
-    list.reduceRight((acc, cur) => (cur.name = acc.label) && acc.parent, curNode) 
+
+    list.reduceRight((acc, cur) => acc 
+      ? ((cur.name = acc.label), acc.parent) : null, curNode) // eslint-disable-line
     return list
   }
 

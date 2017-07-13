@@ -71,8 +71,8 @@ export default{
           $(this).removeClass('mouseover')
         },
         eventClick: function (calEvent, jsEvent, view) {
-          console.log(calEvent)
-          self.$router.push({name: 'ApiList', params: {'teamId': calEvent.teamId, 'projectId': calEvent.projectId, 'prdId': calEvent.Id}})
+          self.$router.push({name: 'teamsApiList', 
+            params: {'teamId': calEvent.teamId, 'projectId': calEvent.projectId, 'prdId': calEvent.Id}})
         }
       })
     },

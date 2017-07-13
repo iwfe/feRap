@@ -2,7 +2,7 @@
  * @Author: zoucong 
  * @Date: 2017-07-06 10:50:52 
  * @Last Modified by: zoucong
- * @Last Modified time: 2017-07-10 10:14:47
+ * @Last Modified time: 2017-07-13 18:51:36
  */
 
 import Vue from 'vue'
@@ -31,7 +31,7 @@ export default Vue.extend({
         <ul class="tree-component-ul">
           { 
             data.children.map(d => (
-              <li>
+              <li key={d.id}>
                 {this.renderNode(h, d, level)}
               </li>
             ))
