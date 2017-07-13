@@ -18,6 +18,7 @@
   import { mapGetters } from 'vuex'
   import Left from './components/Left'
   import TeamsContent from './components/Content'
+  import { getParents, scrollCurNodeToView } from './utils'
 
   export default {
     data () {
@@ -35,8 +36,19 @@
       Left,
       TeamsContent
     },
-    mounted () {
-      this.$store.dispatch('teams/getAllTeams')
+    beforeRouteUpdate (to, from, next) {
+      this.$store.dispatch('teams/setCurNode', to.params)
+      next()
+    },
+    async mounted () {
+      await this.$store.dispatch('teams/getAllTeams')
+      this.$store.dispatch('teams/setCurNode', this.$route.params)
+      // 展开当前
+      const parents = getParents(this.curNode)
+      this.$store.dispatch('teams/setExpends', 
+        { setName: 'expendedNodes', nodeIds: parents.map(d => d.id) })
+      // 当前滑到页面
+      setTimeout(scrollCurNodeToView, 1000)
     }
   }
 </script>
