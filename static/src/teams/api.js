@@ -6,13 +6,7 @@ export default {
     }[key]
   },
   getTeamsTree (cb) {
-    axios.get(this.getUrl('getTeamsTree'), {})
-    .then(function (response) {
-      cb(response.data)
-    })
-    .catch(function (response) {
-      console.log(`faild: ${response}`)
-    })
+    return axios.get(this.getUrl('getTeamsTree'), {})
   }
 }
 

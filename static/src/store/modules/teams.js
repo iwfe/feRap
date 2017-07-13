@@ -8,6 +8,14 @@ function addParent (node) {
   return node
 }
 
+function findByIdList (data, ids) {
+  const [curId, ...oth] = ids
+  if (!curId) return data
+
+  const cur = data.children.find(d => d.id === curId)
+  return cur ? findByIdList(cur, oth) : null
+}
+
 const starItemsKey = 'teamStarItems'
 // initial state
 const state = {
@@ -30,13 +38,18 @@ const getters = {
 // actions
 const actions = {
   getAllTeams ({ commit }) {
-    teamsApi.getTeamsTree(res => {
-      const teams = res.map(addParent)
-      commit(types.GET_ALL_TEAMS, { teams })
-      commit(types.SET_CUR_NODE, { node: teams[0] })
-    })
+    return teamsApi.getTeamsTree()
+      .then(({data: res}) => {
+        const teams = res.map(addParent)
+        commit(types.GET_ALL_TEAMS, { teams })
+      })
   },
-  setCurNode ({ commit }, node) {
+  setCurNode ({ commit, state }, params) {
+    // debugger
+    const all = state.all[0]
+    const { teamId, projectId, prdId } = params
+    const idList = [teamId, projectId, prdId]
+    const node = findByIdList(all, idList)
     commit(types.SET_CUR_NODE, { node })
   },
   starItem ({ commit }, nodeId) {
@@ -47,6 +60,9 @@ const actions = {
   },
   toggleExpends ({ commit }, { setName, nodeId }) {
     commit(types.TOGGLE_EXPENDS, { setName, nodeId })
+  },
+  addExpends ({ commit }, {setName, nodeIds}) {
+    commit(types.ADD_EXPENDS, {setName, nodeIds})
   }
 }
 
@@ -75,6 +91,10 @@ const mutations = {
     const set = state[setName]
     const idx = set.indexOf(nodeId)
     idx === -1 ? set.push(nodeId) : set.splice(idx, 1)
+  },
+  [types.ADD_EXPENDS] (state, {nodeIds, setName}) {
+    const set = new Set([...state[setName], ...nodeIds])
+    state[setName] = Array.from(set)
   }
 }
 

@@ -8,6 +8,7 @@
     <!-- 星标项 -->
     <h5 class="left-group-title">我的星标</h5>
     <team-tree 
+      class="star-teams"
       :data="starTrees"
       :current-node="curNode"
       :expendeds="expendedCollections"
@@ -20,6 +21,7 @@
     <h5 class="left-group-title">我的团队</h5>
     <team-tree 
       v-if="displayTeams"
+      class="all-teams"
       :data="displayTeams"
       :current-node="curNode"
       :expendeds="expendedNodes"
@@ -87,7 +89,6 @@
     methods: {
       handleNodeClick (setName, data) {
         this.$store.dispatch('teams/toggleExpends', {setName, nodeId: data.id})
-        this.$store.dispatch('teams/setCurNode', data)
       }
     }
   }
@@ -95,10 +96,9 @@
 
 <style lang="less" scoped>
 .left-panel {
-  height: 100%;
-  text-align: left;
-  border-right: 1px solid #ddd;
   @sildPadding: 8px;
+  text-align: left;
+  padding-bottom: 300px;
   .left-header {
     border-right: 1px solid #eaeefb;
     padding: @sildPadding;

@@ -2,11 +2,11 @@
  * @Author: zoucong 
  * @Date: 2017-07-06 10:52:29 
  * @Last Modified by: zoucong
- * @Last Modified time: 2017-07-10 10:22:41
+ * @Last Modified time: 2017-07-13 17:24:23
  */
  
 <template>
-  <div class="team-tree-item">
+  <router-link :to="link" class="team-tree-item" replace>
     <span class="tree-label">
       {{data.label}}
       <span v-if="parentsStr" class="sub-label-text">{{parentsStr}}</span>
@@ -16,31 +16,31 @@
         :class="{true:'el-icon-star-on',false:'el-icon-star-off'}[isStared]" 
         @click="toggelStar($event)"/>
     </span>
-  </div>
+  </router-link>
 </template>
 
 <script>
   import { mapGetters, mapActions } from 'vuex'
-
-  function getParents (node) {
-    if (!node.parent) return []
-    return [node.parent.label, ...getParents(node.parent)]
-  }
-
+  import { getParents } from '../utils'
+  
   export default {
     props: ['data', 'level'],
+    data () {
+      const parents = getParents(this.data)
+      parents.pop() // 去掉“全部”
+
+      return {
+        parentsStr: this.level === 1 && parents.length 
+          ? `( ${parents.map(d => d.label).join(' → ')} )` : null,
+        link: '/teams/' + [...parents.map(d => d.id).reverse(), this.data.id].join('/')
+      }
+    },
     computed: {
       ...mapGetters({
         starItems: 'teams/starItems'
       }),
       isStared () {
         return this.starItems.indexOf(this.data.id) !== -1
-      },
-      parentsStr () {
-        if (this.level !== 1) return 
-        const pList = getParents(this.data)
-        pList.pop() // 去掉“全部”
-        if (pList.length) return `( ${pList.join(' → ')} )`
       }
     },
     methods: {
@@ -48,6 +48,7 @@
         this.$store.dispatch(this.isStared 
           ? 'teams/unStarItem' : 'teams/starItem', this.data.id)
         event.stopPropagation()
+        event.preventDefault()
       }
     }
   }
@@ -55,6 +56,7 @@
 
 <style lang="less">
   .team-tree-item{
+    padding: 8px 26px 8px 0;
     display: flex;
     .tree-label{
       flex: 1;
