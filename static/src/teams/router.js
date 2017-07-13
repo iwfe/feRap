@@ -26,6 +26,7 @@ export default {
     },
     {
       path: ':teamId/:projectId/:prdId',
+      name: 'ApiList',
       component: ApiList
     }
   ]

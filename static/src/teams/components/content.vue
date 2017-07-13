@@ -2,8 +2,7 @@
   <div class="content-panel">
     <div class="content-header">
       <el-breadcrumb separator="/">
-        <el-breadcrumb-item v-for="item in breadcrumbs" 
-          :to="{ path: item.path }" replace>
+        <el-breadcrumb-item v-for="(item, index) in breadcrumbs" :to="{ path: item.path }" replace :key="index">
           {{item.name}}
         </el-breadcrumb-item>
       </el-breadcrumb>

@@ -21,6 +21,7 @@ export default {
         trees = [], treesMap = {}
 
     user = await this.findUser(user)
+    console.log(user)
     const teams0 = user.teams
     if(!teams0 || !teams0.length) return []
 

@@ -46,7 +46,7 @@
 
       <el-col :span="24">
         <editor-frame
-            :list-active="{}"
+            :list-active="form"
             :output-model.sync="form.output"
             :output-json.sync="form.outputJson"
             :input-json.sync="form.input"
@@ -133,7 +133,7 @@
       getData () {
         if (!this.apiId) return
         api.getApiDetail(this.apiId, (data) => {
-          this.isAdd = !this.isAdd
+          // this.isAdd = !this.isAdd
           this.form = data
         })
       }
