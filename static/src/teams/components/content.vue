@@ -20,7 +20,6 @@
   import { Breadcrumb, BreadcrumbItem } from 'element-ui'
 
   function getBreadcrumbs (params, curNode) {
-    if (!curNode || !curNode.label) return []
     const { teamId, projectId, prdId } = params
     const idList = [ teamId, projectId, prdId ]
     const noneIndex = idList.findIndex(d => !d)
@@ -52,7 +51,7 @@
         curNode: 'teams/curNode'
       }),
       breadcrumbs () {
-        return this.curNode 
+        return this.curNode && this.curNode.label
           ? getBreadcrumbs(this.$route.params, this.curNode)
           : []
       }
