@@ -63,8 +63,8 @@ export default {
     // 保存用户
     const isUser = await userService.regist(username, password)
 
-    // 跳转
-    await ctx.redirect('/login')
+    // 注册成功
+    sutil.success(ctx)
   },
 
   /**

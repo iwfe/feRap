@@ -5,14 +5,6 @@
       :data="tableData"
       border
       style="width: 100%">
-<!--      <el-table-column type="expand">
-        <template scope="props">
-          <div class="team-user-panel">
-            <span class="team-user-label">团队成员：</span>
-            <span class="user-item" v-for="user in props.row.users">{{user}}</span>
-          </div>
-        </template>
-      </el-table-column>-->
       <el-table-column
         prop="name"
         label="项目名称"
@@ -26,12 +18,6 @@
       <el-table-column
         prop="createTime"
         label="创建时间"
-        sortable
-        width="180">
-      </el-table-column>
-      <el-table-column
-        prop="updateTime"
-        label="更新时间"
         sortable
         width="180">
       </el-table-column>
@@ -58,7 +44,7 @@
       :teamId="teamId"
       :prjId="prjId"
       @hideForm="hideForm"
-      @updateList="getListData">
+      @updateList="updateList">
     </prj-form>
   </div>
 </template>
@@ -130,7 +116,7 @@
         const self = this
         api.delPrj(self.prjId, (res) => {
           Message.success('删除成功')
-          self.getListData() // 更新数据列表
+          self.updateList() // 更新数据列表
           self.$store.dispatch('teams/getAllTeams') // 更新团队树
         })
       },

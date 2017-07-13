@@ -1,4 +1,4 @@
-import apiApi from '@/api/api'
+import apiApi from '@/teams/api/api'
 import * as types from '@/store/mutation-types'
 
 // initial state
@@ -17,12 +17,10 @@ const getters = {
 const actions = {
   getAllApis ({ commit }, prdId) {
     apiApi.getApiList(prdId, apis => {
-      console.log(`actions ...${apis}`)
       commit(types.GET_ALL_APIS, { apis })
     })
   },
   setCurId ({ commit }, apiId) {
-    console.log(`actions curId=${apiId}`)
     commit(types.SET_CUR_API_ID, { apiId })
   }
 }
@@ -33,7 +31,6 @@ const mutations = {
     state.all = apis
   },
   [types.SET_CUR_API_ID] (state, { apiId }) {
-    console.log(`mutation curId=${apiId}`)
     state.curId = apiId
   }
 }

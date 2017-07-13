@@ -21,7 +21,7 @@ app.use(views(__dirname + '/view', { extension: 'ejs' }))
 
 app.use(serve(path.resolve(__dirname, '../static/dist')))
 
-app.use(logger());
+app.use(logger())
 
 app.use(bodyParser())
 
@@ -30,4 +30,4 @@ app.use(security)
 app.use(router.routes())
 
 app.listen(3779);
-console.log('server is start: http://localhost:3779/');
+console.log('server is start: http://localhost:3779/')

@@ -54,7 +54,7 @@ export default {
       // 创建树节点
       const node = this.createTreeNode(prj.id, 2, prj.name, [])
       treesMap[`prj_${prj.id}`] = node
-      treesMap[`team_${prj.teamId}`].children.push(node)
+      treesMap[`team_${prj.teamId}`] && treesMap[`team_${prj.teamId}`].children.push(node)
     }
 
     // 查找prd

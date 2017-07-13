@@ -2,7 +2,7 @@
  * @Author: zoucong 
  * @Date: 2017-07-06 10:51:05 
  * @Last Modified by: zoucong
- * @Last Modified time: 2017-07-10 10:17:53
+ * @Last Modified time: 2017-07-13 16:08:30
  */
 
 <template>
@@ -81,8 +81,8 @@
 
   .leaf-label{
     display: flex;
+    align-items: center;
     border-radius: 2px;
-    padding: 8px 10px;
     &:hover{
       background-color: #eee;
       cursor: pointer;

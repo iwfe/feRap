@@ -26,6 +26,7 @@
       </el-table-column>
       <el-table-column
         prop="updateDescList"
+        :render-header="getLastDesc"
         label="最后修改">
       </el-table-column>
       <el-table-column
@@ -50,7 +51,6 @@
   export default {
     data () {
       return {
-        prdId: this.$route.query.prdId,
         // apiId: null,  // 用于编辑删除Api
         // apiList: [], // 列表数据
         isShowForm: false // 是否显示表单
@@ -68,14 +68,23 @@
     computed: {
       ...mapGetters({
         apiList: 'apis/allApis',
-        apiId: 'apis/curId'
-      })
+        apiId: 'apis/curId',
+        curNode: 'teams/curNode'
+      }),
+      prdId () {
+        return this.curNode.id
+      }
     },
     mounted () {
       this.getListData()
       document.addEventListener('click', () => {
         // this.isShowForm = false
       })
+    },
+    watch: {
+      prdId () {
+        this.getListData()
+      }
     },
     methods: {
       // 获取数据列表
@@ -90,6 +99,14 @@
         console.log(row.id)
         this.$store.dispatch('apis/setCurId', row.id)
         event.stopPropagation()
+      },
+      getLastDesc (list, { column, $index }) {
+        console.log(11111)
+        console.log($index)
+        return ''
+        // if (!list || list.length < 1) return ''
+        // const desc = list[0]
+        // return `${desc.userName}:${desc.updateDesc}`
       }
 
     }
@@ -98,7 +115,8 @@
 
 <style lang="less" scoped>
 .api-list-panel {
-  margin: 10px 30px;
+  margin: 10px;
+  height: 95%;
   .toolbar {
     text-align: right;
   }

@@ -18,7 +18,9 @@ import '@/common/axios-init'
 
 // 路由拦截
 router.beforeEach((to, from, next) => {
+  console.log('beforeEach')
   if (to.meta && to.meta.requireLogin) { // 该路由是否需要登录权限
+    console.log('====', store.getters['login/getLoginStatus'])
     if (store.getters['login/getLoginStatus']) {
       next()
     } else {

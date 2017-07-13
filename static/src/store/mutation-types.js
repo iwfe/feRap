@@ -4,6 +4,7 @@ export const SET_CUR_NODE = 'SET_CUR_NODE'    // 获得点击节点
 export const STAR_TEAM_ITEM = 'STAR_TEAM_ITEM' // 星标节点
 export const UNSTAR_TEAM_ITEM = 'UNSTAR_TEAM_ITEM' // 取消星标节点
 export const TOGGLE_EXPENDS = 'TOGGLE_EXPENDS' // 打开节点
+export const SET_EXPENDS = 'SET_EXPENDS' // 设置打开的节点
 
 // apis
 export const GET_ALL_APIS = 'GET_ALL_APIS'  // 获得所有APIs

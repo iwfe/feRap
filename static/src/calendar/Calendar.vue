@@ -59,7 +59,7 @@ export default{
             content: event.description,
             show: 'mouseover',
             hide: {
-              event: 'click mouseleave',
+              event: 'click mouseleave', // click防止用$router跳转还存在提示
               delay: 0
             }
           })
@@ -71,11 +71,8 @@ export default{
           $(this).removeClass('mouseover')
         },
         eventClick: function (calEvent, jsEvent, view) {
-          const setName = 'expendedNodes'
-          console.log(calEvent.id, calEvent.teamId)
-          self.$store.dispatch('teams/toggleExpends', {setName, nodeId: calEvent.id})
-          // self.$store.dispatch('teams/setCurNode', data)
-          self.$router.push('/teams/index')
+          console.log(calEvent)
+          self.$router.push({name: 'ApiList', params: {'teamId': calEvent.teamId, 'projectId': calEvent.projectId, 'prdId': calEvent.Id}})
         }
       })
     },
@@ -89,7 +86,8 @@ export default{
       const seconds = data.getSeconds() < 10 ? '0' + data.getSeconds() : data.getSeconds()
       const eventTime = year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + seconds
       this.events.push({
-        id: item.projectId,
+        Id: item.id,
+        projectId: item.projectId,
         teamId: item.teamId,
         title: title,
         start: eventTime,

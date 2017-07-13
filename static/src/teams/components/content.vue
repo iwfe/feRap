@@ -2,18 +2,14 @@
   <div class="content-panel">
     <div class="content-header">
       <el-breadcrumb separator="/">
-        <el-breadcrumb-item :to="{ path: '/teams' }">全部</el-breadcrumb-item>
-        <el-breadcrumb-item v-if="curNode.type >= 0">团队</el-breadcrumb-item>
-        <el-breadcrumb-item v-if="curNode.type >= 1">项目</el-breadcrumb-item>
-        <el-breadcrumb-item v-if="curNode.type >= 2">prd</el-breadcrumb-item>
-        <el-breadcrumb-item v-if="curNode.type >= 3">api</el-breadcrumb-item>
+        <el-breadcrumb-item v-for="(item, index) in breadcrumbs" :to="{ path: item.path }" replace :key="index">
+          {{item.name}}
+        </el-breadcrumb-item>
       </el-breadcrumb>
     </div>
+
     <div class="content-body">
-      <team-list v-if="curNode.type === 0"></team-list>
-      <prj-list v-if="curNode.type === 1"></prj-list>
-      <prd-list v-if="curNode.type === 2"></prd-list>
-      <api-list v-if="curNode.type === 3"></api-list>
+      <router-view></router-view>
     </div>
   </div>
 </template>
@@ -21,10 +17,25 @@
 <script>
   import { mapGetters } from 'vuex'
   import { Breadcrumb, BreadcrumbItem } from 'element-ui'
-  import TeamList from '../team/TeamList'
-  import PrjList from '../project/PrjList'
-  import PrdList from '../prd/PrdList'
-  import ApiList from '../api/ApiList'
+
+  function getBreadcrumbs (params, curNode) {
+    if (!curNode || !curNode.label) return []
+    const { teamId, projectId, prdId } = params
+    const idList = [ teamId, projectId, prdId ]
+    const noneIndex = idList.findIndex(d => !d)
+    const sliceIndex =
+      (noneIndex === -1 ? idList.length : noneIndex) + 1
+
+    const list = ['全部', '团队', '项目', 'prd']
+      .slice(0, sliceIndex)
+      .map((d, i) => ({
+        type: d, 
+        path: `/teams/${idList.slice(0, i).join('/')}`
+      }))
+    // add name
+    list.reduceRight((acc, cur) => (cur.name = acc.label) && acc.parent, curNode) 
+    return list
+  }
 
   export default {
     data () {
@@ -33,16 +44,17 @@
     },
     components: {
       ElBreadcrumb: Breadcrumb,
-      ElBreadcrumbItem: BreadcrumbItem,
-      TeamList,
-      PrjList,
-      PrdList,
-      ApiList
+      ElBreadcrumbItem: BreadcrumbItem
     },
     computed: {
       ...mapGetters({
         curNode: 'teams/curNode'
-      })
+      }),
+      breadcrumbs () {
+        return this.curNode 
+          ? getBreadcrumbs(this.$route.params, this.curNode)
+          : []
+      }
     }
   }
 </script>

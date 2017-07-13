@@ -1,7 +1,7 @@
 <template>
     <div class='editor-wrap'>
       <div class="field">
-          <label><i class="red">*</i>输入数据格式</label>{{inputModel}}
+          <label><i class="red">*</i>输入数据格式</label>
           <textarea ref="inputeditor" ></textarea>
           <div class='' v-if='inputModel.length'>
             <div class='table-tr table-head'>
@@ -65,7 +65,7 @@ export default {
     tableItem
   },
   props: {
-    list_active: {
+    listActive: {
       type: Object,
       default () {
         return {}
@@ -75,8 +75,7 @@ export default {
       type: Array,
       default () {
         return []
-      },
-      twoWay: true
+      }
     },
     showMock: {
       type: Boolean,
@@ -95,15 +94,13 @@ export default {
             test: ''
           }
         }
-      },
-      twoWay: true
+      }
     },
     inputJson: {
       type: Object,
       default () {
         return {}
-      },
-      twoWay: true
+      }
     },
     editorError: {
       type: Object,
@@ -118,8 +115,7 @@ export default {
       type: Array,
       default () {
         return []
-      },
-      twoWay: true
+      }
     }
 
   },
@@ -156,14 +152,7 @@ export default {
     }
   },
   watch: {
-    inputJson (val) {
-      console.log(`inputJson` + JSON.stringify(val))
-    },
-    inputModel (val) {
-      console.log(`inputModel` + JSON.stringify(val))
-    },
     outputData (val) {
-      console.log(`outputData update....`)
       const self = this
       if (val && self.isJson(val)) {
         console.log('yes, is json')
@@ -199,7 +188,6 @@ export default {
       return self.setError(2)
     },
     isAdd (v) {
-      console.log(`isAdd.....`)
       const self = this
       if (v) {
         // self.inputJson = {
@@ -229,8 +217,6 @@ export default {
     this.$on('init-code-mirror-all', this.initCodeMirrorAll)
     this.$on('remove-code-mirror-all', this.removeCodeMirrorAll)
     this.$on('revertMock', this.revertMock)
-
-    this.initCodeMirrorAll()
   },
   // 清除事件监听
   beforeDestroy: function () {
@@ -240,7 +226,6 @@ export default {
   },
   methods: {
     initEditor (dom, readOnly) {
-      console.log(`initEditor...dom=${dom}`)
       const editor = CodeMirror.fromTextArea(dom, {
         lineNumbers: true,
         mode: 'application/json',
@@ -258,12 +243,13 @@ export default {
       return self[`${editor}Editor`].getValue()
     },
     setEditorData (editor, value) {
+      console.log(1111)
       const self = this
       if (self.isJson(value)) {
         value = JSON.parse(value)
       }
       const jsonStr = JSON.stringify(value, null, 2)
-      self[`${editor}Editor`].setValue(jsonStr)
+      self[`${editor}Editor`].setValue && self[`${editor}Editor`].setValue(jsonStr)
     },
     /**
      * 校验输入数据是否为json
@@ -292,7 +278,6 @@ export default {
      * @returns {{key: *, comment: string, dataType: string, mock: string, children: Array}}
        */
     revertFormat (model, parents, type) {
-      console.log(`revertFormat......`)
       const self = this
       const output = []
       let children = ''
@@ -470,7 +455,7 @@ export default {
     },
 
     initCodeMirrorAll () {
-      console.log(`initCodeMirrorAll....`)
+      // console.log(`initCodeMirrorAll....`)
       const self = this
       if (self.editorReady) {
         self.setEditorData('input', self.inputJson)
@@ -478,13 +463,10 @@ export default {
         self.$emit('revertMock')
         return
       }
-      console.log(`self.$refs=${JSON.stringify(self.$refs)}`)
 
       const inputEditorDom = self.$refs.inputeditor
       const outputEditorDom = self.$refs.outputeditor
       const mockEditorDom = self.$refs.mockeditor
-      console.log(`inputEditorDom=${inputEditorDom}`)
-      console.log(`outputEditorDom=${outputEditorDom}`)
 
       self.inputEditor = self.initEditor(inputEditorDom)
       self.inputEditor.on('change', (cm, obj) => {
@@ -498,7 +480,7 @@ export default {
 
       self.mockEditor = self.initEditor(mockEditorDom, true)
       self.editorReady = true
-      if (!self.list_active.id) {
+      if (!self.listActive.id) {
         // self.inputJson = {
         //   id: 123
         // }
