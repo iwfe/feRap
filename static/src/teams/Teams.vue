@@ -45,7 +45,7 @@
       this.$store.dispatch('teams/setCurNode', this.$route.params)
       // 展开当前
       const parents = getParents(this.curNode)
-      this.$store.dispatch('teams/setExpends', 
+      this.$store.dispatch('teams/addExpends', 
         { setName: 'expendedNodes', nodeIds: parents.map(d => d.id) })
       // 当前滑到页面
       setTimeout(scrollCurNodeToView, 1000)

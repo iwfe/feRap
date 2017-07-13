@@ -96,9 +96,9 @@
 
 <style lang="less" scoped>
 .left-panel {
-  height: 100%;
-  text-align: left;
   @sildPadding: 8px;
+  text-align: left;
+  padding-bottom: 300px;
   .left-header {
     border-right: 1px solid #eaeefb;
     padding: @sildPadding;

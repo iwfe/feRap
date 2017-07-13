@@ -61,8 +61,8 @@ const actions = {
   toggleExpends ({ commit }, { setName, nodeId }) {
     commit(types.TOGGLE_EXPENDS, { setName, nodeId })
   },
-  setExpends ({ commit }, {setName, nodeIds}) {
-    commit(types.SET_EXPENDS, {setName, nodeIds})
+  addExpends ({ commit }, {setName, nodeIds}) {
+    commit(types.ADD_EXPENDS, {setName, nodeIds})
   }
 }
 
@@ -92,8 +92,9 @@ const mutations = {
     const idx = set.indexOf(nodeId)
     idx === -1 ? set.push(nodeId) : set.splice(idx, 1)
   },
-  [types.SET_EXPENDS] (state, {nodeIds, setName}) {
-    state[setName] = nodeIds
+  [types.ADD_EXPENDS] (state, {nodeIds, setName}) {
+    const set = new Set([...state[setName], ...nodeIds])
+    state[setName] = Array.from(set)
   }
 }
 

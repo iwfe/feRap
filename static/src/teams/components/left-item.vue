@@ -2,7 +2,7 @@
  * @Author: zoucong 
  * @Date: 2017-07-06 10:52:29 
  * @Last Modified by: zoucong
- * @Last Modified time: 2017-07-13 16:25:19
+ * @Last Modified time: 2017-07-13 17:24:23
  */
  
 <template>
@@ -48,6 +48,7 @@
         this.$store.dispatch(this.isStared 
           ? 'teams/unStarItem' : 'teams/starItem', this.data.id)
         event.stopPropagation()
+        event.preventDefault()
       }
     }
   }
