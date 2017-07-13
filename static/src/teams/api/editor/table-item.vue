@@ -19,14 +19,13 @@
           <span class="mock-input" @keyup.enter="revertMock" @click.stop="showInput('mock')">{{model.mock}}</span>
         </li>
 
-        <li class="td-select" v-if="type=='output' && loop < 3">
-          <!-- <comment-input :group.sync="model.selectGroup" :class="getSelectgroupInputClass"></comment-input> -->
+        <!-- <li class="td-select" v-if="type=='output' && loop < 3">
           <input type="checkbox" v-model="model.isSelect" class="mock-input require-checkbox">
           <span @click="showInput('select')">
             <label for="checkbox" v-if="model.isSelect" class="require-label">需要选择</label>
             <label for="checkbox" v-if="!model.isSelect" class="require-label">无需选择</label>
           </span>
-        </li>
+        </li> -->
 
         <li class="td-mock" v-if="type=='input'">
           <input type="checkbox" v-model="model.require" class="mock-input require-checkbox">
@@ -246,13 +245,13 @@
 
         .table-item-output{
             .td-key{
-              width:20%;
+              width:25%;
             }
             .td-datatype{
               width:10%;
             }
             .td-remark{
-              width:25%
+              width:40%
             }
             .td-mock{
               width:25%;

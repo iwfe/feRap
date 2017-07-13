@@ -16,7 +16,7 @@
           </div>
       </div>
       <div class="field output-field clearfix-sp">
-          <label><i class="red">*</i>返回数据格式<i :title="isHideOutputData ? '展开' : '隐藏'" @click="isHideOutputData = !isHideOutputData" class="chevron circle icon" :class="isHideOutputData ? 'up' : 'down'"></i>
+          <label><i class="red">*</i>返回数据格式<i :title="isHideOutputData ? '展开' : '隐藏'" @click="isHideOutputData = !isHideOutputData" class="icon" :class="isHideOutputData ? 'el-icon-caret-top' : 'el-icon-caret-bottom'"></i>
           </label>
           <div class="output-editor" :class="{'hide' : isHideOutputData}">
             <div class='input-frame'>
@@ -40,7 +40,7 @@
               <li class='td-datatype'>数据类型</li>
               <li class='td-remark'>含义</li>
               <li class='td-mock'><a href="http://mockjs.com" target="_blank">mock规则</a></li>
-              <li class="td-select">状态选择</li>
+              <!-- <li class="td-select">状态选择</li> -->
             </ul>
           </div>
           <table-item :model='output' :is-child=false :loop=1 v-for="(output, key) in outputModel"  v-bind:key="key" type="output"></table-item>
@@ -187,20 +187,12 @@ export default {
       console.log('no, is not json')
       return self.setError(2)
     },
+    'listActive.id' (val) {
+      this.$emit('init-code-mirror-all')
+    },
     isAdd (v) {
       const self = this
       if (v) {
-        // self.inputJson = {
-        //   id: 123
-        // }
-        // self.outputJson = {
-        //   status: 1,
-        //   data: {
-        //     test: 'test'
-        //   }
-        // }
-        // self.outputModel = []
-
         self.$emit('update:inputJson', { id: 123 })
         self.$emit('update:outputJson', {
           status: 1,
@@ -558,10 +550,11 @@ export default {
     .table-head{
       font-weight: bold;
     }
-    .icon.chevron {
+    .icon {
       font-size: 16px;
       color: #3380b6;
       cursor: pointer;
+      margin-left: 5px;
     }
     .hide {
       display: none;
