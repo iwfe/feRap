@@ -66,6 +66,7 @@
     width: @left-width;
     height: 100%;
     overflow-y: scroll;
+    border-right: 1px solid #ddd;
   }
   .main-content-panel {
     flex: 1;

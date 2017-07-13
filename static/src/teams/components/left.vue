@@ -98,7 +98,6 @@
 .left-panel {
   height: 100%;
   text-align: left;
-  border-right: 1px solid #ddd;
   @sildPadding: 8px;
   .left-header {
     border-right: 1px solid #eaeefb;
