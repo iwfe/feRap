@@ -74,7 +74,7 @@
     computed: mapState({
       teamId: state => state.teams.curNode.id
     }),
-    mounted () {
+    mounted(){
       this.getListData(this.teamId)
     },
     watch: {
@@ -130,6 +130,9 @@
         setTimeout(() => {
           self.dialogFormVisible = true
         }, 100)
+      },
+      updateList () {
+        this.getListData(this.teamId)
       }
     }    
   }
