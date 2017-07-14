@@ -1,6 +1,6 @@
 <template>
   <div class="team-form-panel">
-    <el-dialog title="收货地址" v-model="showForm">
+    <el-dialog title="新增团队" v-model="showForm">
       <el-form ref="form" :rules="rules" :model="form" label-width="90px" size="tiny">
         <el-form-item label="团队名称" prop="name">
           <el-input v-model="form.name"></el-input>
