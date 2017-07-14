@@ -59,9 +59,10 @@
   @transition-time: .5s;
   display: flex;
   position: relative;
-  height: calc(~"100% - 36px");
+  height: calc(~"100% - 64px");
   margin-left: 0;
   transition: margin-left @transition-time;
+  overflow: hidden;
   .main-left-panel {
     width: @left-width;
     height: 100%;
