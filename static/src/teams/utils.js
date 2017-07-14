@@ -6,7 +6,7 @@
  */
 
 export function getParents (node) {
-  if (!node.parent) return []
+  if (!node || !node.parent) return []
   return [node.parent, ...getParents(node.parent)]
 } 
 
