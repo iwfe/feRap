@@ -115,8 +115,8 @@
 
 <style lang="less" scoped>
 .api-list-panel {
-  margin: 10px;
-  height: 95%;
+  padding: 10px 20px;
+  height: ~'calc(100% - 38px)';
   .toolbar {
     text-align: right;
   }

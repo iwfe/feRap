@@ -21,6 +21,7 @@ const starItemsKey = 'teamStarItems'
 const state = {
   all: [],    // 所有数据
   curNode: {},  // 当前树节点
+  teamPrjPrdId: {},
   starItems: store.getItem(starItemsKey) || [], // 星标项目
   expendedNodes: [], // 打开的节点
   expendedCollections: []
@@ -30,6 +31,7 @@ const state = {
 const getters = {
   allTeams: state => state.all,
   curNode: state => state.curNode,
+  teamPrjPrdId: state => state.teamPrjPrdId,
   starItems: state => state.starItems,
   expendedNodes: state => state.expendedNodes,
   expendedCollections: state => state.expendedCollections
@@ -51,6 +53,7 @@ const actions = {
     const idList = [teamId, projectId, prdId]
     const node = findByIdList(all, idList)
     commit(types.SET_CUR_NODE, { node })
+    commit(types.SET_TEAM_PRJ_PRD_ID, params)
   },
   starItem ({ commit }, nodeId) {
     commit(types.STAR_TEAM_ITEM, { nodeId })
@@ -73,6 +76,13 @@ const mutations = {
   },
   [types.SET_CUR_NODE] (state, { node }) {
     state.curNode = node
+  },
+  [types.SET_TEAM_PRJ_PRD_ID] (state, { teamId, projectId, prdId }) {
+    state.teamPrjPrdId = {
+      teamId,
+      projectId,
+      prdId
+    }
   },
   [types.STAR_TEAM_ITEM] (state, { nodeId }) {
     if (state.starItems.indexOf(nodeId) === -1) {

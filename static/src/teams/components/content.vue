@@ -2,7 +2,7 @@
   <div class="content-panel">
     <div class="content-header">
       <el-breadcrumb separator="/">
-        <el-breadcrumb-item v-for="(item, index) in breadcrumbs" 
+        <el-breadcrumb-item v-for="(item, index) in breadcrumbs"
           :key="item.type" :to="{ path: item.path }" replace>
           {{item.name}}
         </el-breadcrumb-item>
@@ -29,12 +29,12 @@
     const list = ['全部', '团队', '项目', 'prd']
       .slice(0, sliceIndex)
       .map((d, i) => ({
-        type: d, 
+        type: d,
         path: `/teams/${idList.slice(0, i).join('/')}`
       }))
     // add name
 
-    list.reduceRight((acc, cur) => acc 
+    list.reduceRight((acc, cur) => acc
       ? ((cur.name = acc.label), acc.parent) : null, curNode) // eslint-disable-line
     return list
   }
@@ -63,6 +63,7 @@
 
 <style lang="less" scoped>
 .content-panel {
+  height: 100%;
   .content-header {
     border-bottom: 1px solid #eaeefb;
     transition: .2s;
@@ -71,7 +72,7 @@
   .content-body {
     border-radius: 4px;
     transition: .2s;
-    padding: 10px 24px;
+    height: 100%;
   }
 }
 </style>

@@ -126,7 +126,8 @@
     },
     computed: {
       ...mapGetters({
-        apiId: 'apis/curId'
+        apiId: 'apis/curId',
+        teamPrjPrdId: 'teams/teamPrjPrdId'
       })
     },
     mounted () {
@@ -145,7 +146,7 @@
 
       },
       sendData () {
-        console.log(`sendData......`)
+        console.log(`sendData......${JSON.stringify(this.teamPrjPrdId)}`)
         // 校验数据
         // const valid = this.invalid()
         // if (!valid) {
@@ -160,9 +161,9 @@
         const time = `${date.toISOString().slice(5, 10)} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
         _.extend(apiData, {
           status: status,
-          prdId: this.prdId,
-          projectId: this.projectId,
-          teamId: this.teamId,
+          prdId: this.teamPrjPrdId.prdId,
+          projectId: this.teamPrjPrdId.projectId,
+          teamId: this.teamPrjPrdId.teamId,
           root: this.apiRoot,
           // updateDesc: modifyDesc,
           // lastModify: `${time} ${this.userName} ${modifyDesc}`,
@@ -170,7 +171,7 @@
         })
         console.log(apiData)
         api.saveApi(apiData, (res) => {
-
+          
         })
       },
       closeSlide () {

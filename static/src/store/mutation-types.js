@@ -5,6 +5,7 @@ export const STAR_TEAM_ITEM = 'STAR_TEAM_ITEM' // 星标节点
 export const UNSTAR_TEAM_ITEM = 'UNSTAR_TEAM_ITEM' // 取消星标节点
 export const TOGGLE_EXPENDS = 'TOGGLE_EXPENDS' // 打开节点
 export const ADD_EXPENDS = 'ADD_EXPENDS' // 设置打开的节点
+export const SET_TEAM_PRJ_PRD_ID = 'SET_TEAM_PRJ_PRD_ID' // 设置当前的TeamId，PrjId，PrdId
 
 // apis
 export const GET_ALL_APIS = 'GET_ALL_APIS'  // 获得所有APIs
