@@ -7,8 +7,8 @@ module.exports = {
   cookieAuthKey: 'nodeblogauth',  // 存 cookie 的 key
   staticCacheMaxAge: 1000 * 60 * 60 * 24 * 365,
   mongodb: {
-    // host: 'localhost',
-    host: '10.7.251.88',
+    host: 'localhost',
+    // host: '10.7.251.88',
     port: 27017,
     db: 'fete'
   },

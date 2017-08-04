@@ -505,7 +505,10 @@ export default {
 <style media='screen' lang='less'>
   .editor-wrap{
     margin-bottom: 30px;
-    font-size: 14px;
+    font-size: 12px;
+    .field {
+      margin-bottom: 10px;
+    }
     li{
       list-style:none;
     }

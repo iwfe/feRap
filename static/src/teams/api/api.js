@@ -30,6 +30,12 @@ export default {
     .catch(function (response) {
       console.log(`faild: ${response}`)
     })
+  },
+  /**
+   *
+   */
+  saveApi (apiData) {
+    
   }
 
 }

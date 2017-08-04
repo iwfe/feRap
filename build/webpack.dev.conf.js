@@ -26,7 +26,8 @@ module.exports = merge(baseWebpackConfig, {
       jQuery: 'jquery',
       CodeMirror: 'codemirror',
       jsonlint: 'jsonlint',
-      toastr: 'toastr'
+      toastr: 'toastr',
+      clipboard: 'clipboard'
     }),
     new webpack.DefinePlugin({
       'process.env': config.dev.env

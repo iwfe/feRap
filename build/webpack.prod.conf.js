@@ -34,7 +34,8 @@ var webpackConfig = merge(baseWebpackConfig, {
       $: 'jquery',
       jQuery: 'jquery',
       CodeMirror: 'codemirror',
-      toastr: 'toastr'
+      toastr: 'toastr',
+      Clipboard: 'clipboard'
     }),
     // http://vuejs.github.io/vue-loader/en/workflow/production.html
     new webpack.DefinePlugin({

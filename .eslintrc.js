@@ -21,7 +21,8 @@ module.exports = {
     "Vue": true,
     "axios": true,
     "CodeMirror": true,
-    "toastr": true
+    "toastr": true,
+    "Clipboard": true
   },
   // add your custom rules here
   'rules': {
