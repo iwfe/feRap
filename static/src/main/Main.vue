@@ -1,5 +1,6 @@
 <template>
   <div class="main-container-panel">
+    <!-- <edit-team></edit-team> -->
     <div class="teams-wrap">
       <h2>星标团队</h2>
       <div class="teams-stared-list">
@@ -8,14 +9,17 @@
           name="teams-item"
         >
           <div class="teams-item" v-for="team in staredTeams" :key="team.id">
-            <div class="header">
-              <p class="team-title" @click="handleTitle($event, team)">{{team.name}}</p>
-              <i class="edit-icon el-icon-edit"></i>
-              <i class="star-icon el-icon-star-on" @click="stared(team)"></i>
-            </div>
-            <div class="team-content">{{team.description}}</div>
-            <div class="team-footer">
-              <el-button class="team-button" :type="team.joined ? '' : 'primary'" size="small" @click="joinOrExit(team)">{{team.joined ? '退出' : '加入'}}</el-button>
+            <div class="teams-item-inner">
+              <img class="teams-item-img" :src="team.imgUrl" alt="">
+              <div class="header">
+                <p class="team-title" @click="handleTitle($event, team)">{{team.name}}</p>
+                <i class="edit-icon el-icon-edit"></i>
+                <i class="star-icon el-icon-star-on" @click="stared(team)"></i>
+              </div>
+              <div class="team-content">{{team.description}}</div>
+              <div class="team-footer">
+                <el-button class="team-button" :type="team.joined ? '' : 'primary'" size="small" @click="joinOrExit(team)">{{team.joined ? '退出' : '加入'}}</el-button>
+              </div>
             </div>
           </div>
         </transition-group>
@@ -29,15 +33,18 @@
           name="teams-item"
         >
           <div class="teams-item" v-for="team in joinedTeams" :key="team.id">
-            <div class="header">
-              <p class="team-title">
-                <span class="fs-nowrap team-title">{{team.name}}</span>
-              </p>
-              <i class="star-icon" :class="team.stared ? 'el-icon-star-on' : 'el-icon-star-off'" @click="stared(team)"></i>
-            </div>
-            <div class="team-content">{{team.description}}</div>
-            <div class="team-footer">
-              <el-button :type="team.joined ? '' : 'primary'" size="small" @click="joinOrExit(team)">{{team.joined ? '退出' : '加入'}}</el-button>
+            <div class="teams-item-inner">
+              <img class="teams-item-img" :src="team.imgUrl" alt="">
+              <div class="header">
+                <p class="team-title">
+                  <span class="fs-nowrap team-title">{{team.name}}</span>
+                </p>
+                <i class="star-icon" :class="team.stared ? 'el-icon-star-on' : 'el-icon-star-off'" @click="stared(team)"></i>
+              </div>
+              <div class="team-content">{{team.description}}</div>
+              <div class="team-footer">
+                <el-button :type="team.joined ? '' : 'primary'" size="small" @click="joinOrExit(team)">{{team.joined ? '退出' : '加入'}}</el-button>
+              </div>
             </div>
           </div>
         </transition-group>
@@ -51,15 +58,18 @@
           name="teams-item"
         >
           <div class="teams-item" v-for="team in allTeams" :key="team.id">
-            <div class="header">
-              <p class="team-title">
-                <span class="fs-nowrap team-title">{{team.name}}</span>
-              </p>
-              <i class="star-icon" :class="team.stared ? 'el-icon-star-on' : 'el-icon-star-off'" @click="stared(team)"></i>
-            </div>
-            <div class="team-content">{{team.description}}</div>
-            <div class="team-footer">
-              <el-button :type="team.joined ? '' : 'primary'" size="small" @click="joinOrExit(team)">{{team.joined ? '退出' : '加入'}}</el-button>
+            <div class="teams-item-inner">
+              <img class="teams-item-img" :src="team.imgUrl" alt="">
+              <div class="header">
+                <p class="team-title">
+                  <span class="fs-nowrap team-title">{{team.name}}</span>
+                </p>
+                <i class="star-icon" :class="team.stared ? 'el-icon-star-on' : 'el-icon-star-off'" @click="stared(team)"></i>
+              </div>
+              <div class="team-content">{{team.description}}</div>
+              <div class="team-footer">
+                <el-button :type="team.joined ? '' : 'primary'" size="small" @click="joinOrExit(team)">{{team.joined ? '退出' : '加入'}}</el-button>
+              </div>
             </div>
           </div>
         </transition-group>
@@ -93,6 +103,13 @@ import {
   Input,
   Message
 } from 'element-ui'
+// import EditTeam from './EditTeam.vue'
+
+let imgUrls = []
+for (let i = 0; i < 10; i++) {
+  imgUrls.push(require(`./imgs/p${i + 1}.jpg`))
+}
+
 let curMessage
 
 export default {
@@ -103,6 +120,7 @@ export default {
     ElCard: Card,
     ElButton: Button,
     ElInput: Input
+    // EditTeam
   },
   data () {
     return {
@@ -122,6 +140,15 @@ export default {
     this.getAllTeams()
   },
   methods: {
+    getRandomImg (team) {
+      const { updateTime, imgUrl } = team
+      if (updateTime) {
+        const key = updateTime.toString().substr(-1)
+        return imgUrls[key]
+      } else {
+        return imgUrls[9]
+      }
+    },
     getAllTeams () {
       const self = this
       api.getAllTeamList().then(data => {
@@ -171,6 +198,10 @@ export default {
       const starItems = this.starItems
       if (res && res.length) {
         for (let i = 0, len = res.length; i < len; i++) {
+          // 无图片的随机一张图片
+          // TODO
+          if (!res[i].imgUrl) res[i].imgUrl = this.getRandomImg(res[i])
+          // res[i].[imgUrl]
           // 已星标
           for (let j = 0; j < starItems.length; j++) {
             if (res[i]['id'] === starItems[j]) {
@@ -350,16 +381,29 @@ export default {
 }
 .teams-item{
   // display: inline-block;
-  transition: all 1s;
-  height: 128px;
-  width: 254px;
-  border-radius: 4px;
-  background-color: #e1e1e1;
+  transition: all .8s;
   margin-right: 24px;
   margin-bottom: 24px;
+}
+.teams-item-img{
+  position: absolute;
+  z-index: -1;
+  opacity: .4;
+  left: 0;
+  top: 0;
+  border-radius: 4px;
+  width: 100%;
+  height: 100%;
+}
+.teams-item-inner{
+  height: 128px;
+  width: 254px;
   padding: 8px 16px 16px;
+  border-radius: 4px;
+  // background-color: #e1e1e1;
+  transition: all .2s;
+  position: relative;
   &:hover{
-    transition: all .2s;
     transform: translateY(-5px);
     box-shadow: 0 7px 21px rgba(56, 56, 56, 0.15);
     .el-icon-star-off{
