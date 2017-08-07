@@ -1,6 +1,71 @@
 <template>
-  <div class="container-panel">
-    <el-row class="team-card-row" :gutter="32" justify="space-between">
+  <div class="main-container-panel">
+    <div class="teams-wrap">
+      <h2>星标团队</h2>
+      <div class="teams-stared-list">
+        <transition-group
+          tag="div"
+          name="teams-item"
+        >
+          <div class="teams-item" v-for="team in staredTeams" :key="team.id" :data-index="index">
+            <div class="header">
+              <p class="team-title" @click="handleTitle($event, team)">{{team.name}}</p>
+              <i class="edit-icon el-icon-edit"></i>
+              <i class="star-icon el-icon-star-on" @click="stared(team)"></i>
+            </div>
+            <div class="team-content">{{team.description}}</div>
+            <div class="team-footer">
+              <el-button class="team-button" :type="team.joined ? '' : 'primary'" size="small" @click="joinOrExit(team)">{{team.joined ? '退出' : '加入'}}</el-button>
+            </div>
+          </div>
+        </transition-group>
+      </div>
+    </div>
+    <div class="teams-wrap">
+      <h2>我加入的团队</h2>
+      <div class="teams-joined-list">
+        <transition-group
+          tag="div"
+          name="teams-item"
+        >
+          <div class="teams-item" v-for="team in joinedTeams" :key="team.id" :data-index="index">
+            <div class="header">
+              <p class="team-title">
+                <span class="fs-nowrap team-title">{{team.name}}</span>
+              </p>
+              <i class="star-icon" :class="team.stared ? 'el-icon-star-on' : 'el-icon-star-off'" @click="stared(team)"></i>
+            </div>
+            <div class="team-content">{{team.description}}</div>
+            <div class="team-footer">
+              <el-button :type="team.joined ? '' : 'primary'" size="small" @click="joinOrExit(team)">{{team.joined ? '退出' : '加入'}}</el-button>
+            </div>
+          </div>
+        </transition-group>
+      </div>
+    </div>
+    <div class="teams-wrap">
+      <h2>所有团队</h2>
+      <div class="teams-all-list">
+        <transition-group
+          tag="div"
+          name="teams-item"
+        >
+          <div class="teams-item" v-for="team in allTeams" :key="team.id" :data-index="index">
+            <div class="header">
+              <p class="team-title">
+                <span class="fs-nowrap team-title">{{team.name}}</span>
+              </p>
+              <i class="star-icon" :class="team.stared ? 'el-icon-star-on' : 'el-icon-star-off'" @click="stared(team)"></i>
+            </div>
+            <div class="team-content">{{team.description}}</div>
+            <div class="team-footer">
+              <el-button :type="team.joined ? '' : 'primary'" size="small" @click="joinOrExit(team)">{{team.joined ? '退出' : '加入'}}</el-button>
+            </div>
+          </div>
+        </transition-group>
+      </div>
+    </div>
+    <!-- <el-row class="team-card-row" :gutter="32" justify="space-between">
       <el-col class="team-card-col" :span="4" v-for="(team, index) in teams" :key="index">
         <el-card :body-style="{ padding: '0px' }">
           <div class="team-card-header">
@@ -13,19 +78,23 @@
           </div>
         </el-card>
       </el-col>
-    </el-row>
+    </el-row> -->
   </div>
 </template>
 
 <script>
 import api from './api.js'
+import { mapGetters } from 'vuex'
 import {
   Row,
   Col,
   Card,
   Button,
-  Input
+  Input,
+  Message
 } from 'element-ui'
+let curMessage
+
 export default {
   name: 'Main',
   components: {
@@ -37,8 +106,17 @@ export default {
   },
   data () {
     return {
-      teams: []
+      isJoining: false,
+      teams: [],
+      staredTeams: [],
+      joinedTeams: [],
+      allTeams: []
     }
+  },
+  computed: {
+    ...mapGetters({
+      starItems: 'teams/starItems'
+    })
   },
   mounted () {
     this.getAllTeams()
@@ -46,30 +124,91 @@ export default {
   methods: {
     getAllTeams () {
       const self = this
-      api.getAllTeamList(function (res) {
-        self.addAttrForTeams(res)
+      api.getAllTeamList().then(data => {
+        self.addAttrForTeams(data)
       })
     },
-    join (teamId) {
-      const self = this
-      api.joinIntoTeam(teamId, function (res) {
-        self.getAllTeams()
+    handleTitle (e, team) {
+      const { className } = e.target
+      const { id, joined } = team
+      const isTitle = className.split(' ').indexOf('team-title') !== -1
+      if (!isTitle) return
+      if (joined) {
+        curMessage && curMessage.close()
+        this.$router.push({
+          name: 'teamsPrjList',
+          params: { teamId: id }
+        })
+      } else {
+        curMessage = Message.warning({
+          message: '你还未加入该团队'
+        })
+      }
+    },
+    joinIt (team) {
+      const { id } = team
+      api.joinIntoTeam(id).then(data => {
+        if (data) {
+          team.joined = true
+          this.joinedTeams.push(team)
+        }
       })
     },
-    quit (teamId) {
-      const self = this
-      api.quitFromTeam(teamId, function (res) {
-        self.getAllTeams()
+    quitIt (team) {
+      const { id } = team
+      api.quitFromTeam(id).then(data => {
+        if (data) {
+          team.joined = false
+          this.joinedTeams = this.joinedTeams.filter(item => {
+            return item.joined
+          })
+        }
       })
     },
     addAttrForTeams (res) {
+      let staredTeams = []
+      let joinedTeams = []
+      const starItems = this.starItems
       if (res && res.length) {
-        this.teams = res.map((item, index) => {
-          item.__loading = false
-          if (!item.joined) item.joined = false
-          return item
-        })
+        for (let i = 0, len = res.length; i < len; i++) {
+          // 已星标
+          for (let j = 0; j < starItems.length; j++) {
+            if (res[i]['id'] === starItems[j]) {
+              res[i].stared = true
+              staredTeams.push(res[i])
+              continue
+            }
+          }
+
+          if (!res[i].joined) {
+            res[i].joined = false
+          } else { // 已加入团队
+            joinedTeams.push(res[i])
+          }
+        }
+        this.allTeams = res
+        this.joinedTeams = joinedTeams
+        this.staredTeams = staredTeams
       }
+    },
+    joinOrExit (team) {
+      const { joined } = team
+      this[joined ? 'quitIt' : 'joinIt'](team)
+    },
+    // 星标 || 取消星标
+    stared (team) {
+      const { stared, id } = team
+      const { dispatch } = this.$store
+      if (stared) {
+        const index = this.staredTeams.indexOf(team)
+        dispatch('teams/unStarItem', id)
+        this.staredTeams.splice(index, 1)
+      } else {
+        dispatch('teams/starItem', id)
+        const len = this.staredTeams.length
+        this.staredTeams.push(team)
+      }
+      team.stared = !team.stared
     },
     joinTeam (index) {
       const team = this.teams[index]
@@ -140,9 +279,99 @@ export default {
   height: 32px;
 }
 
-.container-panel {
+.main-container-panel {
   box-sizing: border-box;
   padding: 0 5%;
   color: #475669;
+}
+.fs-nowrap{
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.teams-wrap{
+  padding-top: 24px;
+  .header{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    &:hover{
+      .edit-icon{
+        opacity: 1;
+      }
+    }
+  }
+  .edit-icon{
+    padding-top: 6px;
+    opacity: 0;
+    transition: opacity .4s;
+    cursor: pointer;
+  }
+  .el-icon-star-off {
+    opacity: 0;
+  }
+  .star-icon{
+    color: #FFAF38;
+    font-size: 16px;
+    padding-top: 2px;
+    transition: opacity .4s;
+    cursor: pointer;
+  }
+  .team-title{
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.5;
+    width: 178px;
+    cursor: pointer;
+    &:hover{
+      text-decoration: underline;
+    }
+  }
+  .team-content{
+    height: 40px;
+    margin-top: 8px;
+  }
+  .team-footer{
+    text-align: right;
+  }
+  .team-button{
+    transition: all .5s;
+  }
+}
+.teams-stared-list, .teams-joined-list, .teams-all-list{
+  & > div{
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    position: relative;
+  }
+}
+.teams-item{
+  // display: inline-block;
+  transition: all 1s;
+  height: 128px;
+  width: 254px;
+  border-radius: 4px;
+  background-color: #e1e1e1;
+  margin-right: 24px;
+  margin-bottom: 24px;
+  padding: 8px 16px 16px;
+  &:hover{
+    transition: all .2s;
+    transform: translateY(-5px);
+    box-shadow: 0 7px 21px rgba(56, 56, 56, 0.15);
+    .el-icon-star-off{
+      opacity: 1;
+    }
+  }
+}
+.teams-item-enter, .teams-item-leave-to {
+  opacity: 0;
+  transform: translateY(100px);
+}
+.teams-item-leave-active {
+  position: absolute;
 }
 </style>

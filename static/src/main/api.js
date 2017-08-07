@@ -10,28 +10,28 @@ export default {
   /**
    * 获得列表数据
    */
-  getAllTeamList (cb) {
-    axios.get(this.getUrl('getAllTeamList'), {})
-    .then(function (response) {
-      cb(response.data)
+  getAllTeamList () {
+    return axios.get(this.getUrl('getAllTeamList'))
+    .then(res => {
+      return res.data
     })
   },
   /**
    * 加入团队
    */
-  joinIntoTeam (teamId, cb) {
-    axios.get(this.getUrl('joinIntoTeam') + `?teamId=${teamId}`)
-    .then(function (response) {
-      cb(response.data)
+  joinIntoTeam (teamId) {
+    return axios.get(this.getUrl('joinIntoTeam') + `?teamId=${teamId}`)
+    .then(res => {
+      return res.data
     })
   },
   /**
    * 退出团队
    */
-  quitFromTeam (teamId, cb) {
-    axios.get(this.getUrl('quitFromTeam') + `?teamId=${teamId}`)
-    .then(function (response) {
-      cb(response.data)
+  quitFromTeam (teamId) {
+    return axios.get(this.getUrl('quitFromTeam') + `?teamId=${teamId}`)
+    .then(res => {
+      return res.data
     })
   }
 }
