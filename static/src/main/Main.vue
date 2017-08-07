@@ -7,7 +7,7 @@
           tag="div"
           name="teams-item"
         >
-          <div class="teams-item" v-for="team in staredTeams" :key="team.id" :data-index="index">
+          <div class="teams-item" v-for="team in staredTeams" :key="team.id">
             <div class="header">
               <p class="team-title" @click="handleTitle($event, team)">{{team.name}}</p>
               <i class="edit-icon el-icon-edit"></i>
@@ -28,7 +28,7 @@
           tag="div"
           name="teams-item"
         >
-          <div class="teams-item" v-for="team in joinedTeams" :key="team.id" :data-index="index">
+          <div class="teams-item" v-for="team in joinedTeams" :key="team.id">
             <div class="header">
               <p class="team-title">
                 <span class="fs-nowrap team-title">{{team.name}}</span>
@@ -50,7 +50,7 @@
           tag="div"
           name="teams-item"
         >
-          <div class="teams-item" v-for="team in allTeams" :key="team.id" :data-index="index">
+          <div class="teams-item" v-for="team in allTeams" :key="team.id">
             <div class="header">
               <p class="team-title">
                 <span class="fs-nowrap team-title">{{team.name}}</span>
