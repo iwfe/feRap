@@ -106,7 +106,7 @@ export default {
   }
   .img-uploader-tips {
     margin-left: 24px;
-    font-size: 10px;
+    font-size: 12px;
     color: #757575;
   }
   .img-uploader {

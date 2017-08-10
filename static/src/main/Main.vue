@@ -12,7 +12,7 @@
             <div class="teams-item-inner">
               <img class="teams-item-img" :src="team.imgId ? `/image/data?imgId=${team.imgId}` : team.imgUrl" alt="">
               <div class="header">
-                <p class="team-title" @click="handleTitle($event, team)">{{team.name}}</p>
+                <p class="team-title fs-nowrap" @click="handleTitle($event, team)">{{team.name}}</p>
                 <i class="star-icon el-icon-star-on" @click="stared(team)"></i>
               </div>
               <div class="team-content">
@@ -41,9 +41,7 @@
             <div class="teams-item-inner">
               <img class="teams-item-img" :src="team.imgId ? `/image/data?imgId=${team.imgId}` : team.imgUrl" alt="">
               <div class="header">
-                <p class="team-title">
-                  <span class="fs-nowrap team-title">{{team.name}}</span>
-                </p>
+                <p class="team-title fs-nowrap" @click="handleTitle($event, team)">{{team.name}}</p>
                 <i class="star-icon" :class="team.stared ? 'el-icon-star-on' : 'el-icon-star-off'" @click="stared(team)"></i>
               </div>
               <div class="team-content">
@@ -72,9 +70,7 @@
             <div class="teams-item-inner">
               <img class="teams-item-img" :src="team.imgId ? `/image/data?imgId=${team.imgId}` : team.imgUrl" alt="">
               <div class="header">
-                <p class="team-title">
-                  <span class="fs-nowrap team-title">{{team.name}}</span>
-                </p>
+                <p class="team-title fs-nowrap" @click="handleTitle($event, team)">{{team.name}}</p>
                 <i class="star-icon" :class="team.stared ? 'el-icon-star-on' : 'el-icon-star-off'" @click="stared(team)"></i>
               </div>
               <div class="team-content">
@@ -332,6 +328,7 @@ export default {
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
+    flex-decoration: row;
     &:hover{
       .edit-icon{
         opacity: 1;
@@ -353,6 +350,8 @@ export default {
     font-weight: 700;
     line-height: 1.5;
     width: 178px;
+    margin-top: 0;
+    margin-bottom: 0;
     cursor: pointer;
     &:hover{
       text-decoration: underline;
@@ -371,7 +370,6 @@ export default {
     .right {
       width: 20px;
       font-size: 14px;
-      text-align: right;
     }
   }
   .team-content-icon{
@@ -379,6 +377,7 @@ export default {
     margin-bottom: 8px;
     transition: all .2s;
     cursor: pointer;
+    float: right;
   }
   .team-footer{
     text-align: right;
