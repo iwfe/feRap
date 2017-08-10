@@ -10,7 +10,7 @@ module.exports = {
     host: 'localhost',
     // host: '10.7.251.88',
     port: 27017,
-    db: 'feRap'
+    db: 'fete'
   },
   // staticUrl: staticManifest,
   uploadImagePath: 'data/upload/images'
