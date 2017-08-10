@@ -117,7 +117,7 @@ export default {
   align-items: end;
   padding-left: 20px;
   padding-right: 20px;
-  align-self: flex-end;
+  // align-self: flex-end;
   margin: 0 0 -2px;
   border-bottom-width: 2px;
   -webkit-transition: color,border-bottom-color .2s ease;
@@ -126,7 +126,8 @@ export default {
     border-bottom-color: #20a0ff;
     color: #20a0ff;
   }
-  &.active{
+  outline: none;
+  &.router-link-active{
     border-bottom-color: #20a0ff;
     color: #20a0ff;
     font-weight: 700;
@@ -136,6 +137,10 @@ export default {
   display: flex;
   margin-left: auto;
   margin-right: 10px;
+}
+.el-dropdown-link{
+  display: inline-block;
+  cursor: pointer;
 }
 .drop-items {
   display: none;
