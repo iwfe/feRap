@@ -22,6 +22,7 @@
           <el-date-picker
             v-model="updateForm.testTime"
             type="datetime"
+            :editable="false"
             placeholder="选择日期时间">
           </el-date-picker>
         </el-form-item>
@@ -29,6 +30,7 @@
           <el-date-picker
             v-model="updateForm.onlineTime"
             type="datetime"
+            :editable="false"
             placeholder="选择日期时间">
           </el-date-picker>
         </el-form-item>
@@ -39,8 +41,8 @@
             off-text="否"
             on-color="#13ce66"
             off-color="#ff4949"
-            on-value="否"
-            off-value="是">
+            on-value="是"
+            off-value="否">
           </el-switch>
         </el-form-item>
         <el-form-item label="备注" prop="memo">
@@ -95,7 +97,7 @@ export default {
         jira: '',
         testTime: '',
         onlineTime: '',
-        mergeMaster: 0,
+        mergeMaster: '否',
         comment: ''
       },
       rules: {
@@ -106,8 +108,30 @@ export default {
       }
     }
   },
-  mounted () {
-    this.updateForm = Object.assign({}, this.row)
+  watch: {
+    dialogVisible (newVal, oldVal) {
+      if (newVal === true) {
+        this.updateForm = {
+          name: this.row.name,
+          description: this.row.description,
+          jira: this.row.jira,
+          testTime: this.row.testTime,
+          onlineTime: this.row.onlineTime,
+          mergeMaster: this.row.mergeMaster,
+          comment: this.row.comment
+        }
+      } else {
+        this.updateForm = {
+          name: '',
+          description: '',
+          jira: '',
+          testTime: '',
+          onlineTime: '',
+          mergeMaster: '否',
+          comment: ''
+        }
+      }
+    }
   },
   methods: {
     handleUpdate () {

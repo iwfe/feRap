@@ -13,7 +13,7 @@
           <el-input type="textarea" v-model="form.description"></el-input>
         </el-form-item>
         <el-form-item label="封面图：" prop="description">
-          <upload-img @img-change="imgChange"></upload-img>
+          <upload-img ref="img-uploader" @img-change="imgChange"></upload-img>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -60,6 +60,17 @@ export default {
           { required: true, message: '请输入团队名称', trigger: 'blur' },
           { max: 50, message: '长度不能超过 50 个字符', trigger: 'blur' }
         ]
+      }
+    }
+  },
+  watch: {
+    dialogVisible (newVal, oldVal) {
+      if (newVal === false) {
+        this.form = {
+          name: '',
+          description: ''
+        }
+        this.$refs['img-uploader'].deleteImg()
       }
     }
   },

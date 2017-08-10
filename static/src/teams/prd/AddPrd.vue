@@ -22,6 +22,7 @@
           <el-date-picker
             v-model="addPrdForm.testTime"
             type="datetime"
+            :editable="false"
             placeholder="选择日期时间">
           </el-date-picker>
         </el-form-item>
@@ -29,6 +30,7 @@
           <el-date-picker
             v-model="addPrdForm.onlineTime"
             type="datetime"
+            :editable="false"
             placeholder="选择日期时间">
           </el-date-picker>
         </el-form-item>
@@ -39,8 +41,8 @@
             off-text="否"
             on-color="#13ce66"
             off-color="#ff4949"
-            on-value="否"
-            off-value="是">
+            on-value="是"
+            off-value="否">
           </el-switch>
         </el-form-item>
         <el-form-item label="备注" prop="memo">
@@ -94,7 +96,7 @@ export default {
         jira: '',
         testTime: '',
         onlineTime: '',
-        mergeMaster: 0,
+        mergeMaster: '否',
         comment: ''
       },
       rules: {
@@ -102,6 +104,21 @@ export default {
           { required: true, message: '请输入PRD名称', trigger: 'blur' },
           { max: 50, message: '长度不能超过 50 个字符', trigger: 'blur' }
         ]
+      }
+    }
+  },
+  watch: {
+    dialogVisible (newVal, oldVal) {
+      if (newVal === true) {
+        this.addPrdForm = {
+          name: '',
+          description: '',
+          jira: '',
+          testTime: '',
+          onlineTime: '',
+          mergeMaster: '否',
+          comment: ''
+        }
       }
     }
   },
