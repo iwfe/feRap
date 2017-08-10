@@ -13,6 +13,9 @@
       </el-upload>
       <i v-if="imageUrl" class="el-icon-close" @click.prevent="deleteImg"></i>
     </div>
+    <div class="img-uploader-tips">
+      <p>请上传小于1mb的图片</p>
+    </div>
   </div>
 </template>
 
@@ -46,11 +49,15 @@ export default {
   },
   data () {
     const token = store.getters['login/getLoginStatus']
-    console.log(this.imageSrc)
     return {
       uploadUrl: `${window.pageConfig.siteUrl}image/data`,
       headers: token ? { token } : {},
       imageUrl: this.imageSrc
+    }
+  },
+  watch: {
+    imageSrc (newVal, oldVal) {
+      this.imageUrl = newVal
     }
   },
   methods: {
@@ -94,6 +101,14 @@ export default {
 </script>
 
 <style lang="less">
+  .upload-img {
+    display: flex;
+  }
+  .img-uploader-tips {
+    margin-left: 24px;
+    font-size: 10px;
+    color: #757575;
+  }
   .img-uploader {
     font-size: 28px;
     color: #8c939d;
