@@ -1,6 +1,6 @@
 <template>
   <div class="main-container-panel">
-    <!-- <edit-team></edit-team> -->
+     <edit-team ref="edit-item" :team="selectedTeam" @edit-success="handleEditSuccess"></edit-team>
     <div class="teams-wrap">
       <h2>星标团队</h2>
       <div class="teams-stared-list">
@@ -10,15 +10,20 @@
         >
           <div class="teams-item" v-for="team in staredTeams" :key="team.id">
             <div class="teams-item-inner">
-              <img class="teams-item-img" :src="team.imgUrl" alt="">
+              <img class="teams-item-img" :src="team.imgId ? `/image/data?imgId=${team.imgId}` : team.imgUrl" alt="">
               <div class="header">
                 <p class="team-title" @click="handleTitle($event, team)">{{team.name}}</p>
-                <i class="edit-icon el-icon-edit"></i>
                 <i class="star-icon el-icon-star-on" @click="stared(team)"></i>
               </div>
-              <div class="team-content">{{team.description}}</div>
+              <div class="team-content">
+                <div class="left">{{team.description}}</div>
+                <div class="right">
+                  <i class="team-content-icon el-icon-edit" @click="editTeam(team)"></i>
+                  <i class="team-content-icon el-icon-delete2" @click="deleteTeam(team)"></i>
+                </div>
+              </div>
               <div class="team-footer">
-                <el-button class="team-button" :type="team.joined ? '' : 'primary'" size="small" @click="joinOrExit(team)">{{team.joined ? '退出' : '加入'}}</el-button>
+                <el-button class="team-button" :type="team.joined ? '' : 'primary'" size="mini" @click="joinOrExit(team)">{{team.joined ? '退出' : '加入'}}</el-button>
               </div>
             </div>
           </div>
@@ -34,16 +39,22 @@
         >
           <div class="teams-item" v-for="team in joinedTeams" :key="team.id">
             <div class="teams-item-inner">
-              <img class="teams-item-img" :src="team.imgUrl" alt="">
+              <img class="teams-item-img" :src="team.imgId ? `/image/data?imgId=${team.imgId}` : team.imgUrl" alt="">
               <div class="header">
                 <p class="team-title">
                   <span class="fs-nowrap team-title">{{team.name}}</span>
                 </p>
                 <i class="star-icon" :class="team.stared ? 'el-icon-star-on' : 'el-icon-star-off'" @click="stared(team)"></i>
               </div>
-              <div class="team-content">{{team.description}}</div>
+              <div class="team-content">
+                <div class="left">{{team.description}}</div>
+                <div class="right">
+                  <i class="team-content-icon el-icon-edit" @click="editTeam(team)"></i>
+                  <i class="team-content-icon el-icon-delete2" @click="deleteTeam(team)"></i>
+                </div>
+              </div>
               <div class="team-footer">
-                <el-button :type="team.joined ? '' : 'primary'" size="small" @click="joinOrExit(team)">{{team.joined ? '退出' : '加入'}}</el-button>
+                <el-button :type="team.joined ? '' : 'primary'" size="mini" @click="joinOrExit(team)">{{team.joined ? '退出' : '加入'}}</el-button>
               </div>
             </div>
           </div>
@@ -54,41 +65,37 @@
       <h2>所有团队</h2>
       <div class="teams-all-list">
         <transition-group
-          tag="div"
+          tag="span"
           name="teams-item"
         >
           <div class="teams-item" v-for="team in allTeams" :key="team.id">
             <div class="teams-item-inner">
-              <img class="teams-item-img" :src="team.imgUrl" alt="">
+              <img class="teams-item-img" :src="team.imgId ? `/image/data?imgId=${team.imgId}` : team.imgUrl" alt="">
               <div class="header">
                 <p class="team-title">
                   <span class="fs-nowrap team-title">{{team.name}}</span>
                 </p>
                 <i class="star-icon" :class="team.stared ? 'el-icon-star-on' : 'el-icon-star-off'" @click="stared(team)"></i>
               </div>
-              <div class="team-content">{{team.description}}</div>
+              <div class="team-content">
+                <div class="left">{{team.description}}</div>
+                <div class="right">
+                  <i class="team-content-icon el-icon-edit" @click="editTeam(team)"></i>
+                  <i class="team-content-icon el-icon-delete2" @click="deleteTeam(team)"></i>
+                </div>
+              </div>
               <div class="team-footer">
-                <el-button :type="team.joined ? '' : 'primary'" size="small" @click="joinOrExit(team)">{{team.joined ? '退出' : '加入'}}</el-button>
+                <el-button :type="team.joined ? '' : 'primary'" size="mini" @click="joinOrExit(team)">{{team.joined ? '退出' : '加入'}}</el-button>
               </div>
             </div>
           </div>
         </transition-group>
+        <div class="teams-add-item" @click="addTeam">
+          <i class="el-icon-plus img-uploader-icon"></i>
+        </div>
       </div>
     </div>
-    <!-- <el-row class="team-card-row" :gutter="32" justify="space-between">
-      <el-col class="team-card-col" :span="4" v-for="(team, index) in teams" :key="index">
-        <el-card :body-style="{ padding: '0px' }">
-          <div class="team-card-header">
-            <p class="team-card-title" v-show="!team.__showIpt">{{team.name}}</p>
-            <p class="team-card-des">{{team.description}}</p>
-          </div>
-          <div class="team-card-bottom">
-            <el-button type="primary" size="small" v-if="!team.joined" :loading="team.loading" @click="joinTeam(index)">加入</el-button>
-            <el-button type="warning" size="small" v-if="team.joined" :loading="team.loading" @click="exitTeam(index)">退出</el-button>
-          </div>
-        </el-card>
-      </el-col>
-    </el-row> -->
+    <add-team ref="add-item" @add-success="handleAddSuccess"></add-team>
   </div>
 </template>
 
@@ -101,9 +108,11 @@ import {
   Card,
   Button,
   Input,
-  Message
+  Message,
+  MessageBox
 } from 'element-ui'
-// import EditTeam from './EditTeam.vue'
+import EditTeam from './EditTeam.vue'
+import AddTeam from './AddTeam.vue'
 
 let imgUrls = []
 for (let i = 0; i < 10; i++) {
@@ -119,16 +128,18 @@ export default {
     ElCol: Col,
     ElCard: Card,
     ElButton: Button,
-    ElInput: Input
-    // EditTeam
+    ElInput: Input,
+    EditTeam,
+    AddTeam
   },
   data () {
     return {
-      isJoining: false,
       teams: [],
       staredTeams: [],
       joinedTeams: [],
-      allTeams: []
+      allTeams: [],
+      showAdd: false,
+      selectedTeam: {}
     }
   },
   computed: {
@@ -241,75 +252,69 @@ export default {
       }
       team.stared = !team.stared
     },
-    joinTeam (index) {
-      const team = this.teams[index]
-      team.__loading = true
-      api.joinIntoTeam(team.id, res => {
-        team.__loading = false
-        team.joined = true
-      })
+    addTeam () {
+      this.$refs['add-item'].dialogVisible = true
     },
-    exitTeam (index) {
-      const team = this.teams[index]
-      team.__loading = true
-      api.quitFromTeam(team.id, res => {
-        team.__loading = false
-        team.joined = false
-      })
+    editTeam (team) {
+      const { joined } = team
+      if (joined) {
+        this.selectedTeam = team
+        this.$refs['edit-item'].dialogVisible = true
+      } else {
+        curMessage = Message.warning({
+          message: '你还未加入该团队'
+        })
+      }
+    },
+    handleEditSuccess (team) {
+      let editedTeam = this.allTeams.filter(item => item.id === team.id)[0]
+      editedTeam.name = team.name
+      editedTeam.description = team.description
+      editedTeam.imgId = team.imgId
+    },
+    handleAddSuccess (team) {
+      this.allTeams.push(team)
+      this.joinedTeams.push(team)
+    },
+    deleteTeam (team) {
+      const { joined } = team
+      const { dispatch } = this.$store
+      if (!joined) {
+        curMessage = Message.warning({
+          message: '你还未加入该团队'
+        })
+        return
+      }
+      MessageBox.confirm('此操作将永久删除该团队, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        api.delTeam(team.id).then(res => {
+          const { code } = res
+          if (code === 200) {
+            const staredIndex = this.staredTeams.indexOf(team)
+            const joinedIndex = this.joinedTeams.indexOf(team)
+            const allIndex = this.allTeams.indexOf(team)
+            if (staredIndex > 0) {
+              dispatch('teams/unStarItem', team.id)
+              this.staredTeams.splice(staredIndex, 1)
+            }
+            if (joinedIndex > 0) {
+              this.joinedTeams.splice(joinedIndex, 1)
+            }
+            if (allIndex > 0) {
+              this.allTeams.splice(allIndex, 1)
+            }
+          }
+        }).catch(() => {})
+      }).catch(() => {})
     }
   }
 }
 </script>
 
 <style lang="less" scoped >
-.team-card-row {
-  padding-top: 20px;
-}
-
-.team-card-col {
-  margin-bottom: 32px;
-}
-
-.team-card-header {
-  padding: 8px;
-  border-bottom: 1px solid #d1dbe5;
-}
-
-.team-card-title {
-  .icon {
-    display: none;
-    cursor: pointer;
-  }
-  &:hover .icon {
-    display: inline-block;
-  }
-}
-
-.team-card-bottom {
-  padding: 8px;
-  text-align: right;
-}
-
-.team-card-des {
-  height: 48px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  color: #aaa;
-}
-
-.team-card-title {
-  line-height: 32px;
-  font-size: 16px;
-  margin: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.team-card-ipt {
-  height: 32px;
-}
-
 .main-container-panel {
   box-sizing: border-box;
   padding: 0 5%;
@@ -333,12 +338,6 @@ export default {
       }
     }
   }
-  .edit-icon{
-    padding-top: 6px;
-    opacity: 0;
-    transition: opacity .4s;
-    cursor: pointer;
-  }
   .el-icon-star-off {
     opacity: 0;
   }
@@ -360,8 +359,26 @@ export default {
     }
   }
   .team-content{
-    height: 40px;
+    height: 52px;
     margin-top: 8px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    .left {
+      width: 198px;
+    }
+    .right {
+      width: 20px;
+      font-size: 14px;
+      text-align: right;
+    }
+  }
+  .team-content-icon{
+    opacity: 0;
+    margin-bottom: 8px;
+    transition: all .2s;
+    cursor: pointer;
   }
   .team-footer{
     text-align: right;
@@ -370,7 +387,7 @@ export default {
     transition: all .5s;
   }
 }
-.teams-stared-list, .teams-joined-list, .teams-all-list{
+.teams-stared-list, .teams-joined-list{
   & > div{
     width: 100%;
     display: flex;
@@ -384,6 +401,12 @@ export default {
   transition: all .8s;
   margin-right: 24px;
   margin-bottom: 24px;
+  float: left;
+  :hover {
+    .team-content-icon{
+      opacity: 1;
+    }
+  }
 }
 .teams-item-img{
   position: absolute;
@@ -394,13 +417,13 @@ export default {
   border-radius: 4px;
   width: 100%;
   height: 100%;
+  transition: all .2s;
 }
 .teams-item-inner{
   height: 128px;
   width: 254px;
-  padding: 8px 16px 16px;
+  padding: 8px 14px 12px;
   border-radius: 4px;
-  // background-color: #e1e1e1;
   transition: all .2s;
   position: relative;
   &:hover{
@@ -417,5 +440,25 @@ export default {
 }
 .teams-item-leave-active {
   position: absolute;
+}
+.teams-add-item{
+  float: left;
+  width: 254px;
+  height: 128px;
+  border: 1px dashed #d9d9d9;
+  border-radius: 4px;
+  line-height: 128px;
+  font-size: 28px;
+  text-align: center;
+  cursor: pointer;
+  color: #8c939d;
+  transition: color, border .2s;
+  &:hover {
+    color: #828282;
+    border-color: #20a0ff;
+    .el-icon-close {
+      display: block;
+    }
+  }
 }
 </style>

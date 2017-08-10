@@ -7,14 +7,16 @@ const config = require('../config')
 
 const ACCEPT_URLS = [
   '/login',
-  '/regist'
+  '/regist',
+  '/image/data'
 ]
 
 // 是否需要验证权限
 const isVerifyUrl = (url) => {
+  // console.log(url)
   for (let i = 0; i < ACCEPT_URLS.length; i++) {
     const accUrl = ACCEPT_URLS[i]
-    if (accUrl.indexOf(url) !== -1) {
+    if (url.indexOf(accUrl) !== -1) {
       return true
     }
   }

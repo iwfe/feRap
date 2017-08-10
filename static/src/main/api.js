@@ -4,7 +4,8 @@ export default {
     return window.pageConfig.siteUrl + 'team/' + {
       getAllTeamList: 'getAllTeamList.json',
       joinIntoTeam: 'joinIntoTeam.json',
-      quitFromTeam: 'quitFromTeam.json'
+      quitFromTeam: 'quitFromTeam.json',
+      teamData: 'data'
     }[key]
   },
   /**
@@ -33,5 +34,23 @@ export default {
     .then(res => {
       return res.data
     })
+  },
+  /**
+   * 新增团队
+   */
+  addTeam (data) {
+    return axios.post(this.getUrl('teamData'), data)
+  },
+  /**
+   * 修改团队
+   */
+  updateTeam (data) {
+    return axios.put(this.getUrl('teamData'), data)
+  },
+  /**
+   * 删除团队
+   */
+  delTeam (id) {
+    return axios.delete(this.getUrl('teamData') + `?teamId=${id}`)
   }
 }

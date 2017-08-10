@@ -43,10 +43,11 @@ export default {
    * @return {Promise}       [description]
    */
   addTeam: async function (ctx, next) {
-    const {name, description} = ctx.locals.parse
+    const { name, description, imgId } = ctx.locals.parse
     const team = {
-     name: name,
-     description: description
+      name,
+      description,
+      imgId
     }
     const user = ctx.locals._user
     const result = await teamService.addTeam(user, team)

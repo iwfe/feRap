@@ -1,11 +1,11 @@
 <template>
-  <div class="edit-team">
+  <div class="add-team">
     <el-dialog
-      title="更新团队"
+      title="增加团队"
       :visible.sync="dialogVisible"
       :before-close="handleClose"
     >
-      <el-form :model="form" :rules="rules" ref="editTeamForm" label-width="100px">
+      <el-form :model="form" :rules="rules" ref="addTeamForm" label-width="100px">
         <el-form-item label="团队名称：" prop="name">
           <el-input type="text" v-model="form.name"></el-input>
         </el-form-item>
@@ -13,12 +13,12 @@
           <el-input type="textarea" v-model="form.description"></el-input>
         </el-form-item>
         <el-form-item label="封面图：" prop="description">
-          <upload-img :imageSrc="team.imgId ? `/image/data?imgId=${team.imgId}` : null" @img-change="imgChange"></upload-img>
+          <upload-img @img-change="imgChange"></upload-img>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button :loading="editing" type="primary" @click="submitForm('editTeamForm')">确 定</el-button>
+        <el-button :loading="adding" type="primary" @click="submitForm('addTeamForm')">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -46,16 +46,10 @@ export default {
     ElInput: Input,
     UploadImg
   },
-  props: {
-    team: {
-      required: true,
-      type: Object
-    }
-  },
   data () {
     return {
       dialogVisible: false,
-      editing: false,
+      adding: false,
       form: {
         name: '',
         description: '',
@@ -66,23 +60,6 @@ export default {
           { required: true, message: '请输入团队名称', trigger: 'blur' },
           { max: 50, message: '长度不能超过 50 个字符', trigger: 'blur' }
         ]
-      }
-    }
-  },
-  watch: {
-    dialogVisible (newVal, oldVal) {
-      if (newVal === true) {
-        this.form = {
-          name: this.team.name,
-          description: this.team.description,
-          imgId: this.team.imgId
-        }
-      } else {
-        this.form = {
-          name: '',
-          description: '',
-          imgId: ''
-        }
       }
     }
   },
@@ -101,23 +78,20 @@ export default {
       const form = this[formName]
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.editing = true
-          const params = Object.assign({}, this.form, {
-            id: this.team.id
-          })
-          API.updateTeam(params).then(res => {
+          this.adding = true
+          API.addTeam(this.form).then(res => {
             const { code, data } = res
-            this.editing = false
+            this.adding = false
             if (code === 200) {
               this.dialogVisible = false
-              this.$emit('edit-success', params)
+              this.$emit('add-success', data)
             } else {
               Message.error({
                 message: '新增失败！'
               })
             }
           }).catch(err => {
-            this.editing = false
+            this.adding = false
             if (err) {
               Message.error({
                 message: '新增失败！'

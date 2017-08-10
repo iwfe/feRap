@@ -36,6 +36,7 @@ module.exports = {
                   || pathname.match('^/team/')
                   || pathname.match('^/calendar/')
                   || pathname.match('^/prd/')
+                  || pathname.match('^/image/')
                   || pathname.match('^/project/')
                   || (pathname.match('^/api/') && !pathname.match('^/api/index'))
         }

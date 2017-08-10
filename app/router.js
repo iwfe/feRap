@@ -1,6 +1,7 @@
 'use strict';
 
 import Router from 'koa-router'
+import multer from 'koa-multer'
 
 import main from './controller/main'
 import user from './controller/user'
@@ -9,8 +10,10 @@ import prj from './controller/prj'
 import api from './controller/api'
 import calendar from './controller/calendar'
 import prd from './controller/prd'
+import image from './controller/image'
 
 const routes = new Router()
+const upload = multer()
 
 // main
 routes.get('/', main.index)
@@ -53,5 +56,11 @@ routes.get('/prd/getPrdList.json', prd.getPrdList)
 routes.post('/prd/data', prd.addPrd)
 routes.put('/prd/data', prd.updatePrd)
 routes.delete('/prd/data', prd.deletePrd)
+
+// image
+routes.post('/image/data', upload.single('file'), image.uploadImg)
+// routes.post('/image/data', image.uploadImg)
+routes.get('/image/data', image.getImg)
+routes.delete('/image/data', image.removeImg)
 
 module.exports = routes
