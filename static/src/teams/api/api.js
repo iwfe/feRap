@@ -3,7 +3,8 @@ export default {
     return window.pageConfig.siteUrl + 'api/' + {
       getApiList: 'getApiList.json',
       getApiDetail: 'getApiDetail.json',
-      apiData: 'data'
+      apiData: 'data',
+      saveApi: 'save'
     }[key]
   },
 
@@ -32,10 +33,16 @@ export default {
     })
   },
   /**
-   *
+   * 保存Api
    */
   saveApi (apiData) {
-    
+    axios.post(this.getUrl('saveApi'))
+    .then(function (response) {
+      cb(response.data)
+    })
+    .catch(function (response) {
+      console.log(`faild: ${response}`)
+    })
   }
 
 }
