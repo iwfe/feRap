@@ -14,7 +14,7 @@ export default {
   getApiList (prdId, cb) {
     axios.get(this.getUrl('getApiList') + `?prdId=${prdId}`)
     .then(function (response) {
-      cb(response.data)
+      cb && cb(response.data)
     })
     .catch(function (response) {
       console.log(`faild: ${response}`)
@@ -26,7 +26,7 @@ export default {
   getApiDetail (apiId, cb) {
     axios.get(this.getUrl('getApiDetail') + `?apiId=${apiId}`)
     .then(function (response) {
-      cb(response.data)
+      cb && cb(response.data)
     })
     .catch(function (response) {
       console.log(`faild: ${response}`)
@@ -35,10 +35,10 @@ export default {
   /**
    * 保存Api
    */
-  saveApi (apiData) {
+  saveApi (apiData, cb) {
     axios.post(this.getUrl('saveApi'))
     .then(function (response) {
-      cb(response.data)
+      cb && cb(response.data)
     })
     .catch(function (response) {
       console.log(`faild: ${response}`)
